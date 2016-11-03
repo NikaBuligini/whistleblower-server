@@ -35,3 +35,12 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Configuration
+.env
+
+# Generated files after build
+public/css
+public/fonts
+public/*.js
+*.map
