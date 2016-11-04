@@ -5,13 +5,16 @@ module.exports = {
     entry: './app/react/index.js',
     output: {
         path: path.join(__dirname, 'public'),
-        filename: 'bundle.js',
-        publicPath: '/public/'
+        filename: 'bundle.js'
+    },
+    resolve: {
+      extensions: ['', '.js', '.jsx']
     },
     devtool: 'sourcemap',
     module: {
         loaders: [
-            { test: /\.css$/, loader: 'style!css' }
+            { test: /\.css$/, loader: 'style!css' },
+            { test: /\.js$/, exclude: /node_modules/, loaders: ['babel-loader'] }
         ]
     },
     plugins: [

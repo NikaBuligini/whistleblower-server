@@ -6,7 +6,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 
 // Set jsx as the templating engine
 app.set('views', path.resolve(__dirname, 'app/views'));
