@@ -13,13 +13,11 @@ class DefaultLayout extends React.Component {
           <title>{this.props.title}</title>
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossOrigin="anonymous" />
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossOrigin="anonymous" />
-          <link rel="stylesheet" href="/css/font-awesome.min.css" />
-          <link rel="stylesheet" type="text/css" href="/css/app.css" />
         </head>
         <body>
-          <div>
-            <div className="page-outer">
-              <div className="app-content wrapper wrapper-home">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12">
                 {this.props.children}
               </div>
             </div>

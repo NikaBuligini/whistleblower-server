@@ -6,9 +6,7 @@ class HomeComponent extends React.Component {
   render () {
     return (
       <DefaultLayout title={this.props.title}>
-        <div id="mount">
-          Hello World!
-        </div>
+        <div id="mount" />
       </DefaultLayout>
     )
   }
