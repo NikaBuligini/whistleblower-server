@@ -22,18 +22,19 @@ app.use('/', require('./routes'));
 app.use('/', express.static(path.join(__dirname, '/public/')));
 
 // Fire it up (start our server)
-const server = http.createServer(app);
+const ser = http.createServer(app);
 
-server.listen(port, () => {
+ser.listen(port, () => {
   console.log('Express server listening on port ' + port);
 });
 
 // Initialize socket.io
-var io = require('socket.io').listen(http);
+const server = http.Server(app);
+const io = require('socket.io')(server);
 io.on('connection', (socket) => {
   console.log('a user connected');
 });
 
-server.listen(3000, function(){
+io.listen(3000, () => {
   console.log('listening on *:3000');
 });

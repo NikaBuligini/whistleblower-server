@@ -5,7 +5,9 @@ class Dashboard extends Component {
   render () {
     return (
       <div>
-        asd
+        <ul className='monitor-list'>
+          <li>Free memory: 2.3 GB</li>
+        </ul>
       </div>
     )
   }

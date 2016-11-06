@@ -8,15 +8,19 @@ import rootReducer from '../reducers';
 import DevTools from '../containers/DevTools';
 // import devTools from 'remote-redux-devtools';
 
-let socket = io('http://localhost:3000');
-let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
+let socket = io('localhost:3000');
+
+socket.on('connect', function(){});
+socket.on('event', function(data){});
+socket.on('disconnect', function(){});
+// let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
 
 export default function configureStore (preloadedState) {
   const store = createStore(
     rootReducer,
     preloadedState,
     compose(
-      applyMiddleware(thunk, socketIoMiddleware, api, createLogger()),
+      applyMiddleware(thunk, /*socketIoMiddleware,*/ api, createLogger()),
       // DevTools.instrument()
       // devTools({ realtime: true })
       window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument()
