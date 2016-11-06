@@ -5,7 +5,7 @@ class Dashboard extends Component {
   render () {
     return (
       <div>
-        {'asd'}
+        asd
       </div>
     )
   }

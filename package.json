@@ -79,6 +79,7 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2",
     "yargs": "^6.3.0"
   }
 }
