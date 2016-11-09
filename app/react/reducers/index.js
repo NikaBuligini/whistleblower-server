@@ -7,6 +7,21 @@ function preloaded (state = {}, action) {
   return state
 }
 
+function memory (state = {
+  available: '0',
+  free: '0',
+  total: '0'
+}, action) {
+  switch (action.type) {
+    case 'MEMORY_UPDATE':
+      let { available, free, total } = action.info
+      return { available, free, total }
+      break;
+    default:
+      return state;
+  }
+}
+
 function apps (state = {
   isFetching: false,
   error: null
@@ -45,6 +60,7 @@ function errorMessage (state = null, action) {
 
 const rootReducer = combineReducers({
   preloaded,
+  memory,
   apps,
   errorMessage,
   routing
