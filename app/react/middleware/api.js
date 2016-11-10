@@ -34,26 +34,12 @@ function callApi (endpoint, schema) {
 // leading to a frozen UI as it wouldn't find "someuser" in the entities.
 // That's why we're forcing lower cases down there.
 
-const appSchema = new Schema('apps')
-
-const userSchema = new Schema('users', {
-  idAttribute: user => user.login.toLowerCase()
-})
-
-const repoSchema = new Schema('repos')
-
-repoSchema.define({
-  owner: userSchema
-})
+const projectSchema = new Schema('projects')
 
 // Schemas for Github API responses.
 export const Schemas = {
-  APP: appSchema,
-  APP_ARRAY: arrayOf(appSchema),
-  USER: userSchema,
-  USER_ARRAY: arrayOf(userSchema),
-  REPO: repoSchema,
-  REPO_ARRAY: arrayOf(repoSchema)
+  PROJECT: projectSchema,
+  PROJECT_ARRAY: arrayOf(projectSchema)
 }
 
 // Action key that carries API call info interpreted by this Redux middleware.

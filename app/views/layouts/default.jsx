@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-class DefaultLayout extends React.Component {
+class DefaultLayout extends Component {
   render () {
     return (
       <html lang="en">
@@ -15,13 +15,7 @@ class DefaultLayout extends React.Component {
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossOrigin="anonymous" />
         </head>
         <body>
-          <div className="container">
-            <div className="row">
-              <div className="col-md-12">
-                {this.props.children}
-              </div>
-            </div>
-          </div>
+          {this.props.children}
           <div id="devtools" />
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossOrigin="anonymous"></script>

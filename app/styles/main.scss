@@ -1,9 +1,114 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 body {
-  background: #fff;
+  background: #eee;
+  font-family: 'Roboto', sans-serif;
+  text-size-adjust: 100%;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
 }
 
 ul.monitor-list {
-  list-style: none;
-  padding-top: 20px;
-  font-size: 2em;
+  padding: 20px;
+  font-size: 1.3em;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
+  z-index: 1;
+}
+
+.monitoring {
+  margin-top: 20px;
+}
+
+.projects-list {
+  margin-top: 20px;
+
+  .project {
+    padding: 15px;
+    margin-bottom: 10px;
+    position: relative;
+
+    span {
+      color: rgba(0,0,0,0.54);
+    }
+
+    .created-at {
+      position: absolute;
+      font-size: 12px;
+      top: 25px;
+      right: 15px;
+    }
+  }
+}
+
+nav.navigation {
+  background-color: #db4437;
+  padding: 0 0 0 8px;
+  z-index: 2;
+  box-shadow: 0 1px 8px rgba(0,0,0,.3);
+  color: #fff;
+
+  .navigation-container {
+    height: 64px;
+    padding: 10px 0;
+
+    .navigation-content {
+      margin-left: 20px;
+      text-overflow: ellipsis;
+      font-size: 20px;
+      font-weight: 500;
+      white-space: nowrap;
+      line-height: 44px;
+    }
+  }
+}
+
+.default-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -18px;
+}
+
+.spinner {
+  animation: rotate 2s linear infinite;
+  z-index: 2;
+  position: relative;;
+  left: 50%;
+  width: 35px;
+  height: 35px;
+
+  & .path {
+    stroke: #337ab7;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
 }

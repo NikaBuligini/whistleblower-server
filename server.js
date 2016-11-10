@@ -3,6 +3,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
+const mongoose = require('mongoose');
+const promise = require('bluebird');
 const path = require('path');
 require('dotenv').config();
 
@@ -29,11 +31,21 @@ app.engine('jsx', require('express-react-views').createEngine());
 // Disable etag headers on responses
 app.disable('etag');
 
+// Connect to our mongo database
+mongoose.Promise = promise;
+mongoose.connect('mongodb://localhost/whistleblower');
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('connected to mongodb');
+});
+
 // Middleware
 app.use((req, res, next) => {
   req.io = io;
   next();
-})
+});
 
 app.use('/', require('./routes'));
 

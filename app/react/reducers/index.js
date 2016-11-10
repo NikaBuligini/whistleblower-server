@@ -22,20 +22,28 @@ function memory (state = {
   }
 }
 
-function apps (state = {
+// Updates an entity cache in response to any action with response.entities.
+function entities (state = { projects: {}, services: {} }, action) {
+  if (action.response && action.response.entities) {
+    return merge({}, state, action.response.entities)
+  }
+  return state
+}
+
+function projects (state = {
   isFetching: false,
   error: null
 }, action) {
   switch (action.type) {
-    case ActionTypes.APPS_REQUEST:
+    case ActionTypes.PROJECTS_REQUEST:
       return merge({}, state, {
         isFetching: true
       })
-    case ActionTypes.APPS_SUCCESS:
+    case ActionTypes.PROJECTS_SUCCESS:
       return merge({}, state, {
         isFetching: false
       })
-    case ActionTypes.APPS_FAILURE:
+    case ActionTypes.PROJECTS_FAILURE:
       return merge({}, state, {
         isFetching: false,
         error: action.error
@@ -44,6 +52,10 @@ function apps (state = {
       return state
   }
 }
+
+const process = combineReducers({
+  projects
+})
 
 // Updates error message to notify about the failed fetches.
 function errorMessage (state = null, action) {
@@ -60,8 +72,9 @@ function errorMessage (state = null, action) {
 
 const rootReducer = combineReducers({
   preloaded,
+  process,
   memory,
-  apps,
+  entities,
   errorMessage,
   routing
 })
