@@ -1,72 +1,72 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-body {
-  background: #eee;
-  font-family: 'Roboto', sans-serif;
-  text-size-adjust: 100%;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
+@import url('http://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
 ul.monitor-list {
   padding: 20px;
   font-size: 1.3em;
 }
 
-.card {
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
-  z-index: 1;
-}
-
 .monitoring {
   margin-top: 20px;
 }
 
-.projects-list {
-  margin-top: 20px;
+.projects {
+  .add {
+    margin-bottom: 20px;
 
-  .project {
-    padding: 15px;
-    margin-bottom: 10px;
-    position: relative;
-
-    span {
-      color: rgba(0,0,0,0.54);
+    .create {
+      margin-left: 10px;
     }
+  }
 
-    .created-at {
-      position: absolute;
-      font-size: 12px;
-      top: 25px;
-      right: 15px;
+  .list {
+    .item {
+      margin: 0 15px 15px 0;
+      display: inline-flex;
+      overflow: visible;
+      z-index: 2;
+
+      .mdl-card-actions {
+        position: absolute;
+        width: 120px;
+        height: 32px;
+        text-align: right;
+        top: 16px;
+        right: 16px;
+
+        .timespan {
+          font-size: 13px;
+          font-weight: 600;
+          line-height: 32px;
+          color: #777;
+        }
+
+        .hover {display: none;}
+
+        &:hover {
+          .default {display: none;}
+          .hover {display: inline-flex;}
+        }
+      }
+
+      .mdl-card__title-text a {
+        display: block;
+        font-size: 18px;
+        font-weight: 600;
+        color: #555;
+        text-decoration: none;
+        line-height: 32px;
+      }
     }
   }
 }
 
-nav.navigation {
-  background-color: #db4437;
-  padding: 0 0 0 8px;
-  z-index: 2;
-  box-shadow: 0 1px 8px rgba(0,0,0,.3);
-  color: #fff;
+.mdl-layout__header {
+  // background-color: #db4437;
 
-  .navigation-container {
-    height: 64px;
-    padding: 10px 0;
-
-    .navigation-content {
-      margin-left: 20px;
-      text-overflow: ellipsis;
-      font-size: 20px;
-      font-weight: 500;
-      white-space: nowrap;
-      line-height: 44px;
-    }
+  a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
   }
 }
 
@@ -75,40 +75,4 @@ nav.navigation {
   top: 50%;
   left: 50%;
   margin-left: -18px;
-}
-
-.spinner {
-  animation: rotate 2s linear infinite;
-  z-index: 2;
-  position: relative;;
-  left: 50%;
-  width: 35px;
-  height: 35px;
-
-  & .path {
-    stroke: #337ab7;
-    stroke-linecap: round;
-    animation: dash 1.5s ease-in-out infinite;
-  }
-}
-
-@keyframes rotate {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes dash {
-  0% {
-    stroke-dasharray: 1, 150;
-    stroke-dashoffset: 0;
-  }
-  50% {
-    stroke-dasharray: 90, 150;
-    stroke-dashoffset: -35;
-  }
-  100% {
-    stroke-dasharray: 90, 150;
-    stroke-dashoffset: -124;
-  }
 }

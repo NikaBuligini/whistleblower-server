@@ -3,7 +3,6 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: [
-    'bootstrap-loader',
     './app/react/index.js'
   ],
   output: {

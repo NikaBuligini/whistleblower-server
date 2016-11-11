@@ -8,18 +8,17 @@ class DefaultLayout extends Component {
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           {/* <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /> */}
-          <link rel="mask-icon" sizes="any" href="/svg/favicon.svg" color="#55acee" />
-          <link rel="icon" href="/svg/favicon.ico" type="image/x-icon" />
           <title>{this.props.title}</title>
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossOrigin="anonymous" />
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossOrigin="anonymous" />
+          <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.red-blue.min.css" />
+          {/* <link rel="stylesheet" href="/material.min.css" /> */}
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         </head>
         <body>
           {this.props.children}
           <div id="devtools" />
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossOrigin="anonymous"></script>
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" />
           {/* <script src="/bundle.js"></script> */}
+          <script src="/material.min.js" />
           <script src="http://localhost:8080/bundle.js"></script>
         </body>
       </html>

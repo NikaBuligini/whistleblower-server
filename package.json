@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "build": "webpack --progress --colors",
+    "build": "webpack --progress --colors && gulp build",
     "watch": "webpack-dev-server --hot --inline"
   },
   "author": "Nikoloz Buligini",
@@ -24,6 +24,8 @@
     "express-react-views": "^0.10.2",
     "express-session": "^1.14.2",
     "humps": "^2.0.0",
+    "material-design-lite": "^1.2.1",
+    "moment": "^2.16.0",
     "mongoose": "^4.6.5",
     "node-jsx": "^0.13.3",
     "normalizr": "^2.2.1",

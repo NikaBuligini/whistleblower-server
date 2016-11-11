@@ -40,7 +40,5 @@ jspm_packages
 .env
 
 # Generated files after build
-public/css
-public/fonts
-public/*.js
+public
 *.map
