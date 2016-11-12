@@ -11,7 +11,7 @@ ul.monitor-list {
 
 .projects {
   .add {
-    margin-bottom: 20px;
+    margin: 0 8px 20px 8px;
 
     .create {
       margin-left: 10px;
@@ -20,7 +20,7 @@ ul.monitor-list {
 
   .list {
     .item {
-      margin: 0 15px 15px 0;
+      margin: 0 8px 16px 8px;
       display: inline-flex;
       overflow: visible;
       z-index: 2;
@@ -75,4 +75,11 @@ ul.monitor-list {
   top: 50%;
   left: 50%;
   margin-left: -18px;
+}
+
+.inline-loading {
+  display: inline-flex;
+  position: relative;
+  top: 10px;
+  left: 10px;
 }

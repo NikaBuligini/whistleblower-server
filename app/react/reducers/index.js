@@ -31,6 +31,7 @@ function entities (state = { projects: {}, services: {} }, action) {
 }
 
 function projects (state = {
+  isAdding: false,
   isFetching: false,
   error: null
 }, action) {
@@ -38,16 +39,29 @@ function projects (state = {
     case ActionTypes.PROJECTS_REQUEST:
       return merge({}, state, {
         isFetching: true
-      })
+      });
     case ActionTypes.PROJECTS_SUCCESS:
       return merge({}, state, {
         isFetching: false
-      })
+      });
     case ActionTypes.PROJECTS_FAILURE:
       return merge({}, state, {
         isFetching: false,
         error: action.error
-      })
+      });
+    case ActionTypes.CREATE_PROJECT_REQUEST:
+      return merge({}, state, {
+        isAdding: true
+      });
+    case ActionTypes.CREATE_PROJECT_SUCCESS:
+      return merge({}, state, {
+        isAdding: false
+      });
+    case ActionTypes.CREATE_PROJECT_FAILURE:
+      return merge({}, state, {
+        isAdding: false,
+        error: action.error
+      });
     default:
       return state
   }

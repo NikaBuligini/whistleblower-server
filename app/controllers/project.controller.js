@@ -18,8 +18,35 @@ module.exports = {
   listAll (req, res) {
     Project.getAll()
       .then(projects => {
-        console.log(projects);
+        // console.log(projects);
         return res.json(projects);
       })
+  },
+
+  create (req, res) {
+    let name = req.body.projectName;
+
+    Project.getProjectByName(name)
+      .then((existingProject) => {
+        if (existingProject) {
+          return res.status(500).json({message: `${name} is already used!`});
+        }
+
+        let project = new Project({
+          name: name
+        });
+        project.save();
+
+        res.json(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json(err);
+      })
+  },
+
+  clear (req, res) {
+    Project.remove({}).exec();
+    res.send('Done');
   }
 }

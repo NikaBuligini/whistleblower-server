@@ -35,7 +35,7 @@ ProjectSchema.statics = {
    *
    * @api private
    */
-  getFirstProject: function () {
+  getFirstProject () {
     return this.findOne({})
       .populate('services')
       .exec()
@@ -43,21 +43,21 @@ ProjectSchema.statics = {
 
   /**
    * Get all projects
+   * @api public
    */
-  getAll: function () {
+  getAll () {
     return this.find({})
       .exec()
   },
 
   /**
-   * Get project by id
+   * Get project by name
    *
    * @param {projectName} project name
    * @api public
    */
-  getProject: function (projectName) {
+  getProjectByName (projectName) {
     return this.findOne({ 'name': projectName })
-      .populate('services')
       .exec()
   }
 }

@@ -1,18 +1,19 @@
 import { CALL_API, Schemas } from '../middleware/api'
+import { SUBMIT_API } from '../middleware/submitApi'
 
-export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
+export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE';
 
 // Resets the currently visible error message.
 export function resetErrorMessage () {
   return {
     type: RESET_ERROR_MESSAGE
-  }
+  };
 }
 
 
-export const PROJECTS_REQUEST = 'PROJECTS_REQUEST'
-export const PROJECTS_SUCCESS = 'PROJECTS_SUCCESS'
-export const PROJECTS_FAILURE = 'PROJECTS_FAILURE'
+export const PROJECTS_REQUEST = 'PROJECTS_REQUEST';
+export const PROJECTS_SUCCESS = 'PROJECTS_SUCCESS';
+export const PROJECTS_FAILURE = 'PROJECTS_FAILURE';
 
 // Fetches a single user from Github API.
 // Relies on the custom API middleware defined in ../middleware/api.js.
@@ -24,19 +25,41 @@ function fetchProjects () {
       schema: Schemas.PROJECT_ARRAY
     },
     type: 'CALL_API'
-  }
+  };
 }
 
 // Fetches a list of applocations from server unless it is cached.
 // Relies on Redux Thunk middleware.
 export function loadProjects () {
   return (dispatch, getState) => {
-    const { projects } = getState().entities
+    return dispatch(fetchProjects());
+  }
+}
 
-    if (Object.keys(projects).length !== 0) {
-      return null
-    }
+export const CREATE_PROJECT_REQUEST = 'CREATE_PROJECT_REQUEST';
+export const CREATE_PROJECT_SUCCESS = 'CREATE_PROJECT_SUCCESS';
+export const CREATE_PROJECT_FAILURE = 'CREATE_PROJECT_FAILURE';
 
-    return dispatch(fetchProjects())
+// Calls single project creator method.
+// Relies on the custom API middleware defined in ../middleware/submitApi.js.
+function callCreateProject (name) {
+  return {
+    [SUBMIT_API]: {
+      types: [ CREATE_PROJECT_REQUEST, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE ],
+      endpoint: '/api/project/add',
+      body: {
+        projectName: name
+      },
+      success: fetchProjects
+    },
+    type: 'SUBMIT_API'
+  };
+}
+
+// Creates new project instance.
+// Relies on Redux Thunk middleware.
+export function createProject (name) {
+  return (dispatch, getState) => {
+    return dispatch(callCreateProject(name));
   }
 }

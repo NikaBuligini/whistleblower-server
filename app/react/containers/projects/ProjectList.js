@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
-import { loadProjects } from '../../actions'
+import { loadProjects, createProject } from '../../actions'
 import Loading from '../../components/Loading'
+import AddProjectComponent from '../../components/AddProjectComponent'
 import moment from 'moment'
 
 const ProjectItem = (props) => {
@@ -71,65 +72,6 @@ class ProjectsComponent extends Component {
   }
 }
 
-class AddProjectComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showInputs: false
-    };
-  }
-
-  componentDidUpdate () {
-    componentHandler.upgradeDom();
-  }
-
-  showInputFields () {
-    this.setState({showInputs: true});
-  }
-
-  render () {
-    if (!this.state.showInputs) {
-      return (
-        <div className='add'>
-          <button
-            className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-            onClick={this.showInputFields.bind(this)}
-          >
-            New Project
-          </button>
-        </div>
-      )
-    }
-
-    return (
-      <div className='add'>
-        <button
-          className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-          onClick={this.showInputFields.bind(this)}
-        >
-          New Project
-        </button>
-        <form action="#">
-          <div className="mdl-textfield mdl-js-textfield">
-            <input
-              className="mdl-textfield__input"
-              type="text"
-              id="project-name"
-              name="project-name"
-            />
-            <label className="mdl-textfield__label" htmlFor="project-name">Name</label>
-          </div>
-          <button
-            className="mdl-button mdl-js-button mdl-button--accent create"
-          >
-            Create
-          </button>
-        </form>
-      </div>
-    )
-  }
-}
-
 class ProjectList extends Component {
   componentWillMount () {
     this.props.loadProjects();
@@ -158,7 +100,8 @@ class ProjectList extends Component {
 ProjectList.propTypes = {
   projects: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  loadProjects: PropTypes.func.isRequired
+  loadProjects: PropTypes.func.isRequired,
+  createProject: PropTypes.func.isRequired
 }
 
 ProjectList.defaultProps = {
@@ -175,5 +118,5 @@ function mapStateToProps (state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  loadProjects
+  loadProjects, createProject
 })(ProjectList)

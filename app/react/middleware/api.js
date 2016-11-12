@@ -1,5 +1,6 @@
 import { Schema, arrayOf, normalize } from 'normalizr'
 import { camelizeKeys } from 'humps'
+import submitApi from './submitApi'
 import 'isomorphic-fetch'
 
 // Fetches an API response and normalizes the result JSON according to schema.
@@ -48,6 +49,11 @@ export const CALL_API = Symbol('Call API')
 // A Redux middleware that interprets actions with CALL_API info specified.
 // Performs the call and promises when such actions are dispatched.
 export default store => next => action => {
+  const { type  } = action;
+  if (type === 'SUBMIT_API') {
+    return submitApi(store, next, action);
+  }
+
   const callAPI = action[CALL_API]
   if (typeof callAPI === 'undefined') {
     return next(action)
