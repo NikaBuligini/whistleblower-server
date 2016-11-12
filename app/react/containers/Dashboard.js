@@ -6,12 +6,13 @@ class Dashboard extends Component {
     let { memory } = this.props;
 
     return (
-      <div className='monitoring card'>
-        <ul className='monitor-list'>
-          <li>Available: {memory.available}</li>
-          <li>Free: {memory.free}</li>
-          <li>Total: {memory.total}</li>
-        </ul>
+      <div className='mdl-grid'>
+        <div className='mdl-cell mdl-cell--10-col mdl-cell--1-offset'>
+          {this.props.params.projectName}
+          <p>Available: {memory.available}</p>
+          <p>Free: {memory.free}</p>
+          <p>Total: {memory.total}</p>
+        </div>
       </div>
     )
   }

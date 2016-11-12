@@ -3,24 +3,16 @@ import { connect } from 'react-redux'
 import { createProject } from '../actions'
 import Loading from './Loading'
 
-class AddProjectComponent extends Component {
+class FormComponent extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showInputs: false,
-      projectName: ''
-    };
-    this.showInputFields = this.showInputFields.bind(this);
+    this.state = {projectName: props.projectName && ''};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidUpdate () {
+  componentDidMount () {
     componentHandler.upgradeDom();
-  }
-
-  showInputFields () {
-    this.setState({showInputs: true});
   }
 
   handleChange (event) {
@@ -33,21 +25,47 @@ class AddProjectComponent extends Component {
   }
 
   render () {
-    if (!this.state.showInputs) {
-      return (
-        <div className='add'>
-          <button
-            className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-            onClick={this.showInputFields}
-          >
-            New Project
-          </button>
+    const { error, isAdding } = this.props;
+
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <div className="mdl-textfield mdl-js-textfield">
+          <input
+            className="mdl-textfield__input"
+            type="text"
+            id="project-name"
+            autoComplete="off"
+            autoFocus="on"
+            onChange={this.handleChange}
+            value={this.state.projectName}
+          />
+          <label className="mdl-textfield__label" htmlFor="project-name">Name</label>
+          {error && <span className="mdl-textfield__error" style={{visibility: 'visible'}}>{error}</span>}
         </div>
-      )
-    }
+        <button
+          className="mdl-button mdl-js-button mdl-button--accent create"
+          type="submit"
+        >
+          Create
+        </button>
+        {isAdding && <Loading cls="inline-loading" />}
+      </form>
+    )
+  }
+}
 
-    let { isAdding, error } = this.props;
+class AddProjectComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {showInputs: false};
+    this.showInputFields = this.showInputFields.bind(this);
+  }
 
+  showInputFields () {
+    this.setState({showInputs: true});
+  }
+
+  render () {
     return (
       <div className='add'>
         <button
@@ -56,28 +74,13 @@ class AddProjectComponent extends Component {
         >
           New Project
         </button>
-        <form onSubmit={this.handleSubmit}>
-          <div className="mdl-textfield mdl-js-textfield">
-            <input
-              className="mdl-textfield__input"
-              type="text"
-              id="project-name"
-              autoComplete="off"
-              autoFocus="on"
-              onChange={this.handleChange}
-              value={this.state.projectName}
-            />
-            <label className="mdl-textfield__label" htmlFor="project-name">Name</label>
-            {error && <span className="mdl-textfield__error" style={{visibility: 'visible'}}>{error}</span>}
-          </div>
-          <button
-            className="mdl-button mdl-js-button mdl-button--accent create"
-            type="submit"
-          >
-            Create
-          </button>
-          {isAdding && <Loading cls="inline-loading" />}
-        </form>
+        {this.state.showInputs && (
+          <FormComponent
+            isAdding={this.props.isAdding}
+            error={this.props.error}
+            createProject={this.props.createProject}
+          />
+        )}
       </div>
     )
   }
@@ -95,10 +98,7 @@ AddProjectComponent.defaultProps = {
 
 function mapStateToProps (state, ownProps) {
   const { isAdding, error } = state.process.projects;
-  return {
-    isAdding,
-    error
-  }
+  return { isAdding, error }
 }
 
 export default connect(mapStateToProps, {
