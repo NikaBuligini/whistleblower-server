@@ -51,6 +51,46 @@
   }
 }
 
+.project-detailed {
+  .mdl-card__supporting-text {
+    width: 100%;
+    padding-top: 4px;
+  }
+
+  section {
+    padding: 8px 0;
+    border-top: 1px solid #ccc;
+  }
+
+  .title {
+    display: flex;
+    align-items: flex-start;
+
+    h6 {
+      line-height: 36px;
+      margin: 0;
+      order: 0;
+      flex-grow: 2;
+    }
+
+    .actions {
+      margin-right: 5px;
+    }
+  }
+
+  ul.list {
+    padding: 0 16px;
+
+    .mdl-list__item {
+      padding: 8px 16px;
+    }
+
+    .service-status {
+      width: 36px;
+    }
+  }
+}
+
 .mdl-layout__header {
   // background-color: #db4437;
 
