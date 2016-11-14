@@ -67,8 +67,33 @@ function projects (state = {
   }
 }
 
+function services (state = {
+  isAdding: false,
+  isFetching: false,
+  error: null
+}, action) {
+  switch (action.type) {
+    case ActionTypes.SERVICES_REQUEST:
+      return merge({}, state, {
+        isFetching: true
+      });
+    case ActionTypes.SERVICES_SUCCESS:
+      return merge({}, state, {
+        isFetching: false
+      });
+    case ActionTypes.SERVICES_FAILURE:
+      return merge({}, state, {
+        isFetching: false,
+        error: action.error
+      });
+    default:
+      return state
+  }
+}
+
 const process = combineReducers({
-  projects
+  projects,
+  services
 })
 
 // Updates error message to notify about the failed fetches.

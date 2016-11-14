@@ -17,6 +17,17 @@ module.exports = {
       })
   },
 
+  getSingle (req, res) {
+    Project.getProjectByName(req.params.projectName)
+      .then((project) => {
+        res.json(project);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json(err);
+      })
+  },
+
   create (req, res) {
     let name = req.body.projectName;
 
@@ -32,6 +43,17 @@ module.exports = {
         project.save();
 
         res.json(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json(err);
+      })
+  },
+
+  getServicesForProject (req, res) {
+    Project.getProjectServices(req.params.projectName)
+      .then((project) => {
+        res.json(project.services);
       })
       .catch((err) => {
         console.log(err);

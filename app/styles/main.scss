@@ -89,6 +89,22 @@
       width: 36px;
     }
   }
+
+  .loading {
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .no-data {
+    margin-left: 6px;
+    color: #555;
+  }
+
+  form.service-form {
+    .add-service {
+      margin-left: 12px;
+    }
+  }
 }
 
 .mdl-layout__header {
