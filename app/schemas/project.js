@@ -58,6 +58,7 @@ ProjectSchema.statics = {
    */
   getProjectByName (projectName) {
     return this.findOne({'name': projectName})
+      .populate('services')
       .exec()
   },
 

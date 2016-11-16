@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import DocumentTitle from 'react-document-title'
 import ServicesComponent from './ServicesComponent'
 import { loadProject } from '../../actions'
 import Loading from '../../components/Loading'
@@ -18,23 +19,25 @@ class Project extends Component {
     }
 
     return (
-      <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--8-col mdl-cell--2-offset'>
-          <section className='section--center mdl-grid mdl-grid--no-spacing mdl-shadow--4dp project-detailed'>
-            <div className='mdl-card__title'>
-              <h2 className='mdl-card__title-text'>
-                {project.name}
-              </h2>
-            </div>
-            <div className='mdl-card__supporting-text'>
-              <ServicesComponent
-                project={project}
-              />
-              <UsersComponent />
-            </div>
-          </section>
+      <DocumentTitle title={project.name}>
+        <div className='mdl-grid'>
+          <div className='mdl-cell mdl-cell--8-col mdl-cell--2-offset'>
+            <section className='section--center mdl-grid mdl-grid--no-spacing mdl-shadow--4dp project-detailed'>
+              <div className='mdl-card__title'>
+                <h2 className='mdl-card__title-text'>
+                  {project.name}
+                </h2>
+              </div>
+              <div className='mdl-card__supporting-text'>
+                <ServicesComponent
+                  project={project}
+                />
+                <UsersComponent />
+              </div>
+            </section>
+          </div>
         </div>
-      </div>
+      </DocumentTitle>
     )
   }
 }

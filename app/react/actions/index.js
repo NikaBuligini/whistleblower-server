@@ -117,15 +117,15 @@ export const CREATE_SERVICE_FAILURE = 'CREATE_SERVICE_FAILURE';
 
 // Calls single service creator method.
 // Relies on the custom API middleware defined in ../middleware/submitApi.js.
-function callCreateService (name) {
+function callCreateService (name, project) {
   return {
     [SUBMIT_API]: {
       types: [ CREATE_SERVICE_REQUEST, CREATE_SERVICE_SUCCESS, CREATE_SERVICE_FAILURE ],
-      endpoint: '/api/service/add',
+      endpoint: `/api/project/${project}/service`,
       body: {
-        serviceName: name
+        name: name
       },
-      success: fetchProjects
+      success: fetchServices
     },
     type: 'SUBMIT_API'
   };
@@ -133,8 +133,8 @@ function callCreateService (name) {
 
 // Creates new service instance.
 // Relies on Redux Thunk middleware.
-export function addService (name) {
+export function addService (name, project) {
   return (dispatch, getState) => {
-    return dispatch(callCreateProject(name));
+    return dispatch(callCreateService(name, project));
   }
 }

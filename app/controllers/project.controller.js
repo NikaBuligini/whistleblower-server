@@ -10,6 +10,12 @@ module.exports = {
     })
   },
 
+  showSingleProject (req, res) {
+    res.render('./pages/projects', {
+      title: req.params.projectName
+    })
+  },
+
   listAll (req, res) {
     Project.getAll()
       .then(projects => {
@@ -50,10 +56,52 @@ module.exports = {
       })
   },
 
+  createService (req, res) {
+    let projectName = req.params.projectName;
+    let serviceName = req.body.name;
+
+    Project.getProjectByName(projectName)
+      .then((existingProject) => {
+        if (!existingProject) {
+          return res.status(500).json({message: `${name} doesn\'t exists!`});
+        }
+
+        let servicesWithSameName = existingProject.services.filter((service) => {
+          return service.name === serviceName;
+        });
+
+        if (servicesWithSameName.length !== 0) {
+          return res.status(500).json({message: `${serviceName} is already used!`});
+        }
+
+        let service = new Service({
+          name: serviceName,
+          status: 'ok',
+          type: 'DISK_USAGE'
+        });
+        service.save();
+        console.log('SERVICE', service)
+        console.log('SERVICE', existingProject)
+
+        existingProject.services.push(service);
+        existingProject.save();
+
+        res.json(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json(err);
+      })
+  },
+
   getServicesForProject (req, res) {
     Project.getProjectServices(req.params.projectName)
       .then((project) => {
-        res.json(project.services);
+        let result = project.services.map((service) => {
+          return Object.assign({}, service.toObject(), { project: project.name });
+        });
+        
+        res.json(result);
       })
       .catch((err) => {
         console.log(err);

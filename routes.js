@@ -9,9 +9,10 @@ const project = require('./app/controllers/project.controller');
 
 router.get('/', home.dashboard);
 router.get('/projects', project.list);
-router.get('/projects/:projectName', project.list);
+router.get('/projects/:projectName', project.showSingleProject);
 router.get('/api/projects', project.listAll);
 router.get('/api/project/:projectName', project.getSingle);
+router.post('/api/project/:projectName/service', project.createService);
 router.get('/api/project/:projectName/services', project.getServicesForProject);
 router.post('/api/project/add', project.create);
 router.get('/api/projects/clear', project.clear);

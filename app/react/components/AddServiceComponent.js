@@ -21,7 +21,7 @@ class FormComponent extends Component {
 
   handleSubmit (event) {
     event.preventDefault();
-    this.props.addService(this.state.serviceName);
+    this.props.addService(this.state.serviceName, this.props.project.name);
   }
 
   render () {
@@ -62,13 +62,16 @@ class FormComponent extends Component {
 
 class AddServiceComponent extends Component {
   render () {
+    const { error, addService, handleCancel, project } = this.props;
+
     return (
       <div className='add'>
         {this.props.showInputs && (
           <FormComponent
-            error={this.props.error}
-            addService={this.props.addService}
-            handleCancel={this.props.handleCancel}
+            error={error}
+            addService={addService}
+            handleCancel={handleCancel}
+            project={project}
           />
         )}
       </div>
@@ -79,7 +82,8 @@ class AddServiceComponent extends Component {
 AddServiceComponent.propTypes = {
   error: PropTypes.string,
   handleCancel: PropTypes.func.isRequired,
-  addService: PropTypes.func.isRequired
+  addService: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired
 }
 
 function mapStateToProps (state, ownProps) {

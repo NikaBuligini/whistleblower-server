@@ -13,6 +13,14 @@ class FormComponent extends Component {
 
   componentDidMount () {
     componentHandler.upgradeDom();
+    // var notification = document.querySelector('.mdl-js-snackbar');
+    // var data = {
+    //   message: 'Message Sent',
+    //   actionHandler (event) {},
+    //   actionText: 'Undo',
+    //   timeout: 10000
+    // };
+    // notification.MaterialSnackbar.showSnackbar(data);
   }
 
   handleChange (event) {

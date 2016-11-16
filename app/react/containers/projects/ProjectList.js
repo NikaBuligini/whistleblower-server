@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
+import DocumentTitle from 'react-document-title'
 import { loadProjects, createProject } from '../../actions'
 import Loading from '../../components/Loading'
 import AddProjectComponent from '../../components/AddProjectComponent'
@@ -98,14 +99,16 @@ class ProjectList extends Component {
     }
 
     return (
-      <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--10-col mdl-cell--1-offset'>
-          <div className='projects'>
-            <AddProjectComponent />
-            <ProjectsComponent list={projects} />
+      <DocumentTitle title='Projects'>
+        <div className='mdl-grid'>
+          <div className='mdl-cell mdl-cell--10-col mdl-cell--1-offset'>
+            <div className='projects'>
+              <AddProjectComponent />
+              <ProjectsComponent list={projects} />
+            </div>
           </div>
         </div>
-      </div>
+      </DocumentTitle>
     )
   }
 }

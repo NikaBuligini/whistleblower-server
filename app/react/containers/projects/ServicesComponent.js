@@ -5,6 +5,20 @@ import { loadServices } from '../../actions'
 import Loading from '../../components/Loading'
 
 class ServiceItem extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      isActive: props.service.is_active
+    };
+
+    this.handleActivationStatusChange = this.handleActivationStatusChange.bind(this);
+  }
+
+  handleActivationStatusChange (event) {
+    console.log(event.target.value);
+    this.setState({ isActive: event.target.value })
+  }
+
   render () {
     const { service } = this.props;
 
@@ -18,7 +32,13 @@ class ServiceItem extends Component {
         </span>
         <span className="service-status">
           <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect" htmlFor={switchId}>
-            <input type="checkbox" id={switchId} className="mdl-switch__input" />
+            <input
+              id={switchId}
+              type="checkbox"
+              className="mdl-switch__input"
+              checked={this.state.isActive}
+              onChange={this.handleActivationStatusChange}
+            />
           </label>
         </span>
       </li>
@@ -73,7 +93,7 @@ class ServicesComponent extends Component {
   }
 
   render () {
-    let { isFetching, services } = this.props;
+    let { isFetching, services, project } = this.props;
 
     return (
       <section>
@@ -91,6 +111,7 @@ class ServicesComponent extends Component {
         <AddServiceComponent
           showInputs={this.state.isAddingService}
           handleCancel={this.handleAddingCancel}
+          project={project}
         />
         <ServicesList
           isFetching={isFetching}
@@ -120,7 +141,7 @@ function mapStateToProps (state, ownProps) {
   Object.keys(services).forEach((key) => {
     let val = services[key];
 
-    if (val.name === ownProps.project.name) {
+    if (val.project === ownProps.project.name) {
       projectServices[key] = val;
     }
   });

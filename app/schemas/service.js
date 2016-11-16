@@ -5,8 +5,10 @@ const uuid = require('uuid');
 
 // Create a new schema for our app data
 var ServiceSchema = new mongoose.Schema({
+  name: { type: String, required: true },
   type: { type: String, required: true },
   status: { type: String, required: true },
+  is_active: { type: Boolean, default: false },
   uuid: { type: String, index: { unique: true } },
   created_at: Date,
   updated_at: { type: Date, default: Date.now }

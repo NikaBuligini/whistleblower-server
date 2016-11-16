@@ -106,6 +106,10 @@ export default class Layout extends Component {
         <Navigation />
         <Drawer />
         <main className="mdl-layout__content">
+          <div className="mdl-snackbar mdl-js-snackbar">
+            <div className="mdl-snackbar__text" />
+            <button type="button" className="mdl-snackbar__action" />
+          </div>
           {this.props.children}
         </main>
         {/* <Footer /> */}
