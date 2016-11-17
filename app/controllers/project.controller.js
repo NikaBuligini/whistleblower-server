@@ -80,8 +80,6 @@ module.exports = {
           type: 'DISK_USAGE'
         });
         service.save();
-        console.log('SERVICE', service)
-        console.log('SERVICE', existingProject)
 
         existingProject.services.push(service);
         existingProject.save();
@@ -95,12 +93,18 @@ module.exports = {
   },
 
   getServicesForProject (req, res) {
+    const { projectName } = req.params;
+
     Project.getProjectServices(req.params.projectName)
       .then((project) => {
+        if (!project) {
+          return res.status(500).json({message: `Couldn't find ${projectName}!`});
+        }
+
         let result = project.services.map((service) => {
           return Object.assign({}, service.toObject(), { project: project.name });
         });
-        
+
         res.json(result);
       })
       .catch((err) => {

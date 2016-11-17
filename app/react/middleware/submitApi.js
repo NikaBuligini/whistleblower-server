@@ -65,7 +65,7 @@ export default function (store, next, action) {
   return submitApi(endpoint, body)
     .then(response => {
       next(actionWith({response, type: successType}));
-      if (typeof success === 'function') store.dispatch(success());
+      if (typeof success === 'object') store.dispatch(success);
     }, error => {
       next(actionWith({
         type: failureType,

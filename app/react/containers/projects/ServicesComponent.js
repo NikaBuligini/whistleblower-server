@@ -1,28 +1,27 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import AddServiceComponent from '../../components/AddServiceComponent'
-import { loadServices } from '../../actions'
+import { loadServices, changeServiceActivation } from '../../actions'
 import Loading from '../../components/Loading'
 
 class ServiceItem extends Component {
   constructor (props) {
     super(props);
-    this.state = {
-      isActive: props.service.is_active
-    };
 
     this.handleActivationStatusChange = this.handleActivationStatusChange.bind(this);
   }
 
   handleActivationStatusChange (event) {
-    console.log(event.target.value);
-    this.setState({ isActive: event.target.value })
+    this.props.handleActivationChange(this.props.service);
   }
 
   render () {
-    const { service } = this.props;
+    const { service, handleActivationChange } = this.props;
+    const switchId = `${service.name}-switch`;
 
-    let switchId = `${service.name}-switch`;
+    const btnData = service.isActive
+      ? { name: 'Enable', cls: 'mdl-button mdl-js-button mdl-button--accent' }
+      : { name: 'Disable', cls: 'mdl-button mdl-js-button mdl-button--primary' }
 
     return (
       <li className="mdl-list__item">
@@ -31,15 +30,12 @@ class ServiceItem extends Component {
           {service.name}
         </span>
         <span className="service-status">
-          <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect" htmlFor={switchId}>
-            <input
-              id={switchId}
-              type="checkbox"
-              className="mdl-switch__input"
-              checked={this.state.isActive}
-              onChange={this.handleActivationStatusChange}
-            />
-          </label>
+          <button
+            className={btnData.cls}
+            onClick={this.handleActivationStatusChange}
+          >
+            {btnData.name}
+          </button>
         </span>
       </li>
     );
@@ -52,7 +48,7 @@ class ServicesList extends Component {
   }
 
   render () {
-    const { isFetching, services } = this.props;
+    const { isFetching, services, handleActivationChange } = this.props;
 
     if (isFetching && typeof services !== 'undefined') {
       return <Loading cls='loading' />
@@ -69,6 +65,7 @@ class ServicesList extends Component {
             <ServiceItem
               key={index}
               service={services[key]}
+              handleActivationChange={handleActivationChange}
             />
           );
         })}
@@ -82,6 +79,7 @@ class ServicesComponent extends Component {
     super(props);
     this.state = {isAddingService: false};
     this.handleAddingCancel = this.handleAddingCancel.bind(this);
+    this.handleServiceActivationChange = this.handleServiceActivationChange.bind(this);
   }
 
   componentWillMount () {
@@ -90,6 +88,10 @@ class ServicesComponent extends Component {
 
   handleAddingCancel () {
     this.setState({isAddingService: false});
+  }
+
+  handleServiceActivationChange (service) {
+    this.props.changeServiceActivation(service)
   }
 
   render () {
@@ -115,7 +117,9 @@ class ServicesComponent extends Component {
         />
         <ServicesList
           isFetching={isFetching}
+          changeActivation={changeServiceActivation}
           services={services}
+          handleActivationChange={this.handleServiceActivationChange}
         />
       </section>
     );
@@ -126,6 +130,7 @@ ServicesComponent.propTypes = {
   services: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   loadServices: PropTypes.func.isRequired,
+  changeServiceActivation: PropTypes.func.isRequired,
   project: PropTypes.object
 }
 
@@ -151,5 +156,5 @@ function mapStateToProps (state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  loadServices
+  loadServices, changeServiceActivation
 })(ServicesComponent)

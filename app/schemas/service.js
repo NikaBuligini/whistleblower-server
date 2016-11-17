@@ -31,5 +31,17 @@ ServiceSchema.pre('save', function (next) {
   next();
 });
 
+ServiceSchema.statics = {
+  /**
+   * Get first project
+   *
+   * @api private
+   */
+  getById (id) {
+    return this.findById(id)
+      .exec()
+  }
+}
+
 // Return a Service model based upon the defined schema
 module.exports = mongoose.model('Service', ServiceSchema);

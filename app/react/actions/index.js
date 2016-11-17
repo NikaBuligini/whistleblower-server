@@ -125,7 +125,7 @@ function callCreateService (name, project) {
       body: {
         name: name
       },
-      success: fetchServices
+      success: fetchServices(project)
     },
     type: 'SUBMIT_API'
   };
@@ -136,5 +136,33 @@ function callCreateService (name, project) {
 export function addService (name, project) {
   return (dispatch, getState) => {
     return dispatch(callCreateService(name, project));
+  }
+}
+
+export const CHANGE_SERVICE_ACTIVATION_REQUEST = 'CHANGE_SERVICE_ACTIVATION_REQUEST';
+export const CHANGE_SERVICE_ACTIVATION_SUCCESS = 'CHANGE_SERVICE_ACTIVATION_SUCCESS';
+export const CHANGE_SERVICE_ACTIVATION_FAILURE = 'CHANGE_SERVICE_ACTIVATION_FAILURE';
+
+
+function callServiceActivationChange (service) {
+  const { id, project, isActive } = service;
+
+  return {
+    [SUBMIT_API]: {
+      types: [ CHANGE_SERVICE_ACTIVATION_REQUEST, CHANGE_SERVICE_ACTIVATION_SUCCESS, CHANGE_SERVICE_ACTIVATION_FAILURE ],
+      endpoint: `/api/service/${id}/activate`,
+      body: {
+        serviceId: id,
+        isActive: !isActive
+      },
+      success: fetchServices(project)
+    },
+    type: 'SUBMIT_API'
+  };
+}
+
+export function changeServiceActivation (service) {
+  return (dispatch, getState) => {
+    return dispatch(callServiceActivationChange(service));
   }
 }
