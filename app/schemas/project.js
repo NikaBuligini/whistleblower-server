@@ -53,11 +53,23 @@ ProjectSchema.statics = {
   /**
    * Get project by name
    *
-   * @param {projectName} project name
+   * @param {name} project name
    * @api public
    */
-  getProjectByName (projectName) {
-    return this.findOne({'name': projectName})
+  getByName (name) {
+    return this.findOne({ name })
+      .populate('services')
+      .exec()
+  },
+
+  /**
+   * Get project by id
+   *
+   * @param {id} project id
+   * @api public
+   */
+  getById (id) {
+    return this.findById(id)
       .populate('services')
       .exec()
   },

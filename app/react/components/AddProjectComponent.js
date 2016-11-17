@@ -6,7 +6,7 @@ import Loading from './Loading'
 class FormComponent extends Component {
   constructor(props) {
     super(props);
-    this.state = {projectName: props.projectName && ''};
+    this.state = { projectName: '' };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -24,12 +24,13 @@ class FormComponent extends Component {
   }
 
   handleChange (event) {
-    this.setState({projectName: event.target.value});
+    this.setState({ projectName: event.target.value });
   }
 
   handleSubmit (event) {
     event.preventDefault();
     this.props.createProject(this.state.projectName);
+    this.setState({ projectName: '' });
   }
 
   render () {

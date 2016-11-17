@@ -22,7 +22,7 @@ function fetchProjects (name) {
     return {
       [CALL_API]: {
         types: [ PROJECTS_REQUEST, PROJECTS_SUCCESS, PROJECTS_FAILURE ],
-        endpoint: '/api/projects',
+        endpoint: '/api/project',
         schema: Schemas.PROJECT_ARRAY
       },
       type: 'CALL_API'
@@ -66,11 +66,12 @@ function callCreateProject (name) {
   return {
     [SUBMIT_API]: {
       types: [ CREATE_PROJECT_REQUEST, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE ],
-      endpoint: '/api/project/add',
+      endpoint: '/api/project',
       body: {
         projectName: name
       },
-      success: fetchProjects
+      method: 'PUT',
+      schema: Schemas.PROJECT
     },
     type: 'SUBMIT_API'
   };
@@ -89,14 +90,29 @@ export const SERVICES_REQUEST = 'SERVICES_REQUEST';
 export const SERVICES_SUCCESS = 'SERVICES_SUCCESS';
 export const SERVICES_FAILURE = 'SERVICES_FAILURE';
 
+export const SERVICE_REQUEST = 'SERVICE_REQUEST';
+export const SERVICE_SUCCESS = 'SERVICE_SUCCESS';
+export const SERVICE_FAILURE = 'SERVICE_FAILURE';
+
 // Fetches list of services for single project.
 // Relies on the custom API middleware defined in ../middleware/api.js.
-function fetchServices (project) {
+function fetchServices (projectId) {
   return {
     [CALL_API]: {
       types: [ SERVICES_REQUEST, SERVICES_SUCCESS, SERVICES_FAILURE ],
-      endpoint: `/api/project/${project}/services`,
+      endpoint: `/api/service?projectId=${projectId}`,
       schema: Schemas.SERVICE_ARRAY
+    },
+    type: 'CALL_API'
+  };
+}
+
+function fetchService (id) {
+  return {
+    [CALL_API]: {
+      types: [ SERVICE_REQUEST, SERVICE_SUCCESS, SERVICE_FAILURE ],
+      endpoint: `/api/service/${id}`,
+      schema: Schemas.SERVICE
     },
     type: 'CALL_API'
   };
@@ -104,9 +120,9 @@ function fetchServices (project) {
 
 // Fetches a list of services for specific project from server.
 // Relies on Redux Thunk middleware.
-export function loadServices (project) {
+export function loadServices (projectId) {
   return (dispatch, getState) => {
-    return dispatch(fetchServices(project));
+    return dispatch(fetchServices(projectId));
   }
 }
 
@@ -117,15 +133,17 @@ export const CREATE_SERVICE_FAILURE = 'CREATE_SERVICE_FAILURE';
 
 // Calls single service creator method.
 // Relies on the custom API middleware defined in ../middleware/submitApi.js.
-function callCreateService (name, project) {
+function callCreateService (name, projectId) {
   return {
     [SUBMIT_API]: {
       types: [ CREATE_SERVICE_REQUEST, CREATE_SERVICE_SUCCESS, CREATE_SERVICE_FAILURE ],
-      endpoint: `/api/project/${project}/service`,
+      endpoint: `/api/service`,
       body: {
-        name: name
+        projectId,
+        name
       },
-      success: fetchServices(project)
+      method: 'PUT',
+      schema: Schemas.SERVICE
     },
     type: 'SUBMIT_API'
   };
@@ -133,9 +151,9 @@ function callCreateService (name, project) {
 
 // Creates new service instance.
 // Relies on Redux Thunk middleware.
-export function addService (name, project) {
+export function addService (name, projectId) {
   return (dispatch, getState) => {
-    return dispatch(callCreateService(name, project));
+    return dispatch(callCreateService(name, projectId));
   }
 }
 
@@ -155,7 +173,7 @@ function callServiceActivationChange (service) {
         serviceId: id,
         isActive: !isActive
       },
-      success: fetchServices(project)
+      success: fetchService(id)
     },
     type: 'SUBMIT_API'
   };

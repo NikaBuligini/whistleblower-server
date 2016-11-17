@@ -83,7 +83,7 @@ class ServicesComponent extends Component {
   }
 
   componentWillMount () {
-    this.props.loadServices(this.props.project.name);
+    this.props.loadServices(this.props.project.id);
   }
 
   handleAddingCancel () {

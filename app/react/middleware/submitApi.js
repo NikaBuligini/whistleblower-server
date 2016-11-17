@@ -3,9 +3,9 @@ import { camelizeKeys } from 'humps'
 import 'isomorphic-fetch'
 
 // This makes every API response have the same shape, regardless of how nested it was.
-function submitApi (endpoint, body) {
+function submitApi (endpoint, body, method, schema) {
   return fetch(endpoint, {
-    method: 'POST',
+    method: method || 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -21,7 +21,9 @@ function submitApi (endpoint, body) {
 
     const camelizedJson = camelizeKeys(json);
 
-    return json;
+    return typeof schema !== 'undefined'
+      ? Object.assign({}, normalize(camelizedJson, schema))
+      : json;
   })
 }
 
@@ -36,7 +38,7 @@ export default function (store, next, action) {
     return next(action);
   }
 
-  let { endpoint, body } = submitAPI;
+  let { endpoint, body, method, schema } = submitAPI;
   const { types, success } = submitAPI;
 
   if (typeof endpoint === 'function') {
@@ -62,9 +64,9 @@ export default function (store, next, action) {
   const [ requestType, successType, failureType ] = types;
   next(actionWith({ type: requestType }));
 
-  return submitApi(endpoint, body)
+  return submitApi(endpoint, body, method, schema)
     .then(response => {
-      next(actionWith({response, type: successType}));
+      next(actionWith({ response, type: successType }));
       if (typeof success === 'object') store.dispatch(success);
     }, error => {
       next(actionWith({

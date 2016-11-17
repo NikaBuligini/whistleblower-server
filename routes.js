@@ -11,12 +11,16 @@ const service = require('./app/controllers/service.controller');
 router.get('/', home.dashboard);
 router.get('/projects', project.list);
 router.get('/projects/:projectName', project.showSingleProject);
-router.get('/api/projects', project.listAll);
-router.get('/api/project/:projectName', project.getSingle);
-router.post('/api/project/:projectName/service', project.createService);
-router.get('/api/project/:projectName/services', project.getServicesForProject);
+
+router.get('/api/project', project.getAll);
+router.get('/api/project/:projectName', project.get);
+router.put('/api/project', project.create);
+
+router.get('/api/service', service.getByProjectId);
+router.put('/api/service', service.create);
+router.get('/api/service/:serviceId', service.get);
 router.post('/api/service/:serviceId/activate', service.activate);
-router.post('/api/project/add', project.create);
+
 router.get('/api/projects/clear', project.clear);
 router.post('/test', (req, res) => {
   // console.log(req.body);

@@ -21,7 +21,7 @@ class FormComponent extends Component {
 
   handleSubmit (event) {
     event.preventDefault();
-    this.props.addService(this.state.serviceName, this.props.project.name);
+    this.props.addService(this.state.serviceName, this.props.project.id);
     this.props.handleCancel();
   }
 
