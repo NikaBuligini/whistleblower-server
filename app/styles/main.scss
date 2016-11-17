@@ -1,5 +1,7 @@
 @import url('http://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
+$green: #4CAF50;
+
 .projects {
   .add {
     margin: 0 8px 20px 8px;
@@ -83,6 +85,10 @@
 
     .mdl-list__item {
       padding: 8px 16px;
+
+      .mdl-list__item-icon.active {
+        color: $green;
+      }
     }
   }
 

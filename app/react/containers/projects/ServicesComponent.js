@@ -22,11 +22,14 @@ class ServiceItem extends Component {
     const btnData = service.isActive
       ? { name: 'Enable', cls: 'mdl-button mdl-js-button mdl-button--accent' }
       : { name: 'Disable', cls: 'mdl-button mdl-js-button mdl-button--primary' }
+    const iconCls = service.isActive
+      ? 'material-icons mdl-list__item-icon active'
+      : 'material-icons mdl-list__item-icon'
 
     return (
       <li className="mdl-list__item">
         <span className="mdl-list__item-primary-content">
-          <i className="material-icons mdl-list__item-icon">work</i>
+          <i className={iconCls}>work</i>
           {service.name}
         </span>
         <span className="service-status">
