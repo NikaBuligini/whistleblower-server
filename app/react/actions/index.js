@@ -71,7 +71,8 @@ function callCreateProject (name) {
         projectName: name
       },
       method: 'PUT',
-      schema: Schemas.PROJECT
+      schema: Schemas.PROJECT,
+      success: fetchProjects(name)
     },
     type: 'SUBMIT_API'
   };
