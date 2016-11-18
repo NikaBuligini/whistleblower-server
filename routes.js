@@ -5,12 +5,15 @@ const router = express.Router();
 require('express-session');
 
 const home = require('./app/controllers/home.controller');
+const auth = require('./app/controllers/auth.controller');
 const project = require('./app/controllers/project.controller');
 const service = require('./app/controllers/service.controller');
 
 router.get('/', home.dashboard);
 router.get('/projects', project.list);
 router.get('/projects/:projectName', project.showSingleProject);
+
+router.get('/auth', auth.index);
 
 router.get('/api/project', project.getAll);
 router.get('/api/project/:projectName', project.get);

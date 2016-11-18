@@ -14,7 +14,7 @@ const Navigation = (props) => {
             Dashboard
           </Link>
         </span>
-        <div className="mdl-layout-spacer"></div>
+        <div className="mdl-layout-spacer" />
         <nav className="mdl-navigation">
           <Link to={'/projects'} className='mdl-navigation__link'>
             Projects

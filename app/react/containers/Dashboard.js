@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import DefaultLayout from './layouts/DefaultLayout'
 import DocumentTitle from 'react-document-title'
 
 class Dashboard extends Component {
@@ -7,16 +8,18 @@ class Dashboard extends Component {
     let { memory } = this.props;
 
     return (
-      <DocumentTitle title='Dashboard'>
-        <div className='mdl-grid'>
-          <div className='mdl-cell mdl-cell--10-col mdl-cell--1-offset'>
-            {this.props.params.projectName}
-            <p>Available: {memory.available}</p>
-            <p>Free: {memory.free}</p>
-            <p>Total: {memory.total}</p>
+      <DefaultLayout>
+        <DocumentTitle title='Dashboard'>
+          <div className='mdl-grid'>
+            <div className='mdl-cell mdl-cell--10-col mdl-cell--1-offset'>
+              {this.props.params.projectName}
+              <p>Available: {memory.available}</p>
+              <p>Free: {memory.free}</p>
+              <p>Total: {memory.total}</p>
+            </div>
           </div>
-        </div>
-      </DocumentTitle>
+        </DocumentTitle>
+      </DefaultLayout>
     )
   }
 }
