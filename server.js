@@ -31,9 +31,14 @@ app.engine('jsx', require('express-react-views').createEngine());
 // Disable etag headers on responses
 app.disable('etag');
 
+const dbConnection = {
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_DATABASE || 'whistleblower'
+};
+
 // Connect to our mongo database
 mongoose.Promise = promise;
-mongoose.connect('mongodb://localhost/whistleblower');
+mongoose.connect(`mongodb://${dbConnection.host}/${dbConnection.database}`);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
