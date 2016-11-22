@@ -20,8 +20,8 @@ class ServiceItem extends Component {
     const switchId = `${service.name}-switch`;
 
     const btnData = service.isActive
-      ? { name: 'Enable', cls: 'mdl-button mdl-js-button mdl-button--accent' }
-      : { name: 'Disable', cls: 'mdl-button mdl-js-button mdl-button--primary' }
+      ? { name: 'Disable', cls: 'mdl-button mdl-js-button mdl-button--primary' }
+      : { name: 'Enable', cls: 'mdl-button mdl-js-button mdl-button--accent' }
     const iconCls = service.isActive
       ? 'material-icons mdl-list__item-icon active'
       : 'material-icons mdl-list__item-icon'
