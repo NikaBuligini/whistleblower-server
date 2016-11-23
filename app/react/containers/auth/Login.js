@@ -2,6 +2,25 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import DocumentTitle from 'react-document-title'
 
+const Input = (props) => {
+  return (
+    <div className='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
+      <input
+        className='mdl-textfield__input'
+        type={props.type}
+        name={props.id}
+        id={props.id}
+      />
+      <label
+        className='mdl-textfield__label'
+        htmlFor={props.id}
+      >
+        {props.text}
+      </label>
+    </div>
+  );
+}
+
 class Login extends Component {
   componentDidMount () {
     componentHandler.upgradeDom();
@@ -12,15 +31,13 @@ class Login extends Component {
       <DocumentTitle title='Login'>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--10-col mdl-cell--1-offset'>
-            <form action='#' className='mdl-cell mdl-cell--4-col'>
-              <div className='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
-                <input className='mdl-textfield__input' type='text' id='username' />
-                <label className='mdl-textfield__label' htmlFor='username'>Username</label>
-              </div>
-              <div className='mdl-textfield mdl-js-textfield mdl-textfield--floating-label'>
-                <input className='mdl-textfield__input' type='password' id='password' />
-                <label className='mdl-textfield__label' htmlFor='password'>Password</label>
-              </div>
+            <form
+              method='post'
+              action='/auth/login'
+              className='mdl-cell mdl-cell--4-col'
+            >
+              <Input text='Email' id='email' type='text' />
+              <Input text='Password' id='password' type='password' />
               <button
                 type='submit'
                 className='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'

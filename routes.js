@@ -14,6 +14,9 @@ router.get('/projects', project.list);
 router.get('/projects/:projectName', project.showSingleProject);
 
 router.get('/auth', auth.index);
+router.get('/auth/sign-up', auth.index);
+router.post('/auth/login', auth.login);
+router.post('/auth/sign-up', auth.signUp);
 
 router.get('/api/project', project.getAll);
 router.get('/api/project/:projectName', project.get);
