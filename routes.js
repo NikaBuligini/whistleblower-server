@@ -9,7 +9,9 @@ const auth = require('./app/controllers/auth.controller');
 const project = require('./app/controllers/project.controller');
 const service = require('./app/controllers/service.controller');
 
-router.get('/', home.dashboard);
+const authMiddleware = require('./app/middlewares/auth.js');
+
+router.get('/', authMiddleware.notAuthenticated, home.dashboard);
 router.get('/projects', project.list);
 router.get('/projects/:projectName', project.showSingleProject);
 

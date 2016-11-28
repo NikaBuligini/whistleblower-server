@@ -32,7 +32,9 @@ class Project extends Component {
                 <ServicesComponent
                   project={project}
                 />
-                <UsersComponent />
+                <UsersComponent
+                  project={project}
+                />
               </div>
             </section>
           </div>

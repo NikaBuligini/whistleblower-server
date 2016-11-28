@@ -2,6 +2,16 @@
 
 const User = require('../schemas/user');
 
+function authorize (req, user, next) {
+  req.session.regenerate(() => {
+    // Store the user's primary key
+    // in the session store to be retrieved,
+    // or in this case the entire user object
+    req.session.userId = user._id;
+    next();
+  });
+}
+
 module.exports = {
   index (req, res) {
     res.render('./pages/auth', {
@@ -12,29 +22,19 @@ module.exports = {
   login (req, res) {
     let { email, password } = req.body;
 
-    User.find({ email, password })
-      .exec()
-      .then((user) => {
-        if (!user) {
-          res.redirect('/auth');
-        }
+    User.authenticate(email, password, (user) => {
+      if (!user) return res.redirect('/auth');
 
-        res.redirect('/');
-      })
-      .catch((err) => {
-        res.redirect('/auth');
-      });
+      authorize(req, user, () => res.redirect('/'));
+    });
   },
 
   signUp (req, res) {
     let { email, password } = req.body;
 
-    let user = new User({
-      email,
-      password
-    });
+    let user = new User({ email, password });
     user.save();
 
-    res.redirect('/');
+    authorize(req, user, () => res.redirect('/'));
   }
 }

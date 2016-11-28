@@ -2,6 +2,9 @@
 
 const mongoose = require('mongoose');
 
+// const bcrypt = require('bcrypt');
+// const SALT_ROUNDS = 10;
+
 // Create a new schema for our tweet data
 var UserSchema = new mongoose.Schema({
   email: { type: String, required: true, index: { unique: true } },
@@ -21,7 +24,40 @@ UserSchema.pre('save', function (next) {
   if (!this.created_at) this.created_at = currentDate;
 
   next();
+
+  // if (!this.isModified('password')) return next();
+
+  // bcrypt.hash(user.password, SALT_ROUNDS, (err, hash) => {
+  //   if (err) return next(err);
+  //
+  //   // Store hash in your password DB.
+  //   user.password = hash;
+  //   next();
+  // });
 });
+
+UserSchema.statics = {
+  /**
+   * Authenticate user
+   *
+   * @param {String} email
+   * @param {String} password
+   * @param {Function} fired after execution
+   * @api private
+   */
+  authenticate (email, password, next) {
+    return this.findOne({ email })
+      .exec()
+      .then((user) => {
+        if (!user) return next();
+
+        next(user);
+        // bcrypt.compare(password, user.password, (err, res) => {
+        //   next(err, res);
+        // });
+      })
+  }
+}
 
 // Return a User model based upon the defined schema
 module.exports = mongoose.model('User', UserSchema);

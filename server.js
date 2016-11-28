@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const http = require('http');
 const mongoose = require('mongoose');
@@ -23,10 +24,27 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+// to hold session
+app.use(session({
+  secret: 'rthyuilu37jg735ty786935ikehruyh76',
+  resave: false,
+  saveUninitialized: true
+}));
+
 // Set jsx as the templating engine
 app.set('views', path.resolve(__dirname, 'app/views'));
 app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
+
+app.use((req, res, next) => {
+  let { error, success } = req.session;
+  delete req.session.error;
+  delete req.session.success;
+  res.locals.message = '';
+  if (error) res.locals.message = { isError: true, text: error };
+  if (success) res.locals.message = { isError: false, text: success };
+  next();
+});
 
 // Disable etag headers on responses
 app.disable('etag');
