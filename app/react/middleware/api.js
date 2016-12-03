@@ -37,13 +37,16 @@ function callApi (endpoint, schema) {
 
 const projectSchema = new Schema('projects')
 const serviceSchema = new Schema('services')
+const userSchema = new Schema('users')
 
 // Schemas for Github API responses.
 export const Schemas = {
   PROJECT: projectSchema,
   PROJECT_ARRAY: arrayOf(projectSchema),
   SERVICE: serviceSchema,
-  SERVICE_ARRAY: arrayOf(serviceSchema)
+  SERVICE_ARRAY: arrayOf(serviceSchema),
+  USER: userSchema,
+  USER_ARRAY: arrayOf(userSchema)
 }
 
 // Action key that carries API call info interpreted by this Redux middleware.

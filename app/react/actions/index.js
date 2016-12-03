@@ -185,3 +185,29 @@ export function changeServiceActivation (service) {
     return dispatch(callServiceActivationChange(service));
   }
 }
+
+
+export const USERS_REQUEST = 'USERS_REQUEST';
+export const USERS_SUCCESS = 'USERS_SUCCESS';
+export const USERS_FAILURE = 'USERS_FAILURE';
+
+// Fetches list of users.
+// Relies on the custom API middleware defined in ../middleware/api.js.
+function fetchUsers () {
+  return {
+    [CALL_API]: {
+      types: [ USERS_REQUEST, USERS_SUCCESS, USERS_FAILURE ],
+      endpoint: `/api/user`,
+      schema: Schemas.USER_ARRAY
+    },
+    type: 'CALL_API'
+  };
+}
+
+// Fetches a list of users.
+// Relies on Redux Thunk middleware.
+export function loadUsers () {
+  return (dispatch, getState) => {
+    return dispatch(fetchUsers());
+  }
+}

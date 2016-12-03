@@ -30,9 +30,9 @@ module.exports = {
   },
 
   signUp (req, res) {
-    let { email, password } = req.body;
+    let { email, password, fullname } = req.body;
 
-    let user = new User({ email, password });
+    let user = new User({ email, password, fullname });
     user.save();
 
     authorize(req, user, () => res.redirect('/'));

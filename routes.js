@@ -8,6 +8,7 @@ const home = require('./app/controllers/home.controller');
 const auth = require('./app/controllers/auth.controller');
 const project = require('./app/controllers/project.controller');
 const service = require('./app/controllers/service.controller');
+const user = require('./app/controllers/user.controller');
 
 const authMiddleware = require('./app/middlewares/auth.js');
 
@@ -28,6 +29,8 @@ router.get('/api/service', service.getByProjectId);
 router.put('/api/service', service.create);
 router.get('/api/service/:serviceId', service.get);
 router.post('/api/service/:serviceId/activate', service.activate);
+
+router.get('/api/user', user.getAll);
 
 router.get('/api/projects/clear', project.clear);
 router.post('/test', (req, res) => {

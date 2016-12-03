@@ -36,6 +36,7 @@ class SignUp extends Component {
               action='/auth/sign-up'
               className='mdl-cell mdl-cell--4-col'
             >
+              <Input text='Fullname' id='fullname' type='text' />
               <Input text='Email' id='email' type='text' />
               <Input text='Password' id='password' type='password' />
               <Input text='Confirm Password' id='passwordConf' type='password' />

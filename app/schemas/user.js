@@ -7,8 +7,9 @@ const mongoose = require('mongoose');
 
 // Create a new schema for our tweet data
 var UserSchema = new mongoose.Schema({
+  fullname: { type: String, require: true },
   email: { type: String, required: true, index: { unique: true } },
-  password: { type: String, required: true },
+  password: { type: String, required: true, select: false },
   created_at: Date,
   updated_at: { type: Date, default: Date.now }
 });
@@ -47,6 +48,7 @@ UserSchema.statics = {
    */
   authenticate (email, password, next) {
     return this.findOne({ email })
+      .select('+password')
       .exec()
       .then((user) => {
         if (!user) return next();
@@ -56,6 +58,15 @@ UserSchema.statics = {
         //   next(err, res);
         // });
       })
+  },
+
+  /**
+   * Get all projects
+   * @api public
+   */
+  getAll () {
+    return this.find({})
+      .exec()
   }
 }
 
