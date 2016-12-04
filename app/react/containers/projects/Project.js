@@ -4,7 +4,7 @@ import DocumentTitle from 'react-document-title'
 import ServicesComponent from './ServicesComponent'
 import { loadProject } from '../../actions'
 import Loading from '../../components/Loading'
-import UsersComponent from './UsersComponent'
+import PermissionsComponent from './PermissionsComponent'
 
 class Project extends Component {
   componentWillMount () {
@@ -32,7 +32,7 @@ class Project extends Component {
                 <ServicesComponent
                   project={project}
                 />
-                <UsersComponent
+                <PermissionsComponent
                   project={project}
                 />
               </div>

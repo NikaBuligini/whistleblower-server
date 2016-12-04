@@ -68,6 +68,7 @@ export default function (store, next, action) {
     .then(response => {
       next(actionWith({ response, type: successType }));
       if (typeof success === 'object') store.dispatch(success);
+      else if (typeof success === 'function') success();
     }, error => {
       next(actionWith({
         type: failureType,

@@ -46,9 +46,9 @@ let Autocomplete = React.createClass({
         background: 'rgba(255, 255, 255, 0.9)',
         padding: '2px 0',
         fontSize: '90%',
-        position: 'fixed',
+        position: 'absolute',
         overflow: 'auto',
-        maxHeight: '50%', // TODO: don't cheat, let it flow to the bottom
+        maxHeight: '180px', // TODO: don't cheat, let it flow to the bottom
       },
       autoHighlight: true,
       onMenuVisibilityChange () {},
@@ -247,8 +247,6 @@ let Autocomplete = React.createClass({
     var marginLeft = parseInt(computedStyle.marginLeft, 10) || 0;
     var marginRight = parseInt(computedStyle.marginRight, 10) || 0;
     this.setState({
-      menuTop: rect.bottom + marginBottom,
-      menuLeft: rect.left + marginLeft,
       menuWidth: rect.width + marginLeft + marginRight
     })
   },
@@ -287,8 +285,6 @@ let Autocomplete = React.createClass({
       })
     })
     var style = {
-      left: this.state.menuLeft,
-      top: this.state.menuTop,
       minWidth: this.state.menuWidth,
     }
     var menu = this.props.renderMenu(items, this.props.value, style)

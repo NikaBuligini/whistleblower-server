@@ -1,19 +1,27 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import AddUserPermissionComponent from '../../components/AddUserPermissionComponent'
-import { loadServices, changeServiceActivation } from '../../actions'
+import { loadServices, removePermission } from '../../actions'
 import Loading from '../../components/Loading'
 
-class UserItem extends Component {
+class PermissionItem extends Component {
+  handleDelete () {
+    this.props.handlePermissionDelete(this.props.permission);
+  }
+
   render () {
+    let { permission, handlePermissionDelete } = this.props;
     return (
       <li className="mdl-list__item">
         <span className="mdl-list__item-primary-content">
           <i className="material-icons mdl-list__item-icon">person</i>
-          {this.props.permission.name}
+          {permission.fullname}
         </span>
         <span>
-          <button className="mdl-button mdl-js-button mdl-button--icon">
+          <button
+            className="mdl-button mdl-js-button mdl-button--icon"
+            onClick={this.handleDelete.bind(this)}
+          >
             <i className="material-icons">delete</i>
           </button>
         </span>
@@ -24,7 +32,7 @@ class UserItem extends Component {
 
 class PermissionsList extends Component {
   render () {
-    const { isFetching, permissions, handleActivationChange } = this.props;
+    const { isFetching, permissions, handlePermissionDelete } = this.props;
 
     if (isFetching && typeof permissions !== 'undefined') {
       return <Loading cls='loading' />
@@ -38,10 +46,10 @@ class PermissionsList extends Component {
       <ul className="list mdl-list">
         {Object.keys(permissions).map((key, index) => {
           return (
-            <UserItem
+            <PermissionItem
               key={index}
               permission={permissions[key]}
-              handleActivationChange={handleActivationChange}
+              handlePermissionDelete={handlePermissionDelete}
             />
           );
         })}
@@ -50,25 +58,24 @@ class PermissionsList extends Component {
   }
 }
 
-class UsersComponent extends Component {
+class PermissionsComponent extends Component {
   constructor (props) {
     super(props);
     this.state = {isAddingPermission: false};
     this.handleAddingCancel = this.handleAddingCancel.bind(this);
-    // this.handleServiceActivationChange = this.handleServiceActivationChange.bind(this);
+    this.handlePermissionDelete = this.handlePermissionDelete.bind(this);
   }
 
   handleAddingCancel () {
     this.setState({isAddingPermission: false});
   }
 
+  handlePermissionDelete (permission) {
+    this.props.removePermission(permission.id, this.props.project.id);
+  }
+
   render () {
-    let { isFetching, services, project } = this.props;
-    let tempPermissions = {
-      0: {name: 'Nikoloz Buligini'},
-      1: {name: 'Aleko Targamadze'},
-      2: {name: 'Tengiz Lashkhi'}
-    }
+    let { isFetching, project, users } = this.props;
 
     return (
       <section>
@@ -89,42 +96,40 @@ class UsersComponent extends Component {
           project={project}
         />
         <PermissionsList
-          permissions={tempPermissions}
+          permissions={users}
+          handlePermissionDelete={this.handlePermissionDelete}
         />
       </section>
     );
   }
 }
 
-UsersComponent.propTypes = {
-  services: PropTypes.object.isRequired,
+PermissionsComponent.propTypes = {
+  users: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  loadServices: PropTypes.func.isRequired,
-  changeServiceActivation: PropTypes.func.isRequired,
+  removePermission: PropTypes.func.isRequired,
   project: PropTypes.object
 }
 
-UsersComponent.defaultProps = {
+PermissionsComponent.defaultProps = {
   isFetching: true
 }
 
 function mapStateToProps (state, ownProps) {
-  const { isFetching } = state.process.services;
-  let { services } = state.entities;
+  const { isFetching } = state.process.users;
+  let { users } = state.entities;
+  let userIds = ownProps.project.users;
 
-  let projectServices = {};
-  Object.keys(services).forEach((key) => {
-    let val = services[key];
-
-    if (val.project === ownProps.project.name) {
-      projectServices[key] = val;
+  let usersWithPermission = {};
+  Object.keys(users).forEach(key => {
+    if (userIds.indexOf(key) !== -1) {
+      usersWithPermission[key] = users[key];
     }
   });
-  services = projectServices;
 
-  return { isFetching, services };
+  return { isFetching, users: usersWithPermission };
 }
 
 export default connect(mapStateToProps, {
-  loadServices, changeServiceActivation
-})(UsersComponent)
+  removePermission
+})(PermissionsComponent)

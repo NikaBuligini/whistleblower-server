@@ -39,6 +39,11 @@ const projectSchema = new Schema('projects')
 const serviceSchema = new Schema('services')
 const userSchema = new Schema('users')
 
+projectSchema.define({
+  services: arrayOf(serviceSchema),
+  users: arrayOf(userSchema)
+});
+
 // Schemas for Github API responses.
 export const Schemas = {
   PROJECT: projectSchema,

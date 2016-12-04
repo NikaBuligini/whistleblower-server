@@ -8,6 +8,7 @@ var ProjectSchema = new mongoose.Schema({
   name: { type: String, required: true, index: { unique: true } },
   uuid: { type: String, index: { unique: true } },
   services: [{ type: mongoose.Schema.ObjectId, ref: 'Service' }],
+  users: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   created_at: Date,
   updated_at: { type: Date, default: Date.now }
 });
@@ -28,6 +29,34 @@ ProjectSchema.pre('save', function (next) {
 
   next();
 });
+
+ProjectSchema.methods = {
+  /**
+   * Adds permission for user
+   *
+   * @param user
+   * @api private
+   */
+   addPermission (user) {
+     let userIds = this.users.map(u => u.id);
+     if (userIds.indexOf(user.id) === -1) {
+       this.users.push(user);
+       this.save();
+     }
+   },
+
+   /**
+    * Remove permission for user
+    *
+    * @param userId
+    * @api private
+    */
+    removePermission (userId) {
+      let uid = this.users.indexOf(userId);
+      if (uid !== -1) this.users.splice(uid, 1);
+      this.save();
+    }
+}
 
 ProjectSchema.statics = {
   /**
@@ -59,6 +88,7 @@ ProjectSchema.statics = {
   getByName (name) {
     return this.findOne({ name })
       .populate('services')
+      .populate('users')
       .exec()
   },
 
@@ -71,6 +101,7 @@ ProjectSchema.statics = {
   getById (id) {
     return this.findById(id)
       .populate('services')
+      .populate('users')
       .exec()
   },
 
@@ -83,6 +114,7 @@ ProjectSchema.statics = {
   getProjectServices (projectName) {
     return this.findOne({'name': projectName})
       .populate('services')
+      .populate('users')
       .exec()
   }
 }

@@ -60,6 +60,11 @@ UserSchema.statics = {
       })
   },
 
+  getById (id) {
+    return this.findById(id)
+      .exec();
+  },
+
   /**
    * Get all projects
    * @api public

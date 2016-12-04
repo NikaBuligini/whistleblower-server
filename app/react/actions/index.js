@@ -211,3 +211,65 @@ export function loadUsers () {
     return dispatch(fetchUsers());
   }
 }
+
+
+export const CREATE_PERMISSION_REQUEST = 'CREATE_PERMISSION_REQUEST';
+export const CREATE_PERMISSION_SUCCESS = 'CREATE_PERMISSION_SUCCESS';
+export const CREATE_PERMISSION_FAILURE = 'CREATE_PERMISSION_FAILURE';
+
+// Calls single permission creator method.
+// Relies on the custom API middleware defined in ../middleware/submitApi.js.
+function callCreatePermission (userId, projectId) {
+  return {
+    [SUBMIT_API]: {
+      types: [ CREATE_PERMISSION_REQUEST, CREATE_PERMISSION_SUCCESS, CREATE_PERMISSION_FAILURE ],
+      endpoint: `/api/project/${projectId}/permission`,
+      body: {
+        userId
+      },
+      method: 'PUT',
+      schema: Schemas.PROJECT
+    },
+    type: 'SUBMIT_API'
+  };
+}
+
+// Gives user permission over project
+// Relies on Redux Thunk middleware.
+export function addPermission (userId, projectId) {
+  return (dispatch, getState) => {
+    return dispatch(callCreatePermission(userId, projectId));
+  }
+}
+
+export const REMOVE_PERMISSION_REQUEST = 'REMOVE_PERMISSION_REQUEST';
+export const REMOVE_PERMISSION_SUCCESS = 'REMOVE_PERMISSION_SUCCESS';
+export const REMOVE_PERMISSION_FAILURE = 'REMOVE_PERMISSION_FAILURE';
+
+// Calls single permission creator method.
+// Relies on the custom API middleware defined in ../middleware/submitApi.js.
+function callRemovePermission (userId, projectId) {
+  return {
+    [SUBMIT_API]: {
+      types: [ REMOVE_PERMISSION_REQUEST, REMOVE_PERMISSION_SUCCESS, REMOVE_PERMISSION_FAILURE ],
+      endpoint: `/api/project/${projectId}/permission`,
+      body: {
+        userId
+      },
+      method: 'DELETE',
+      schema: Schemas.PROJECT,
+      success: () => {
+        location.reload();
+      }
+    },
+    type: 'SUBMIT_API'
+  };
+}
+
+// Gives user permission over project
+// Relies on Redux Thunk middleware.
+export function removePermission (userId, projectId) {
+  return (dispatch, getState) => {
+    return dispatch(callRemovePermission(userId, projectId));
+  }
+}

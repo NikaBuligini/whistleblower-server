@@ -23,6 +23,8 @@ router.post('/auth/sign-up', auth.signUp);
 
 router.get('/api/project', project.getAll);
 router.get('/api/project/:projectName', project.get);
+router.put('/api/project/:projectId/permission', project.addPermission);
+router.delete('/api/project/:projectId/permission', project.removePermission);
 router.put('/api/project', project.create);
 
 router.get('/api/service', service.getByProjectId);

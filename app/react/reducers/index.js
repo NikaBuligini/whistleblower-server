@@ -23,7 +23,7 @@ function memory (state = {
 }
 
 // Updates an entity cache in response to any action with response.entities.
-function entities (state = { projects: {}, services: {} }, action) {
+function entities (state = { projects: {}, services: {}, users: {} }, action) {
   if (action.response && action.response.entities) {
     return merge({}, state, action.response.entities)
   }

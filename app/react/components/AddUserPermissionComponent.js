@@ -2,56 +2,30 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 // import Autocomplete from 'react-autocomplete'
 import Autocomplete from './Autocomplete'
-import { loadUsers } from '../actions'
+import { loadUsers, addPermission } from '../actions'
 import Loading from './Loading'
 
 const style = {
-  highlited: {
+  highlighted: {
     cursor: 'default',
+    padding: '6px 12px',
     color: 'white',
     background: 'rgb(63, 149, 191)'
   },
   item: {
-    cursor: 'default'
+    cursor: 'default',
+    padding: '6px 12px'
   }
-}
-
-function matchStateToTerm (state, value) {
-  return (
-    state.name.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
-    state.abbr.toLowerCase().indexOf(value.toLowerCase()) !== -1
-  )
-}
-
-function fakeRequest (value, cb) {
-  if (value === '')
-    return getStates()
-  var items = getStates().filter((state) => {
-    return matchStateToTerm(state, value)
-  })
-  setTimeout(() => {
-    cb(items)
-  }, 500)
-}
-
-function getStates() {
-  return [
-    { abbr: "AL", name: "Alabama"},
-    { abbr: "AK", name: "Alaska"},
-    { abbr: "AZ", name: "Arizona"},
-  ]
 }
 
 class FormComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      serviceName: '',
       value: '',
-      unitedStates: getStates(),
-      loading: false
+      loading: false,
+      users: []
     };
-    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -59,18 +33,29 @@ class FormComponent extends Component {
     this.props.loadUsers();
   }
 
-  handleChange (event) {
-    this.setState({serviceName: event.target.value});
+  componentWillReceiveProps (nextProps) {
+    let { users } = nextProps;
+    this.setState({ users });
+  }
+
+  filterUsers (value, users, cb) {
+    if (value === '') return cb();
+
+    let items = users.filter(user => user.fullname.toLowerCase().indexOf(value.toLowerCase()) !== -1);
+
+    setTimeout(() => {
+      cb(items)
+    }, 100);
   }
 
   handleSubmit (event) {
     event.preventDefault();
-    this.props.addService(this.state.serviceName, this.props.project.id);
+    this.props.addPermission(this.state.item.id, this.props.project.id);
     this.props.handleCancel();
   }
 
   render () {
-    const { error } = this.props;
+    const { error, users } = this.props;
 
     return (
       <form onSubmit={this.handleSubmit} className="service-form">
@@ -78,49 +63,37 @@ class FormComponent extends Component {
           <Autocomplete
             inputProps={{
               name: 'user names',
-              id: 'permission-input',
-              // className: 'mdl-textfield__input'
+              id: 'permission-input'
             }}
             inputLabel={() => {
               return (
-                <label className="mdl-textfield__label" htmlFor="permission-input" />
+                <label className="mdl-textfield__label" htmlFor="permission-input">Name</label>
               )
             }}
             ref='autocomplete'
             value={this.state.value}
-            items={this.props.users}
+            items={this.state.users}
             getItemValue={(item) => item.fullname}
             onSelect={(value, item) => {
               // set the menu to only the selected item
-              this.setState({ value, users: [ item ] })
-              // or you could reset it to a default list again
-              // this.setState({ unitedStates: getStates() })
+              this.setState({ value, item, users: [ item ] })
             }}
             onChange={(event, value) => {
               this.setState({ value, loading: true })
-              fakeRequest(value, (items) => {
+              this.filterUsers(value, users, (items) => {
+                if (!items) items = users;
                 this.setState({ users: items, loading: false })
               })
             }}
             renderItem={(item, isHighlighted) => (
               <div
-                style={isHighlighted ? style.highlited : style.item}
+                style={isHighlighted ? style.highlighted : style.item}
                 key={item.id}
                 id={item.id}
               >{item.fullname}</div>
             )}
             wrapperStyle={{display: 'block'}}
           />
-          {/* <input
-            className="mdl-textfield__input"
-            type="text"
-            id="service-name"
-            autoComplete="off"
-            autoFocus="on"
-            onChange={this.handleChange}
-            value={this.state.serviceName}
-          />
-          <label className="mdl-textfield__label" htmlFor="service-name">Name</label> */}
           {error && <span className="mdl-textfield__error" style={{visibility: 'visible'}}>{error}</span>}
         </div>
         <button
@@ -144,6 +117,7 @@ class FormComponent extends Component {
 FormComponent.propTypes = {
   error: PropTypes.string,
   loadUsers: PropTypes.func.isRequired,
+  addPermission: PropTypes.func.isRequired,
   users: PropTypes.array
 }
 
@@ -164,7 +138,7 @@ function mapStateToFormProps (state, ownProps) {
 }
 
 FormComponent = connect(mapStateToFormProps, {
-  loadUsers
+  loadUsers, addPermission
 })(FormComponent)
 
 class AddUserPermissionComponent extends Component {
