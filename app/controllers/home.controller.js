@@ -1,9 +1,7 @@
-'use strict'
-
 module.exports = {
-  dashboard (req, res) {
+  dashboard(req, res) {
     res.render('./pages/home', {
-      title: 'Dashboard'
-    })
-  }
-}
+      title: 'Dashboard',
+    });
+  },
+};

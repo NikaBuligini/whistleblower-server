@@ -8,27 +8,30 @@ import rootReducer from '../reducers';
 import DevTools from '../containers/DevTools';
 // import devTools from 'remote-redux-devtools';
 
-let socket = io('localhost:3000');
+const socket = io('localhost:3000');
 
-socket.on('connect', function(){
+socket.on('connect', () => {
   console.log('connected to socket');
 });
 // socket.on('event', function(data){
 //   console.log(data);
 // });
 // socket.on('disconnect', function(){});
-let socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
+const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
 
-export default function configureStore (preloadedState) {
+/**
+ * add createLogger() to applyMiddleware for logs
+ */
+export default function configureStore(preloadedState) {
   const store = createStore(
     rootReducer,
     preloadedState,
     compose(
-      applyMiddleware(thunk, socketIoMiddleware, api, /*createLogger()*/),
+      applyMiddleware(thunk, socketIoMiddleware, api),
       // DevTools.instrument()
       // devTools({ realtime: true })
-      window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument()
-    )
+      window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument(),
+    ),
   );
 
   // if devToolsExtension is not installed use
@@ -39,7 +42,7 @@ export default function configureStore (preloadedState) {
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers', () => {
-      const nextRootReducer = require('../reducers').default;
+      const nextRootReducer = rootReducer;
       store.replaceReducer(nextRootReducer);
     });
   }

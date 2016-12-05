@@ -1,15 +1,17 @@
-import React, { Component } from 'react'
+import React, { PropTypes } from 'react';
 
-import DefaultLayout from '../layouts/default'
+import DefaultLayout from '../layouts/default';
 
-class AuthComponent extends Component {
-  render () {
-    return (
-      <DefaultLayout title={this.props.title}>
-        <div id="mount" />
-      </DefaultLayout>
-    )
-  }
+function AuthComponent(props) {
+  return (
+    <DefaultLayout title={props.title}>
+      <div id="mount" />
+    </DefaultLayout>
+  );
 }
 
-export default AuthComponent
+AuthComponent.propTypes = {
+  title: PropTypes.string.isRequired,
+};
+
+export default AuthComponent;

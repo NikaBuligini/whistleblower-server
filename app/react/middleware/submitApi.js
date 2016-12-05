@@ -1,17 +1,17 @@
-import { Schema, arrayOf, normalize } from 'normalizr'
-import { camelizeKeys } from 'humps'
-import 'isomorphic-fetch'
+import { normalize } from 'normalizr';
+import { camelizeKeys } from 'humps';
+import fetch from 'isomorphic-fetch';
 
 // This makes every API response have the same shape, regardless of how nested it was.
-function submitApi (endpoint, body, method, schema) {
+function submitApi(endpoint, body, method, schema) {
   return fetch(endpoint, {
     method: method || 'POST',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     credentials: 'same-origin',
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   })
   .then(response => response.json().then(json => ({ json, response })))
   .then(({ json, response }) => {
@@ -24,7 +24,7 @@ function submitApi (endpoint, body, method, schema) {
     return typeof schema !== 'undefined'
       ? Object.assign({}, normalize(camelizedJson, schema))
       : json;
-  })
+  });
 }
 
 // Action key that carries API call info interpreted by this Redux middleware.
@@ -38,7 +38,7 @@ export default function (store, next, action) {
     return next(action);
   }
 
-  let { endpoint, body, method, schema } = submitAPI;
+  let { endpoint } = submitAPI;
   const { types, success } = submitAPI;
 
   if (typeof endpoint === 'function') {
@@ -55,25 +55,25 @@ export default function (store, next, action) {
     throw new Error('Expected action types to be strings.');
   }
 
-  function actionWith (data) {
+  function actionWith(data) {
     const finalAction = Object.assign({}, action, data);
     delete finalAction[SUBMIT_API];
     return finalAction;
   }
 
-  const [ requestType, successType, failureType ] = types;
+  const [requestType, successType, failureType] = types;
   next(actionWith({ type: requestType }));
 
-  return submitApi(endpoint, body, method, schema)
-    .then(response => {
+  return submitApi(endpoint)
+    .then((response) => {
       next(actionWith({ response, type: successType }));
       if (typeof success === 'object') store.dispatch(success);
       else if (typeof success === 'function') success();
-    }, error => {
+    }, (error) => {
       next(actionWith({
         type: failureType,
-        error: error.message || 'Something bad happened'
+        error: error.message || 'Something bad happened',
       }));
-    }
+    },
   );
 }

@@ -1,26 +1,26 @@
-'use strict'
-
-const Project = require('../../app/schemas/project');
-const Service = require('../../app/schemas/service');
+require('../../app/schemas/project');
+require('../../app/schemas/service');
 const User = require('../../app/schemas/user');
 
-module.exports = function () {
+function seed() {
   User.findOne({ roles: 'admin' })
     .exec()
-    .then(user => {
+    .then((user) => {
       if (!user) {
         console.log('seeding...');
-        user = new User({
+        const admin = new User({
           fullname: 'Nikoloz Buligini',
           email: 'nbuligini11@gmail.com',
-          password: 'asd'
+          password: 'asd',
         });
-        user.roles.push('admin');
-        user.save();
+        admin.roles.push('admin');
+        admin.save();
         console.log('admin user created');
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
-    })
+    });
 }
+
+module.exports = seed;

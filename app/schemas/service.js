@@ -1,22 +1,20 @@
-'use strict'
-
 const mongoose = require('mongoose');
 const uuid = require('uuid');
 
 // Create a new schema for our app data
-var ServiceSchema = new mongoose.Schema({
+const ServiceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
   status: { type: String, required: true },
   is_active: { type: Boolean, default: false },
   uuid: { type: String, index: { unique: true } },
   created_at: Date,
-  updated_at: { type: Date, default: Date.now }
+  updated_at: { type: Date, default: Date.now },
 });
 
-ServiceSchema.pre('save', function (next) {
+function save(next) {
   // get the current date
-  var currentDate = new Date();
+  const currentDate = new Date();
 
   if (!this.uuid) {
     this.uuid = uuid.v1();
@@ -29,7 +27,9 @@ ServiceSchema.pre('save', function (next) {
   if (!this.created_at) this.created_at = currentDate;
 
   next();
-});
+}
+
+ServiceSchema.pre('save', save);
 
 ServiceSchema.statics = {
   /**
@@ -37,11 +37,11 @@ ServiceSchema.statics = {
    *
    * @api private
    */
-  getById (id) {
+  getById(id) {
     return this.findById(id)
-      .exec()
-  }
-}
+      .exec();
+  },
+};
 
 // Return a Service model based upon the defined schema
 module.exports = mongoose.model('Service', ServiceSchema);

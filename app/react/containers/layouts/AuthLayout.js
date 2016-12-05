@@ -1,26 +1,24 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router'
+import React, { Component } from 'react';
+import { Link } from 'react-router';
 
-const Navigation = (props) => {
-  return (
-    <header className="mdl-layout__header mdl-layout__header--scroll mdl-shadow--2dp">
-      <div className="mdl-layout__header-row">
-        <div className="mdl-layout-spacer" />
-        <nav className="mdl-navigation">
-          <Link to={'/auth'} className='mdl-navigation__link'>
-            Login
-          </Link>
-          <Link to={'/auth/sign-up'} className='mdl-navigation__link'>
-            Sign Up
-          </Link>
-        </nav>
-      </div>
-    </header>
-  );
-}
+const Navigation = () => (
+  <header className="mdl-layout__header mdl-layout__header--scroll mdl-shadow--2dp">
+    <div className="mdl-layout__header-row">
+      <div className="mdl-layout-spacer" />
+      <nav className="mdl-navigation">
+        <Link to={'/auth'} className="mdl-navigation__link">
+          Login
+        </Link>
+        <Link to={'/auth/sign-up'} className="mdl-navigation__link">
+          Sign Up
+        </Link>
+      </nav>
+    </div>
+  </header>
+);
 
 export default class Layout extends Component {
-  render () {
+  render() {
     return (
       <div className="mdl-layout mdl-js-layout">
         <Navigation />
@@ -32,6 +30,6 @@ export default class Layout extends Component {
           {this.props.children}
         </main>
       </div>
-    )
+    );
   }
 }

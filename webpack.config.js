@@ -3,14 +3,14 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: [
-    './app/react/index.js'
+    './app/react/index.js',
   ],
   output: {
     path: path.join(__dirname, 'public'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
   },
   devtool: 'sourcemap',
   module: {
@@ -18,14 +18,14 @@ module.exports = {
       { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
       { test: /\.(ttf|eot)$/, loader: 'file' },
       { test: /\.scss$/, loaders: ['style', 'css', 'sass'] },
-      { test: /\.js$/, exclude: /node_modules/, loaders: ['babel-loader'] }
-    ]
+      { test: /\.js$/, exclude: /node_modules/, loaders: ['babel-loader'] },
+    ],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
   ],
   devServer: {
-    contentBase: './public'
-  }
+    contentBase: './public',
+  },
 };

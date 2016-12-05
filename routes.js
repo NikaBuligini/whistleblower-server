@@ -1,6 +1,5 @@
-'use strict'
-
 const express = require('express');
+
 const router = express.Router();
 require('express-session');
 
@@ -40,6 +39,6 @@ router.post('/test', (req, res) => {
   req.io.sockets.emit('action', { type: 'MEMORY_UPDATE', info: req.body });
 
   res.json({ greet: 'hi' });
-})
+});
 
-module.exports = router
+module.exports = router;

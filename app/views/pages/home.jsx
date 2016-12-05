@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { PropTypes } from 'react';
+import DefaultLayout from '../layouts/default';
 
-import DefaultLayout from '../layouts/default'
-
-class HomeComponent extends React.Component {
-  render () {
-    return (
-      <DefaultLayout title={this.props.title} user={this.props.user}>
-        <div id="mount" />
-      </DefaultLayout>
-    )
-  }
+function HomeComponent(props) {
+  return (
+    <DefaultLayout title={props.title}>
+      <div id="mount" />
+    </DefaultLayout>
+  );
 }
 
-export default HomeComponent
+HomeComponent.propTypes = {
+  title: PropTypes.string.isRequired,
+};
+
+export default HomeComponent;

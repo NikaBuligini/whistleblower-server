@@ -1,12 +1,12 @@
-import { CALL_API, Schemas } from '../middleware/api'
-import { SUBMIT_API } from '../middleware/submitApi'
+import { CALL_API, Schemas } from '../middleware/api';
+import { SUBMIT_API } from '../middleware/submitApi';
 
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE';
 
 // Resets the currently visible error message.
-export function resetErrorMessage () {
+export function resetErrorMessage() {
   return {
-    type: RESET_ERROR_MESSAGE
+    type: RESET_ERROR_MESSAGE,
   };
 }
 
@@ -17,42 +17,38 @@ export const PROJECTS_FAILURE = 'PROJECTS_FAILURE';
 
 // Fetches a single user from Github API.
 // Relies on the custom API middleware defined in ../middleware/api.js.
-function fetchProjects (name) {
+function fetchProjects(name) {
   if (typeof name === 'undefined') {
     return {
       [CALL_API]: {
-        types: [ PROJECTS_REQUEST, PROJECTS_SUCCESS, PROJECTS_FAILURE ],
+        types: [PROJECTS_REQUEST, PROJECTS_SUCCESS, PROJECTS_FAILURE],
         endpoint: '/api/project',
-        schema: Schemas.PROJECT_ARRAY
+        schema: Schemas.PROJECT_ARRAY,
       },
-      type: 'CALL_API'
+      type: 'CALL_API',
     };
   }
 
   return {
     [CALL_API]: {
-      types: [ PROJECTS_REQUEST, PROJECTS_SUCCESS, PROJECTS_FAILURE ],
+      types: [PROJECTS_REQUEST, PROJECTS_SUCCESS, PROJECTS_FAILURE],
       endpoint: `/api/project/${name}`,
-      schema: Schemas.PROJECT
+      schema: Schemas.PROJECT,
     },
-    type: 'CALL_API'
+    type: 'CALL_API',
   };
 }
 
 // Fetches a list of applocations from server unless it is cached.
 // Relies on Redux Thunk middleware.
-export function loadProjects () {
-  return (dispatch, getState) => {
-    return dispatch(fetchProjects());
-  }
+export function loadProjects() {
+  return dispatch => dispatch(fetchProjects());
 }
 
 // Fetches a list of applocations from server unless it is cached.
 // Relies on Redux Thunk middleware.
-export function loadProject (name) {
-  return (dispatch, getState) => {
-    return dispatch(fetchProjects(name));
-  }
+export function loadProject(name) {
+  return dispatch => dispatch(fetchProjects(name));
 }
 
 
@@ -62,28 +58,26 @@ export const CREATE_PROJECT_FAILURE = 'CREATE_PROJECT_FAILURE';
 
 // Calls single project creator method.
 // Relies on the custom API middleware defined in ../middleware/submitApi.js.
-function callCreateProject (name) {
+function callCreateProject(name) {
   return {
     [SUBMIT_API]: {
-      types: [ CREATE_PROJECT_REQUEST, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE ],
+      types: [CREATE_PROJECT_REQUEST, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE],
       endpoint: '/api/project',
       body: {
-        projectName: name
+        projectName: name,
       },
       method: 'PUT',
       schema: Schemas.PROJECT,
-      success: fetchProjects(name)
+      success: fetchProjects(name),
     },
-    type: 'SUBMIT_API'
+    type: 'SUBMIT_API',
   };
 }
 
 // Creates new project instance.
 // Relies on Redux Thunk middleware.
-export function createProject (name) {
-  return (dispatch, getState) => {
-    return dispatch(callCreateProject(name));
-  }
+export function createProject(name) {
+  return dispatch => dispatch(callCreateProject(name));
 }
 
 
@@ -97,34 +91,32 @@ export const SERVICE_FAILURE = 'SERVICE_FAILURE';
 
 // Fetches list of services for single project.
 // Relies on the custom API middleware defined in ../middleware/api.js.
-function fetchServices (projectId) {
+function fetchServices(projectId) {
   return {
     [CALL_API]: {
-      types: [ SERVICES_REQUEST, SERVICES_SUCCESS, SERVICES_FAILURE ],
+      types: [SERVICES_REQUEST, SERVICES_SUCCESS, SERVICES_FAILURE],
       endpoint: `/api/service?projectId=${projectId}`,
-      schema: Schemas.SERVICE_ARRAY
+      schema: Schemas.SERVICE_ARRAY,
     },
-    type: 'CALL_API'
+    type: 'CALL_API',
   };
 }
 
-function fetchService (id) {
+function fetchService(id) {
   return {
     [CALL_API]: {
-      types: [ SERVICE_REQUEST, SERVICE_SUCCESS, SERVICE_FAILURE ],
+      types: [SERVICE_REQUEST, SERVICE_SUCCESS, SERVICE_FAILURE],
       endpoint: `/api/service/${id}`,
-      schema: Schemas.SERVICE
+      schema: Schemas.SERVICE,
     },
-    type: 'CALL_API'
+    type: 'CALL_API',
   };
 }
 
 // Fetches a list of services for specific project from server.
 // Relies on Redux Thunk middleware.
-export function loadServices (projectId) {
-  return (dispatch, getState) => {
-    return dispatch(fetchServices(projectId));
-  }
+export function loadServices(projectId) {
+  return dispatch => dispatch(fetchServices(projectId));
 }
 
 
@@ -134,28 +126,26 @@ export const CREATE_SERVICE_FAILURE = 'CREATE_SERVICE_FAILURE';
 
 // Calls single service creator method.
 // Relies on the custom API middleware defined in ../middleware/submitApi.js.
-function callCreateService (name, projectId) {
+function callCreateService(name, projectId) {
   return {
     [SUBMIT_API]: {
-      types: [ CREATE_SERVICE_REQUEST, CREATE_SERVICE_SUCCESS, CREATE_SERVICE_FAILURE ],
-      endpoint: `/api/service`,
+      types: [CREATE_SERVICE_REQUEST, CREATE_SERVICE_SUCCESS, CREATE_SERVICE_FAILURE],
+      endpoint: '/api/service',
       body: {
         projectId,
-        name
+        name,
       },
       method: 'PUT',
-      schema: Schemas.SERVICE
+      schema: Schemas.SERVICE,
     },
-    type: 'SUBMIT_API'
+    type: 'SUBMIT_API',
   };
 }
 
 // Creates new service instance.
 // Relies on Redux Thunk middleware.
-export function addService (name, projectId) {
-  return (dispatch, getState) => {
-    return dispatch(callCreateService(name, projectId));
-  }
+export function addService(name, projectId) {
+  return dispatch => dispatch(callCreateService(name, projectId));
 }
 
 export const CHANGE_SERVICE_ACTIVATION_REQUEST = 'CHANGE_SERVICE_ACTIVATION_REQUEST';
@@ -163,27 +153,26 @@ export const CHANGE_SERVICE_ACTIVATION_SUCCESS = 'CHANGE_SERVICE_ACTIVATION_SUCC
 export const CHANGE_SERVICE_ACTIVATION_FAILURE = 'CHANGE_SERVICE_ACTIVATION_FAILURE';
 
 
-function callServiceActivationChange (service) {
-  const { id, project, isActive } = service;
+function callServiceActivationChange(service) {
+  const { id, isActive } = service;
 
   return {
     [SUBMIT_API]: {
-      types: [ CHANGE_SERVICE_ACTIVATION_REQUEST, CHANGE_SERVICE_ACTIVATION_SUCCESS, CHANGE_SERVICE_ACTIVATION_FAILURE ],
+      types: [CHANGE_SERVICE_ACTIVATION_REQUEST, CHANGE_SERVICE_ACTIVATION_SUCCESS,
+        CHANGE_SERVICE_ACTIVATION_FAILURE],
       endpoint: `/api/service/${id}/activate`,
       body: {
         serviceId: id,
-        isActive: !isActive
+        isActive: !isActive,
       },
-      success: fetchService(id)
+      success: fetchService(id),
     },
-    type: 'SUBMIT_API'
+    type: 'SUBMIT_API',
   };
 }
 
-export function changeServiceActivation (service) {
-  return (dispatch, getState) => {
-    return dispatch(callServiceActivationChange(service));
-  }
+export function changeServiceActivation(service) {
+  return dispatch => dispatch(callServiceActivationChange(service));
 }
 
 
@@ -193,23 +182,21 @@ export const USERS_FAILURE = 'USERS_FAILURE';
 
 // Fetches list of users.
 // Relies on the custom API middleware defined in ../middleware/api.js.
-function fetchUsers () {
+function fetchUsers() {
   return {
     [CALL_API]: {
-      types: [ USERS_REQUEST, USERS_SUCCESS, USERS_FAILURE ],
-      endpoint: `/api/user`,
-      schema: Schemas.USER_ARRAY
+      types: [USERS_REQUEST, USERS_SUCCESS, USERS_FAILURE],
+      endpoint: '/api/user',
+      schema: Schemas.USER_ARRAY,
     },
-    type: 'CALL_API'
+    type: 'CALL_API',
   };
 }
 
 // Fetches a list of users.
 // Relies on Redux Thunk middleware.
-export function loadUsers () {
-  return (dispatch, getState) => {
-    return dispatch(fetchUsers());
-  }
+export function loadUsers() {
+  return dispatch => dispatch(fetchUsers());
 }
 
 
@@ -219,27 +206,25 @@ export const CREATE_PERMISSION_FAILURE = 'CREATE_PERMISSION_FAILURE';
 
 // Calls single permission creator method.
 // Relies on the custom API middleware defined in ../middleware/submitApi.js.
-function callCreatePermission (userId, projectId) {
+function callCreatePermission(userId, projectId) {
   return {
     [SUBMIT_API]: {
-      types: [ CREATE_PERMISSION_REQUEST, CREATE_PERMISSION_SUCCESS, CREATE_PERMISSION_FAILURE ],
+      types: [CREATE_PERMISSION_REQUEST, CREATE_PERMISSION_SUCCESS, CREATE_PERMISSION_FAILURE],
       endpoint: `/api/project/${projectId}/permission`,
       body: {
-        userId
+        userId,
       },
       method: 'PUT',
-      schema: Schemas.PROJECT
+      schema: Schemas.PROJECT,
     },
-    type: 'SUBMIT_API'
+    type: 'SUBMIT_API',
   };
 }
 
 // Gives user permission over project
 // Relies on Redux Thunk middleware.
-export function addPermission (userId, projectId) {
-  return (dispatch, getState) => {
-    return dispatch(callCreatePermission(userId, projectId));
-  }
+export function addPermission(userId, projectId) {
+  return dispatch => dispatch(callCreatePermission(userId, projectId));
 }
 
 export const REMOVE_PERMISSION_REQUEST = 'REMOVE_PERMISSION_REQUEST';
@@ -248,28 +233,26 @@ export const REMOVE_PERMISSION_FAILURE = 'REMOVE_PERMISSION_FAILURE';
 
 // Calls single permission creator method.
 // Relies on the custom API middleware defined in ../middleware/submitApi.js.
-function callRemovePermission (userId, projectId) {
+function callRemovePermission(userId, projectId) {
   return {
     [SUBMIT_API]: {
-      types: [ REMOVE_PERMISSION_REQUEST, REMOVE_PERMISSION_SUCCESS, REMOVE_PERMISSION_FAILURE ],
+      types: [REMOVE_PERMISSION_REQUEST, REMOVE_PERMISSION_SUCCESS, REMOVE_PERMISSION_FAILURE],
       endpoint: `/api/project/${projectId}/permission`,
       body: {
-        userId
+        userId,
       },
       method: 'DELETE',
       schema: Schemas.PROJECT,
       success: () => {
         location.reload();
-      }
+      },
     },
-    type: 'SUBMIT_API'
+    type: 'SUBMIT_API',
   };
 }
 
 // Gives user permission over project
 // Relies on Redux Thunk middleware.
-export function removePermission (userId, projectId) {
-  return (dispatch, getState) => {
-    return dispatch(callRemovePermission(userId, projectId));
-  }
+export function removePermission(userId, projectId) {
+  return dispatch => dispatch(callRemovePermission(userId, projectId));
 }

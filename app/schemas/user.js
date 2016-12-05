@@ -1,23 +1,21 @@
-'use strict'
-
 const mongoose = require('mongoose');
 
 // const bcrypt = require('bcrypt');
 // const SALT_ROUNDS = 10;
 
 // Create a new schema for our tweet data
-var UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   fullname: { type: String, require: true },
   email: { type: String, required: true, index: { unique: true } },
   password: { type: String, required: true, select: false },
   roles: [String],
   created_at: Date,
-  updated_at: { type: Date, default: Date.now }
+  updated_at: { type: Date, default: Date.now },
 });
 
-UserSchema.pre('save', function (next) {
+function save(next) {
   // get the current date
-  var currentDate = new Date();
+  const currentDate = new Date();
 
   // change the updated_at field to current date
   this.updated_at = currentDate;
@@ -36,7 +34,9 @@ UserSchema.pre('save', function (next) {
   //   user.password = hash;
   //   next();
   // });
-});
+}
+
+UserSchema.pre('save', save);
 
 UserSchema.statics = {
   /**
@@ -47,21 +47,21 @@ UserSchema.statics = {
    * @param {Function} fired after execution
    * @api private
    */
-  authenticate (email, password, next) {
+  authenticate(email, password, next) {
     return this.findOne({ email })
       .select('+password')
       .exec()
       .then((user) => {
         if (!user) return next();
 
-        next(user);
+        return next(user);
         // bcrypt.compare(password, user.password, (err, res) => {
         //   next(err, res);
         // });
-      })
+      });
   },
 
-  getById (id) {
+  getById(id) {
     return this.findById(id)
       .exec();
   },
@@ -70,11 +70,11 @@ UserSchema.statics = {
    * Get all projects
    * @api public
    */
-  getAll () {
+  getAll() {
     return this.find({})
-      .exec()
-  }
-}
+      .exec();
+  },
+};
 
 // Return a User model based upon the defined schema
 module.exports = mongoose.model('User', UserSchema);

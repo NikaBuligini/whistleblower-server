@@ -1,137 +1,149 @@
-import * as ActionTypes from '../actions'
-import merge from 'lodash/merge'
-import { routerReducer as routing } from 'react-router-redux'
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
+import { routerReducer as routing } from 'react-router-redux';
+import merge from 'lodash/merge';
+import * as ActionTypes from '../actions';
 
-function preloaded (state = {}, action) {
-  return state
+function preloaded(state = {}) {
+  return state;
 }
 
-function memory (state = {
+function memory(state = {
   available: '0',
   free: '0',
-  total: '0'
+  total: '0',
 }, action) {
   switch (action.type) {
-    case 'MEMORY_UPDATE':
-      let { available, free, total } = action.info
-      return { available, free, total }
-      break;
+    case 'MEMORY_UPDATE': {
+      let { available, free, total } = action.info;
+      return { available, free, total };
+    }
     default:
       return state;
   }
 }
 
 // Updates an entity cache in response to any action with response.entities.
-function entities (state = { projects: {}, services: {}, users: {} }, action) {
+function entities(state = { projects: {}, services: {}, users: {} }, action) {
   if (action.response && action.response.entities) {
-    return merge({}, state, action.response.entities)
+    return merge({}, state, action.response.entities);
   }
-  return state
+  return state;
 }
 
-function projects (state = {
+function projects(state = {
   isAdding: false,
   isFetching: false,
-  error: null
+  error: null,
 }, action) {
   switch (action.type) {
-    case ActionTypes.PROJECTS_REQUEST:
+    case ActionTypes.PROJECTS_REQUEST: {
       return merge({}, state, {
-        isFetching: true
+        isFetching: true,
       });
-    case ActionTypes.PROJECTS_SUCCESS:
-      return merge({}, state, {
-        isFetching: false
-      });
-    case ActionTypes.PROJECTS_FAILURE:
+    }
+    case ActionTypes.PROJECTS_SUCCESS: {
       return merge({}, state, {
         isFetching: false,
-        error: action.error
       });
-    case ActionTypes.CREATE_PROJECT_REQUEST:
+    }
+    case ActionTypes.PROJECTS_FAILURE: {
       return merge({}, state, {
-        isAdding: true
+        isFetching: false,
+        error: action.error,
       });
-    case ActionTypes.CREATE_PROJECT_SUCCESS:
+    }
+    case ActionTypes.CREATE_PROJECT_REQUEST: {
       return merge({}, state, {
-        isAdding: false
+        isAdding: true,
       });
-    case ActionTypes.CREATE_PROJECT_FAILURE:
+    }
+    case ActionTypes.CREATE_PROJECT_SUCCESS: {
       return merge({}, state, {
         isAdding: false,
-        error: action.error
       });
+    }
+    case ActionTypes.CREATE_PROJECT_FAILURE: {
+      return merge({}, state, {
+        isAdding: false,
+        error: action.error,
+      });
+    }
     default:
-      return state
+      return state;
   }
 }
 
-function services (state = {
+function services(state = {
   isAdding: false,
   isFetching: false,
-  error: null
+  error: null,
 }, action) {
   switch (action.type) {
-    case ActionTypes.SERVICES_REQUEST:
+    case ActionTypes.SERVICES_REQUEST: {
       return merge({}, state, {
-        isFetching: true
+        isFetching: true,
       });
-    case ActionTypes.SERVICES_SUCCESS:
-      return merge({}, state, {
-        isFetching: false
-      });
-    case ActionTypes.SERVICES_FAILURE:
+    }
+    case ActionTypes.SERVICES_SUCCESS: {
       return merge({}, state, {
         isFetching: false,
-        error: action.error
       });
+    }
+    case ActionTypes.SERVICES_FAILURE: {
+      return merge({}, state, {
+        isFetching: false,
+        error: action.error,
+      });
+    }
     default:
-      return state
+      return state;
   }
 }
 
-function users (state = {
+function users(state = {
   isAdding: false,
   isFetching: false,
-  error: null
+  error: null,
 }, action) {
   switch (action.type) {
-    case ActionTypes.USERS_REQUEST:
+    case ActionTypes.USERS_REQUEST: {
       return merge({}, state, {
-        isFetching: true
+        isFetching: true,
       });
-    case ActionTypes.USERS_SUCCESS:
-      return merge({}, state, {
-        isFetching: false
-      });
-    case ActionTypes.USERS_FAILURE:
+    }
+    case ActionTypes.USERS_SUCCESS: {
       return merge({}, state, {
         isFetching: false,
-        error: action.error
       });
+    }
+    case ActionTypes.USERS_FAILURE: {
+      return merge({}, state, {
+        isFetching: false,
+        error: action.error,
+      });
+    }
     default:
-      return state
+      return state;
   }
 }
 
 const process = combineReducers({
   projects,
   services,
-  users
-})
+  users,
+});
 
 // Updates error message to notify about the failed fetches.
-function errorMessage (state = null, action) {
-  const { type, error } = action
+function errorMessage(state = null, action) {
+  const { type, error } = action;
 
   if (type === ActionTypes.RESET_ERROR_MESSAGE) {
-    return null
+    return null;
   } else if (error) {
-    return action.error
+    return action.error;
   }
 
-  return state
+  return state;
 }
 
 const rootReducer = combineReducers({
@@ -140,7 +152,7 @@ const rootReducer = combineReducers({
   memory,
   entities,
   errorMessage,
-  routing
-})
+  routing,
+});
 
-export default rootReducer
+export default rootReducer;

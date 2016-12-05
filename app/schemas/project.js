@@ -1,21 +1,19 @@
-'use strict'
-
 const mongoose = require('mongoose');
 const uuid = require('uuid');
 
 // Create a new schema for our tweet data
-var ProjectSchema = new mongoose.Schema({
+const ProjectSchema = new mongoose.Schema({
   name: { type: String, required: true, index: { unique: true } },
   uuid: { type: String, index: { unique: true } },
   services: [{ type: mongoose.Schema.ObjectId, ref: 'Service' }],
   users: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   created_at: Date,
-  updated_at: { type: Date, default: Date.now }
+  updated_at: { type: Date, default: Date.now },
 });
 
-ProjectSchema.pre('save', function (next) {
+function save(next) {
   // get the current date
-  var currentDate = new Date();
+  const currentDate = new Date();
 
   if (!this.uuid) {
     this.uuid = uuid.v1();
@@ -28,7 +26,9 @@ ProjectSchema.pre('save', function (next) {
   if (!this.created_at) this.created_at = currentDate;
 
   next();
-});
+}
+
+ProjectSchema.pre('save', save);
 
 ProjectSchema.methods = {
   /**
@@ -37,26 +37,26 @@ ProjectSchema.methods = {
    * @param user
    * @api private
    */
-   addPermission (user) {
-     let userIds = this.users.map(u => u.id);
-     if (userIds.indexOf(user.id) === -1) {
-       this.users.push(user);
-       this.save();
-     }
-   },
-
-   /**
-    * Remove permission for user
-    *
-    * @param userId
-    * @api private
-    */
-    removePermission (userId) {
-      let uid = this.users.indexOf(userId);
-      if (uid !== -1) this.users.splice(uid, 1);
+  addPermission(user) {
+    const userIds = this.users.map(u => u.id);
+    if (userIds.indexOf(user.id) === -1) {
+      this.users.push(user);
       this.save();
     }
-}
+  },
+
+  /**
+   * Remove permission for user
+   *
+   * @param userId
+   * @api private
+   */
+  removePermission(userId) {
+    const uid = this.users.indexOf(userId);
+    if (uid !== -1) this.users.splice(uid, 1);
+    this.save();
+  },
+};
 
 ProjectSchema.statics = {
   /**
@@ -64,19 +64,19 @@ ProjectSchema.statics = {
    *
    * @api private
    */
-  getFirstProject () {
+  getFirstProject() {
     return this.findOne({})
       .populate('services')
-      .exec()
+      .exec();
   },
 
   /**
    * Get all projects
    * @api public
    */
-  getAll () {
+  getAll() {
     return this.find({})
-      .exec()
+      .exec();
   },
 
   /**
@@ -85,11 +85,11 @@ ProjectSchema.statics = {
    * @param {name} project name
    * @api public
    */
-  getByName (name) {
+  getByName(name) {
     return this.findOne({ name })
       .populate('services')
       .populate('users')
-      .exec()
+      .exec();
   },
 
   /**
@@ -98,26 +98,26 @@ ProjectSchema.statics = {
    * @param {id} project id
    * @api public
    */
-  getById (id) {
+  getById(id) {
     return this.findById(id)
       .populate('services')
       .populate('users')
-      .exec()
+      .exec();
   },
 
   /**
    * Get project by name, populated with services
    *
-   * @param {projectName} project name
+   * @param {name} project name
    * @api public
    */
-  getProjectServices (projectName) {
-    return this.findOne({'name': projectName})
+  getProjectServices(name) {
+    return this.findOne({ name })
       .populate('services')
       .populate('users')
-      .exec()
-  }
-}
+      .exec();
+  },
+};
 
 // Return a Project model based upon the defined schema
 module.exports = mongoose.model('Project', ProjectSchema);
