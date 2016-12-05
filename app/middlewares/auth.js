@@ -1,10 +1,14 @@
+'use strict'
+
+const User = require('../schemas/user');
+
 module.exports = {
   /**
    * Redirects to login page if user is not authenticated
    */
   notAuthenticated (req, res, next) {
-    if (req.session.userId) return next()
-    res.redirect('/auth')
+    if (req.session.userId) return next();
+    res.redirect('/auth');
   },
 
   /**
@@ -13,10 +17,10 @@ module.exports = {
    */
   authenticated (req, res, next) {
     if (req.session.userId) {
-      req.session.error = 'Please login'
-      return res.redirect('/')
+      req.session.error = 'Please login';
+      return res.redirect('/');
     }
 
-    next()
+    next();
   }
 }

@@ -34,21 +34,21 @@ class PermissionsList extends Component {
   render () {
     const { isFetching, permissions, handlePermissionDelete } = this.props;
 
-    if (isFetching && typeof permissions !== 'undefined') {
+    if (isFetching) {
       return <Loading cls='loading' />
     }
 
-    if (Object.keys(permissions).length === 0) {
+    if (permissions.length === 0) {
       return <span className='no-data'>No permissions</span>
     }
 
     return (
       <ul className="list mdl-list">
-        {Object.keys(permissions).map((key, index) => {
+        {permissions.map((permission, index) => {
           return (
             <PermissionItem
               key={index}
-              permission={permissions[key]}
+              permission={permission}
               handlePermissionDelete={handlePermissionDelete}
             />
           );
@@ -75,8 +75,8 @@ class PermissionsComponent extends Component {
   }
 
   render () {
-    let { isFetching, project, users } = this.props;
-
+    let { isFetching, project, permissions } = this.props;
+    
     return (
       <section>
         <div className='title'>
@@ -96,7 +96,7 @@ class PermissionsComponent extends Component {
           project={project}
         />
         <PermissionsList
-          permissions={users}
+          permissions={permissions}
           handlePermissionDelete={this.handlePermissionDelete}
         />
       </section>
@@ -105,7 +105,7 @@ class PermissionsComponent extends Component {
 }
 
 PermissionsComponent.propTypes = {
-  users: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
   removePermission: PropTypes.func.isRequired,
   project: PropTypes.object
@@ -117,17 +117,11 @@ PermissionsComponent.defaultProps = {
 
 function mapStateToProps (state, ownProps) {
   const { isFetching } = state.process.users;
-  let { users } = state.entities;
-  let userIds = ownProps.project.users;
+  let permissions = ownProps.project.users
+    .map(key => state.entities.users[key])
+    .filter(permission => typeof permission !== 'undefined');
 
-  let usersWithPermission = {};
-  Object.keys(users).forEach(key => {
-    if (userIds.indexOf(key) !== -1) {
-      usersWithPermission[key] = users[key];
-    }
-  });
-
-  return { isFetching, users: usersWithPermission };
+  return { isFetching, permissions };
 }
 
 export default connect(mapStateToProps, {

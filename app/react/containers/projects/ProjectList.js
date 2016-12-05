@@ -57,9 +57,7 @@ class ProjectItem extends Component {
             >
               View
             </li>
-            <li className="mdl-menu__item">Edit</li>
-            <li disabled className="mdl-menu__item">Disabled Action</li>
-            <li className="mdl-menu__item">Yet Another Action</li>
+            <li disabled className="mdl-menu__item">Edit</li>
           </ul>
         </div>
       </div>

@@ -6,6 +6,27 @@ import { loadProject } from '../../actions'
 import Loading from '../../components/Loading'
 import PermissionsComponent from './PermissionsComponent'
 
+class ProjectDetails extends Component {
+  constructor (props) {
+    super(props);
+  }
+
+  render () {
+    let { project } = this.props;
+    let createdAt = new Date(project.createdAt);
+    return (
+      <section style={{padding: '12px 0'}}>
+        <div>
+          <span>{`Created at: ${createdAt.toLocaleDateString()}`}</span>
+        </div>
+        <div>
+          <span>{`Key: ${project.uuid}`}</span>
+        </div>
+      </section>
+    );
+  }
+}
+
 class Project extends Component {
   componentWillMount () {
     this.props.loadProject(this.props.params.projectName);
@@ -29,6 +50,9 @@ class Project extends Component {
                 </h2>
               </div>
               <div className='mdl-card__supporting-text'>
+                <ProjectDetails
+                  project={project}
+                />
                 <ServicesComponent
                   project={project}
                 />

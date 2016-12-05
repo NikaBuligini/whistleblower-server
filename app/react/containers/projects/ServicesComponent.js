@@ -53,21 +53,21 @@ class ServicesList extends Component {
   render () {
     const { isFetching, services, handleActivationChange } = this.props;
 
-    if (isFetching && typeof services !== 'undefined') {
+    if (isFetching) {
       return <Loading cls='loading' />
     }
 
-    if (Object.keys(services).length === 0) {
+    if (services.length === 0) {
       return <span className='no-data'>No services</span>
     }
 
     return (
       <ul className="list mdl-list">
-        {Object.keys(services).map((key, index) => {
+        {services.map((service, index) => {
           return (
             <ServiceItem
               key={index}
-              service={services[key]}
+              service={service}
               handleActivationChange={handleActivationChange}
             />
           );
@@ -130,7 +130,7 @@ class ServicesComponent extends Component {
 }
 
 ServicesComponent.propTypes = {
-  services: PropTypes.object.isRequired,
+  services: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
   loadServices: PropTypes.func.isRequired,
   changeServiceActivation: PropTypes.func.isRequired,
@@ -143,18 +143,9 @@ ServicesComponent.defaultProps = {
 
 function mapStateToProps (state, ownProps) {
   const { isFetching } = state.process.services;
-  let { services } = state.entities;
-
-  let projectServices = {};
-  Object.keys(services).forEach((key) => {
-    let val = services[key];
-
-    if (val.project === ownProps.project.name) {
-      projectServices[key] = val;
-    }
-  });
-  services = projectServices;
-
+  let services = ownProps.project.services
+    .map(key => state.entities.services[key])
+    .filter(service => typeof service !== 'undefined');
   return { isFetching, services };
 }
 

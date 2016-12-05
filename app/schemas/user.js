@@ -10,6 +10,7 @@ var UserSchema = new mongoose.Schema({
   fullname: { type: String, require: true },
   email: { type: String, required: true, index: { unique: true } },
   password: { type: String, required: true, select: false },
+  roles: [String],
   created_at: Date,
   updated_at: { type: Date, default: Date.now }
 });
