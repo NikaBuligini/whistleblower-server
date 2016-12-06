@@ -1,5 +1,6 @@
 function createSocket(io) {
-  io.on('connection', (socket) => {
+  // has socket param
+  io.on('connection', () => {
     console.log('a user connected');
   });
 }

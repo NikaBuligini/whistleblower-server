@@ -12,8 +12,9 @@ module.exports = {
    * authentication page like login
    */
   authenticated(req, res, next) {
-    if (req.session.userId) {
-      req.session.error = 'Please login';
+    const { session } = req;
+    if (session.userId) {
+      session.error = 'Please login';
       return res.redirect('/');
     }
 

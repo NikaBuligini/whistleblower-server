@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 // import Autocomplete from 'react-autocomplete';
 import Autocomplete from '../Autocomplete';
 import { loadUsers, addPermission } from '../../actions';
+import { ProjectPropType, UserPropType } from '../../propTypes';
 
 const style = {
   highlighted: {
@@ -122,24 +124,18 @@ NewPermissionForm.propTypes = {
   loadUsers: React.PropTypes.func.isRequired,
   addPermission: React.PropTypes.func.isRequired,
   handleCancel: React.PropTypes.func.isRequired,
-  project: React.PropTypes.object.isRequired,
-  users: React.PropTypes.array,
+  project: ProjectPropType.isRequired,
+  users: React.PropTypes.arrayOf(UserPropType),
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const { error } = state.process.users;
-  const { users } = state.entities;
+  const allUsers = Object.values(state.entities.users).map(user => user.id);
+  const users = _.difference(allUsers, ownProps.project.users)
+    .map(id => state.entities.users[id])
+    .filter(user => typeof user !== 'undefined');
 
-  const usersArr = [];
-
-  if (users) {
-    Object.keys(users).forEach((key) => {
-      const { id, email, fullname } = users[key];
-      usersArr.push({ id, email, fullname });
-    });
-  }
-
-  return { error, users: usersArr };
+  return { error, users };
 }
 
 export default connect(mapStateToProps, {

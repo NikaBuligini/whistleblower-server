@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Loading extends Component {
+class Loading extends React.Component {
   componentDidMount() {
     componentHandler.upgradeDom();
   }
@@ -15,3 +15,9 @@ export default class Loading extends Component {
     );
   }
 }
+
+Loading.propTypes = {
+  cls: React.PropTypes.string,
+};
+
+export default Loading;

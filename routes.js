@@ -35,7 +35,6 @@ router.get('/api/user', user.getAll);
 
 router.get('/api/projects/clear', project.clear);
 router.post('/test', (req, res) => {
-  // console.log(req.body);
   req.io.sockets.emit('action', { type: 'MEMORY_UPDATE', info: req.body });
 
   res.json({ greet: 'hi' });

@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 function DefaultLayout(props) {
   return (
@@ -25,8 +25,8 @@ function DefaultLayout(props) {
 }
 
 DefaultLayout.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.func.isRequired,
+  title: React.PropTypes.string.isRequired,
+  children: React.PropTypes.node.isRequired,
 };
 
 export default DefaultLayout;

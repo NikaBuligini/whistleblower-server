@@ -16,12 +16,19 @@ module.exports = {
   },
 
   getAll(req, res) {
-    Project.getAll()
-      .then(projects => res.json(projects))
-      .catch((err) => {
-        console.log(err);
-        res.json(err);
-      });
+    const { id } = req.body;
+    if (typeof id !== 'undefined') {
+      Project.findById(id)
+        .exec()
+        .then(project => res.json(project));
+    } else {
+      Project.getAll()
+        .then(projects => res.json(projects))
+        .catch((err) => {
+          console.log(err);
+          res.json(err);
+        });
+    }
   },
 
   get(req, res) {

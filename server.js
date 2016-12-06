@@ -37,12 +37,20 @@ app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
 
 app.use((req, res, next) => {
-  const { error, success } = req.session;
-  delete req.session.error;
-  delete req.session.success;
-  res.locals.message = '';
-  if (error) res.locals.message = { isError: true, text: error };
-  if (success) res.locals.message = { isError: false, text: success };
+  const reqSession = req.session;
+  const { error, success } = reqSession;
+
+  if (reqSession) {
+    delete reqSession.error;
+    delete reqSession.success;
+  }
+
+  if (res) {
+    const { locals } = res;
+    locals.message = '';
+    if (error) locals.message = { isError: true, text: error };
+    if (success) locals.message = { isError: false, text: success };
+  }
   next();
 });
 
@@ -67,7 +75,8 @@ db.once('open', () => {
 
 // Middleware
 app.use((req, res, next) => {
-  req.io = io;
+  const request = req;
+  request.io = io;
   next();
 });
 

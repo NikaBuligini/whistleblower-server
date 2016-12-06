@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addService } from '../../actions';
+import { ProjectPropType } from '../../propTypes';
 
 class NewServiceForm extends React.Component {
   constructor(props) {
@@ -60,7 +61,7 @@ class NewServiceForm extends React.Component {
 NewServiceForm.propTypes = {
   addService: React.PropTypes.func.isRequired,
   handleCancel: React.PropTypes.func.isRequired,
-  project: React.PropTypes.object.isRequired,
+  project: ProjectPropType.isRequired,
   error: React.PropTypes.string,
 };
 

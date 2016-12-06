@@ -62,7 +62,7 @@ class NewProjectForm extends React.Component {
 }
 
 NewProjectForm.propTypes = {
-  isAdding: React.PropTypes.func.isRequired,
+  isAdding: React.PropTypes.bool.isRequired,
   createProject: React.PropTypes.func.isRequired,
   error: React.PropTypes.string,
 };

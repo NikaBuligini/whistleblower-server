@@ -1,12 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import { loadProjects, createProject } from '../../actions';
 import Loading from '../../components/Loading';
 import AddProjectComponent from '../../components/project/AddProjectComponent';
 import List from '../../components/project/ProjectList';
+import { ProjectPropType } from '../../propTypes';
 
-class ProjectList extends Component {
+class ProjectList extends React.Component {
   componentWillMount() {
     this.props.loadProjects();
   }
@@ -34,18 +35,19 @@ class ProjectList extends Component {
 }
 
 ProjectList.propTypes = {
-  projects: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  loadProjects: PropTypes.func.isRequired,
+  projects: React.PropTypes.arrayOf(ProjectPropType).isRequired,
+  isFetching: React.PropTypes.bool.isRequired,
+  loadProjects: React.PropTypes.func.isRequired,
 };
 
 ProjectList.defaultProps = {
+  projects: [],
   isFetching: true,
 };
 
 function mapStateToProps(state) {
   const { isFetching } = state.process.projects;
-  const { projects } = state.entities;
+  const projects = Object.values(state.entities.projects);
   return { isFetching, projects };
 }
 

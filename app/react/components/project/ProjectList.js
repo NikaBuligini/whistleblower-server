@@ -1,5 +1,6 @@
 import React from 'react';
 import ProjectCard from '../../components/project/ProjectCard';
+import { ProjectPropType } from '../../propTypes';
 
 class ProjectList extends React.Component {
   componentDidMount() {
@@ -10,14 +11,14 @@ class ProjectList extends React.Component {
     const { data } = this.props;
     return (
       <div className="list">
-        {Object.keys(data).map((key, index) => <ProjectCard key={index} project={data[key]} />)}
+        {data.map((project, index) => <ProjectCard key={index} project={project} />)}
       </div>
     );
   }
 }
 
 ProjectList.propTypes = {
-  data: React.PropTypes.object,
+  data: React.PropTypes.arrayOf(ProjectPropType),
 };
 
 export default ProjectList;

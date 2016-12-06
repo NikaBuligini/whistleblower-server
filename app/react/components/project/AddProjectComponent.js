@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { createProject } from '../../actions';
 import NewProjectForm from './NewProjectForm';
 
-class AddProjectComponent extends Component {
+class AddProjectComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = { showInputs: false };
@@ -36,9 +36,9 @@ class AddProjectComponent extends Component {
 }
 
 AddProjectComponent.propTypes = {
-  isAdding: PropTypes.bool.isRequired,
-  createProject: PropTypes.func.isRequired,
-  error: PropTypes.string,
+  isAdding: React.PropTypes.bool.isRequired,
+  createProject: React.PropTypes.func.isRequired,
+  error: React.PropTypes.string,
 };
 
 AddProjectComponent.defaultProps = {

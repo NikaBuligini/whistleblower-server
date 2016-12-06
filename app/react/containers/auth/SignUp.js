@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 
@@ -19,7 +19,13 @@ const Input = props => (
   </div>
 );
 
-class SignUp extends Component {
+Input.propTypes = {
+  text: React.PropTypes.string,
+  type: React.PropTypes.string.isRequired,
+  id: React.PropTypes.string.isRequired,
+};
+
+class SignUp extends React.Component {
   componentDidMount() {
     componentHandler.upgradeDom();
   }

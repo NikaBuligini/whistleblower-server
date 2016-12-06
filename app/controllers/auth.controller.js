@@ -5,7 +5,8 @@ function authorize(req, user, next) {
     // Store the user's primary key
     // in the session store to be retrieved,
     // or in this case the entire user object
-    req.session.userId = user._id;
+    const { session } = req;
+    session.userId = user._id;
     next();
   });
 }

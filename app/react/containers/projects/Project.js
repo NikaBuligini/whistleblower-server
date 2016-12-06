@@ -1,29 +1,32 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import { loadProject } from '../../actions';
 import Loading from '../../components/Loading';
 import ServicesComponent from '../../components/service/ServicesComponent';
 import PermissionsComponent from '../../components/permission/PermissionsComponent';
+import { ProjectPropType } from '../../propTypes';
 
-class ProjectDetails extends Component {
-  render() {
-    const { project } = this.props;
-    const createdAt = new Date(project.createdAt);
-    return (
-      <section style={{ padding: '12px 0' }}>
-        <div>
-          <span>{`Created at: ${createdAt.toLocaleDateString()}`}</span>
-        </div>
-        <div>
-          <span>{`Key: ${project.uuid}`}</span>
-        </div>
-      </section>
-    );
-  }
-}
+const ProjectDetails = (props) => {
+  const { project } = props;
+  const createdAt = new Date(project.createdAt);
+  return (
+    <section style={{ padding: '12px 0' }}>
+      <div>
+        <span>{`Created at: ${createdAt.toLocaleDateString()}`}</span>
+      </div>
+      <div>
+        <span>{`Key: ${project.uuid}`}</span>
+      </div>
+    </section>
+  );
+};
 
-class Project extends Component {
+ProjectDetails.propTypes = {
+  project: ProjectPropType.isRequired,
+};
+
+class Project extends React.Component {
   componentWillMount() {
     this.props.loadProject(this.props.params.projectName);
   }
@@ -61,8 +64,12 @@ class Project extends Component {
 }
 
 Project.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
-  project: PropTypes.object,
+  isFetching: React.PropTypes.bool.isRequired,
+  loadProject: React.PropTypes.func.isRequired,
+  project: ProjectPropType,
+  params: React.PropTypes.shape({
+    projectName: React.PropTypes.string,
+  }),
 };
 
 Project.defaultProps = {

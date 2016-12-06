@@ -1,4 +1,5 @@
 import React from 'react';
+import { ServicePropType } from '../../propTypes';
 
 class ServiceItem extends React.Component {
   constructor(props) {
@@ -40,7 +41,7 @@ class ServiceItem extends React.Component {
 }
 
 ServiceItem.propTypes = {
-  service: React.PropTypes.object.isRequired,
+  service: ServicePropType.isRequired,
   handleActivationChange: React.PropTypes.func.isRequired,
 };
 

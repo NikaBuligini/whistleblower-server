@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import NewPermissionForm from './NewPermissionForm';
+import { ProjectPropType } from '../../propTypes';
 
 function AddUserPermissionComponent(props) {
   const { error, handleCancel, project } = props;
@@ -21,7 +22,7 @@ function AddUserPermissionComponent(props) {
 AddUserPermissionComponent.propTypes = {
   showInputs: React.PropTypes.bool.isRequired,
   handleCancel: React.PropTypes.func.isRequired,
-  project: React.PropTypes.object.isRequired,
+  project: ProjectPropType.isRequired,
   error: React.PropTypes.string,
 };
 

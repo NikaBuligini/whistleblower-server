@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 
 const Navigation = () => (
@@ -17,19 +17,21 @@ const Navigation = () => (
   </header>
 );
 
-export default class Layout extends Component {
-  render() {
-    return (
-      <div className="mdl-layout mdl-js-layout">
-        <Navigation />
-        <main className="mdl-layout__content">
-          <div className="mdl-snackbar mdl-js-snackbar">
-            <div className="mdl-snackbar__text" />
-            <button type="button" className="mdl-snackbar__action" />
-          </div>
-          {this.props.children}
-        </main>
+const Layout = props => (
+  <div className="mdl-layout mdl-js-layout">
+    <Navigation />
+    <main className="mdl-layout__content">
+      <div className="mdl-snackbar mdl-js-snackbar">
+        <div className="mdl-snackbar__text" />
+        <button type="button" className="mdl-snackbar__action" />
       </div>
-    );
-  }
-}
+      {props.children}
+    </main>
+  </div>
+);
+
+Layout.propTypes = {
+  children: React.PropTypes.node.isRequired,
+};
+
+export default Layout;

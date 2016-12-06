@@ -1,10 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import AddServiceComponent from './AddServiceComponent';
 import { loadServices, changeServiceActivation } from '../../actions';
 import List from './ServiceList';
+import { ProjectPropType, ServicePropType } from '../../propTypes';
 
-class ServicesComponent extends Component {
+class ServicesComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isAddingService: false };
@@ -57,23 +58,23 @@ class ServicesComponent extends Component {
 }
 
 ServicesComponent.propTypes = {
-  services: PropTypes.array.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  loadServices: PropTypes.func.isRequired,
-  changeServiceActivation: PropTypes.func.isRequired,
-  project: PropTypes.object,
+  services: React.PropTypes.arrayOf(ServicePropType).isRequired,
+  isFetching: React.PropTypes.bool.isRequired,
+  loadServices: React.PropTypes.func.isRequired,
+  changeServiceActivation: React.PropTypes.func.isRequired,
+  project: ProjectPropType,
 };
 
 ServicesComponent.defaultProps = {
+  services: [],
   isFetching: true,
 };
 
 function mapStateToProps(state, ownProps) {
   const { isFetching } = state.process.services;
-  const services = ownProps.project.services
+  const services = Object.values(ownProps.project.services)
     .map(key => state.entities.services[key])
     .filter(service => typeof service !== 'undefined');
-
   return { isFetching, services };
 }
 

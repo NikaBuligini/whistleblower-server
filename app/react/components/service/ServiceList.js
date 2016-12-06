@@ -1,6 +1,7 @@
 import React from 'react';
 import Loading from '../../components/Loading';
 import ServiceItem from '../../components/service/ServiceItem';
+import { ServicePropType } from '../../propTypes';
 
 class ServicesList extends React.Component {
   componentDidUpdate() {
@@ -34,7 +35,7 @@ class ServicesList extends React.Component {
 
 ServicesList.propTypes = {
   isFetching: React.PropTypes.bool.isRequired,
-  services: React.PropTypes.array.isRequired,
+  services: React.PropTypes.arrayOf(ServicePropType).isRequired,
   handleActivationChange: React.PropTypes.func.isRequired,
 };
 

@@ -14,7 +14,7 @@ function memory(state = {
 }, action) {
   switch (action.type) {
     case 'MEMORY_UPDATE': {
-      let { available, free, total } = action.info;
+      const { available, free, total } = action.info;
       return { available, free, total };
     }
     default:

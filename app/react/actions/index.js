@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { CALL_API, Schemas } from '../middleware/api';
 import { SUBMIT_API } from '../middleware/submitApi';
 
@@ -137,6 +138,23 @@ function callCreateService(name, projectId) {
       },
       method: 'PUT',
       schema: Schemas.SERVICE,
+      success: (store, response) => {
+        const newServiceId = Object.keys(response.entities.services)[0];
+
+        const project = _.cloneDeep(store.getState().entities.projects[projectId]);
+        project.services.push(newServiceId);
+
+        store.dispatch({
+          type: PROJECTS_SUCCESS,
+          response: {
+            entities: {
+              projects: {
+                [projectId]: project,
+              },
+            },
+          },
+        });
+      },
     },
     type: 'SUBMIT_API',
   };

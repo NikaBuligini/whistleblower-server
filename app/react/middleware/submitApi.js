@@ -39,7 +39,7 @@ export default function (store, next, action) {
   }
 
   let { endpoint } = submitAPI;
-  const { types, success } = submitAPI;
+  const { types, success, body, method, schema } = submitAPI;
 
   if (typeof endpoint === 'function') {
     endpoint = endpoint(store.getState());
@@ -64,11 +64,11 @@ export default function (store, next, action) {
   const [requestType, successType, failureType] = types;
   next(actionWith({ type: requestType }));
 
-  return submitApi(endpoint)
+  return submitApi(endpoint, body, method, schema)
     .then((response) => {
       next(actionWith({ response, type: successType }));
       if (typeof success === 'object') store.dispatch(success);
-      else if (typeof success === 'function') success();
+      else if (typeof success === 'function') success(store, response);
     }, (error) => {
       next(actionWith({
         type: failureType,

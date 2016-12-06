@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { Link, withRouter } from 'react-router';
 import moment from 'moment';
+import { ProjectPropType } from '../../propTypes';
 
-class ProjectCard extends Component {
+class ProjectCard extends React.Component {
   goToLink(url) {
     this.props.router.push(url);
   }
@@ -62,8 +63,10 @@ class ProjectCard extends Component {
 }
 
 ProjectCard.propTypes = {
-  project: PropTypes.object.isRequired,
-  router: PropTypes.any,
+  project: ProjectPropType.isRequired,
+  router: React.PropTypes.shape({
+    push: React.PropTypes.func.isRequired,
+  }),
 };
 
 export default withRouter(ProjectCard);

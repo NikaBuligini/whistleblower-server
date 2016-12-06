@@ -1,10 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import AddUserPermissionComponent from '../../components/AddUserPermissionComponent';
+import AddUserPermissionComponent from './AddUserPermissionComponent';
 import { removePermission } from '../../actions';
 import PermissionList from './PermissionList';
+import { ProjectPropType, UserPropType } from '../../propTypes';
 
-class PermissionsComponent extends Component {
+class PermissionsComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isAddingPermission: false };
@@ -52,21 +53,28 @@ class PermissionsComponent extends Component {
 }
 
 PermissionsComponent.propTypes = {
-  permissions: PropTypes.array.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  removePermission: PropTypes.func.isRequired,
-  project: PropTypes.object,
+  permissions: React.PropTypes.arrayOf(UserPropType).isRequired,
+  isFetching: React.PropTypes.bool.isRequired,
+  removePermission: React.PropTypes.func.isRequired,
+  project: ProjectPropType.isRequired,
 };
 
 PermissionsComponent.defaultProps = {
+  permissions: [],
   isFetching: true,
 };
 
 function mapStateToProps(state, ownProps) {
   const { isFetching } = state.process.users;
-  const permissions = ownProps.project.users
-    .map(key => state.entities.users[key])
-    .filter(permission => typeof permission !== 'undefined');
+  const permissions = [];
+
+  ownProps.project.users
+    .forEach((key) => {
+      const permission = state.entities.users[key];
+      if (typeof permission !== 'undefined') {
+        permissions.push(permission);
+      }
+    });
 
   return { isFetching, permissions };
 }

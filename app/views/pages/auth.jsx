@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 import DefaultLayout from '../layouts/default';
 
@@ -11,7 +11,7 @@ function AuthComponent(props) {
 }
 
 AuthComponent.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: React.PropTypes.string.isRequired,
 };
 
 export default AuthComponent;

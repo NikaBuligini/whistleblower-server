@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserPropType } from '../../propTypes';
 
 function PermissionItem(props) {
   const { permission } = props;
@@ -24,7 +25,7 @@ function PermissionItem(props) {
 }
 
 PermissionItem.propTypes = {
-  permission: React.PropTypes.object.isRequired,
+  permission: UserPropType.isRequired,
   handlePermissionDelete: React.PropTypes.func.isRequired,
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import NewServiceForm from './NewServiceForm';
+import { ProjectPropType } from '../../propTypes';
 
 function AddServiceComponent(props) {
   const { error, handleCancel, project } = props;
@@ -20,7 +21,7 @@ function AddServiceComponent(props) {
 
 AddServiceComponent.propTypes = {
   handleCancel: React.PropTypes.func.isRequired,
-  project: React.PropTypes.object.isRequired,
+  project: ProjectPropType.isRequired,
   showInputs: React.PropTypes.bool.isRequired,
   error: React.PropTypes.string,
 };

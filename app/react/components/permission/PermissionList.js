@@ -1,6 +1,7 @@
 import React from 'react';
 import Loading from '../../components/Loading';
 import PermissionItem from '../../components/permission/PermissionItem';
+import { UserPropType } from '../../propTypes';
 
 function PermissionList(props) {
   const { isFetching, permissions, handlePermissionDelete } = props;
@@ -28,7 +29,7 @@ function PermissionList(props) {
 
 PermissionList.propTypes = {
   isFetching: React.PropTypes.bool.isRequired,
-  permissions: React.PropTypes.array,
+  permissions: React.PropTypes.arrayOf(UserPropType),
   handlePermissionDelete: React.PropTypes.func.isRequired,
 };
 
