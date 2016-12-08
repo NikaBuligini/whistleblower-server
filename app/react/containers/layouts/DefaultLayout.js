@@ -1,37 +1,56 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
-const Navigation = () => (
-  <header className="mdl-layout__header mdl-layout__header--scroll mdl-shadow--2dp">
-    <div className="mdl-layout__header-row">
-      <span className="mdl-layout-title">
-        <Link
-          to={'/'}
-          className="link"
-          activeClassName="active"
-        >
-          Dashboard
-        </Link>
-      </span>
-      <div className="mdl-layout-spacer" />
+const Navigation = (props) => {
+  const { roles } = props;
+  return (
+    <header className="mdl-layout__header mdl-layout__header--scroll mdl-shadow--2dp">
+      <div className="mdl-layout__header-row">
+        <span className="mdl-layout-title">
+          <Link
+            to={'/'}
+            className="link"
+            activeClassName="active"
+          >
+            Dashboard
+          </Link>
+        </span>
+        <div className="mdl-layout-spacer" />
+        <nav className="mdl-navigation">
+          {roles.indexOf('admin') !== -1 && (
+            <Link to={'/projects'} className="mdl-navigation__link">
+              Projects
+            </Link>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+};
+
+Navigation.propTypes = {
+  roles: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+};
+
+const Drawer = (props) => {
+  const { roles } = props;
+  return (
+    <div className="mdl-layout__drawer">
+      <span className="mdl-layout-title">Whistleblower</span>
       <nav className="mdl-navigation">
-        <Link to={'/projects'} className="mdl-navigation__link">
-          Projects
-        </Link>
+        <Link to={'/'} className="mdl-navigation__link">Home</Link>
+        {roles.indexOf('admin') !== -1 && (
+          <Link to={'/projects'} className="mdl-navigation__link">Projects</Link>
+        )}
       </nav>
     </div>
-  </header>
-);
+  );
+};
 
-const Drawer = () => (
-  <div className="mdl-layout__drawer">
-    <span className="mdl-layout-title">Whistleblower</span>
-    <nav className="mdl-navigation">
-      <Link to={'/'} className="mdl-navigation__link">Home</Link>
-      <Link to={'/projects'} className="mdl-navigation__link">Projects</Link>
-    </nav>
-  </div>
-);
+Drawer.propTypes = {
+  roles: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+};
 
 const Footer = () => (
   <footer className="mdl-mega-footer">
@@ -93,8 +112,8 @@ const Footer = () => (
 
 const Layout = props => (
   <div className="mdl-layout mdl-js-layout">
-    <Navigation />
-    <Drawer />
+    <Navigation roles={props.roles} />
+    <Drawer roles={props.roles} />
     <main className="mdl-layout__content">
       <div className="mdl-snackbar mdl-js-snackbar">
         <div className="mdl-snackbar__text" />
@@ -108,6 +127,12 @@ const Layout = props => (
 
 Layout.propTypes = {
   children: React.PropTypes.node.isRequired,
+  roles: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
 };
 
-export default Layout;
+function mapStateToProps(state) {
+  const { roles } = state.preloaded;
+  return { roles };
+}
+
+export default connect(mapStateToProps, {})(Layout);

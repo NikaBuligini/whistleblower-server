@@ -1,10 +1,21 @@
+const User = require('../schemas/user');
+
 module.exports = {
   /**
    * Redirects to login page if user is not authenticated
    */
   notAuthenticated(req, res, next) {
-    if (req.session.userId) return next();
-    return res.redirect('/auth');
+    const { userId } = req.session;
+    if (userId) {
+      User.getById(userId)
+        .then((user) => {
+          /* eslint no-param-reassign: ["error", { "props": false }]*/
+          req.user = user;
+          next();
+        });
+    } else {
+      res.redirect('/auth');
+    }
   },
 
   /**

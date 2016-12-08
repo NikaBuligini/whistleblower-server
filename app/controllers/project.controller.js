@@ -6,12 +6,14 @@ module.exports = {
   list(req, res) {
     res.render('./pages/projects', {
       title: 'Projects',
+      user: req.user,
     });
   },
 
   showSingleProject(req, res) {
     res.render('./pages/projects', {
       title: req.params.projectName,
+      user: req.user,
     });
   },
 
