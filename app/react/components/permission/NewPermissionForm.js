@@ -130,7 +130,7 @@ NewPermissionForm.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   const { error } = state.process.users;
-  const allUsers = Object.values(state.entities.users).map(user => user.id);
+  const allUsers = _.values(state.entities.users).map(user => user.id);
   const users = _.difference(allUsers, ownProps.project.users)
     .map(id => state.entities.users[id])
     .filter(user => typeof user !== 'undefined');

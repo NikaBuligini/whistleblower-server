@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
+import _ from 'lodash';
 import { loadProjects, createProject } from '../../actions';
 import Loading from '../../components/Loading';
 import AddProjectComponent from '../../components/project/AddProjectComponent';
@@ -47,7 +48,7 @@ ProjectList.defaultProps = {
 
 function mapStateToProps(state) {
   const { isFetching } = state.process.projects;
-  const projects = Object.values(state.entities.projects);
+  const projects = _.values(state.entities.projects);
   return { isFetching, projects };
 }
 

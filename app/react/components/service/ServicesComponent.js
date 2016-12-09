@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import AddServiceComponent from './AddServiceComponent';
 import { loadServices, changeServiceActivation } from '../../actions';
 import List from './ServiceList';
@@ -72,7 +73,7 @@ ServicesComponent.defaultProps = {
 
 function mapStateToProps(state, ownProps) {
   const { isFetching } = state.process.services;
-  const services = Object.values(ownProps.project.services)
+  const services = _.values(ownProps.project.services)
     .map(key => state.entities.services[key])
     .filter(service => typeof service !== 'undefined');
   return { isFetching, services };
