@@ -12,6 +12,7 @@ addons:
       - g++-4.8
 
 install:
+  - yarn
   - npm install -g flow-typed
 
 before_script:
