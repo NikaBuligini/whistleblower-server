@@ -1,6 +1,6 @@
 # Whistleblower-server
 
-[![build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![build](https://api.travis-ci.org/NikaBuligini/whistleblower-server.svg?branch=master)]()
 [![npm](https://img.shields.io/badge/npm-3.8.9-blue.svg)]()
 [![node](https://img.shields.io/badge/node-6.2.0-yellow.svg)]()
 
