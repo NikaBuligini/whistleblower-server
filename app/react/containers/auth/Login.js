@@ -1,29 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
-
-const Input = props => (
-  <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input
-      className="mdl-textfield__input"
-      type={props.type}
-      name={props.id}
-      id={props.id}
-    />
-    <label
-      className="mdl-textfield__label"
-      htmlFor={props.id}
-    >
-      {props.text}
-    </label>
-  </div>
-);
-
-Input.propTypes = {
-  text: React.PropTypes.string,
-  type: React.PropTypes.string.isRequired,
-  id: React.PropTypes.string.isRequired,
-};
+import Input from './Input';
 
 class Login extends React.Component {
   componentDidMount() {
@@ -38,7 +15,7 @@ class Login extends React.Component {
             <form
               method="post"
               action="/auth/login"
-              className="mdl-cell mdl-cell--4-col"
+              className="mdl-cell mdl-cell--4-col auth"
             >
               <Input text="Email" id="email" type="text" />
               <Input text="Password" id="password" type="password" />
@@ -56,8 +33,4 @@ class Login extends React.Component {
   }
 }
 
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps, {})(Login);
+export default Login;

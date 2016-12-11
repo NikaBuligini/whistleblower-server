@@ -36,4 +36,8 @@ module.exports = {
 
     authorize(req, user, () => res.redirect('/'));
   },
+
+  logout(req, res) {
+    req.session.destroy(() => res.redirect('/auth'));
+  },
 };

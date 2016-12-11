@@ -1,6 +1,42 @@
 @import url('http://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
 $green: #4CAF50;
+$blue: rgb(68,138,255);
+
+.navigation {
+  .account-icon {
+    cursor: default;
+    outline: none;
+  }
+
+  .account-actions {
+    position: absolute;
+    min-width: 180px;
+    padding: 6px 0;
+    right: 36px;
+    top: 54px;
+    border-radius: 2px;
+    background-color: #fff;
+    color: #777;
+
+    .line {
+      padding: 6px 12px;
+      display: block;
+      color: #777;
+
+      &:not(.static):hover {
+        background-color: $blue;
+        color: #fff;
+      }
+    }
+
+    .divider {
+      height: 1px;
+      margin: 8px 1px;
+      background-color: #e5e5e5;
+    }
+  }
+}
 
 .projects {
   .add {
@@ -131,4 +167,12 @@ $green: #4CAF50;
   position: relative;
   top: 10px;
   left: 10px;
+}
+
+form.auth {
+  margin: 24px auto 0 auto;
+}
+
+.mdl-mega-footer {
+  margin-top: 12px;
 }

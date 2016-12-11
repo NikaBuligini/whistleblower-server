@@ -1,6 +1,6 @@
 import React from 'react';
-import { Router } from 'react-router';
 import { Provider } from 'react-redux';
+import { Router } from 'react-router';
 import routes from '../routes';
 import { StorePropType, HistoryPropType } from '../propTypes';
 

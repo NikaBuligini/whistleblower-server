@@ -19,6 +19,7 @@ router.get('/auth', auth.index);
 router.get('/auth/sign-up', auth.index);
 router.post('/auth/login', auth.login);
 router.post('/auth/sign-up', auth.signUp);
+router.get('/auth/logout', auth.logout);
 
 router.get('/api/project', project.getAll);
 router.get('/api/project/:projectName', project.get);

@@ -1,12 +1,26 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import createSocketIoMiddleware from 'redux-socket.io';
+import io from 'socket.io-client';
 import thunk from 'redux-thunk';
 import api from '../middleware/api';
 import rootReducer from '../reducers';
 
 export default function configureStore(preloadedState) {
-  return createStore(
+  const socket = io('localhost:3000');
+
+  socket.on('connect', () => {
+    console.log('connected to socket');
+  });
+
+  const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
+
+  const store = createStore(
     rootReducer,
     preloadedState,
-    applyMiddleware(thunk, api),
+    compose(
+      applyMiddleware(thunk, socketIoMiddleware, api),
+    ),
   );
+
+  return store;
 }

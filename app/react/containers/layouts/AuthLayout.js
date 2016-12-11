@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Footer from './Footer';
 
 const Navigation = () => (
   <header className="mdl-layout__header mdl-layout__header--scroll mdl-shadow--2dp">
@@ -27,6 +28,7 @@ const Layout = props => (
       </div>
       {props.children}
     </main>
+    <Footer />
   </div>
 );
 

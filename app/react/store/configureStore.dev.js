@@ -7,21 +7,21 @@ import api from '../middleware/api';
 import rootReducer from '../reducers';
 // import devTools from 'remote-redux-devtools';
 
-const socket = io('localhost:3000');
-
-socket.on('connect', () => {
-  console.log('connected to socket');
-});
-// socket.on('event', function(data){
-//   console.log(data);
-// });
-// socket.on('disconnect', function(){});
-const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
-
 /**
  * add createLogger() to applyMiddleware for logs
  */
 export default function configureStore(preloadedState) {
+  const socket = io('localhost:3000');
+
+  socket.on('connect', () => {
+    console.log('connected to socket');
+  });
+  // socket.on('event', function(data){
+  //   console.log(data);
+  // });
+  // socket.on('disconnect', function(){});
+  const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
+
   const store = createStore(
     rootReducer,
     preloadedState,

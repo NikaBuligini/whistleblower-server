@@ -8,9 +8,7 @@ const Root = (props) => {
   const { store, history } = props;
   return (
     <Provider store={store}>
-      <div>
-        <Router history={history} routes={routes} />
-      </div>
+      <Router history={history} routes={routes} />
     </Provider>
   );
 };

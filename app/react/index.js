@@ -12,9 +12,9 @@ const state = {
     roles: [],
   },
 };
-const roles = document.getElementById('roles');
-if (roles) {
-  state.preloaded.roles = JSON.parse(roles.value);
+const preloadedJson = document.getElementById('preloaded');
+if (preloadedJson) {
+  state.preloaded = JSON.parse(preloadedJson.value);
 }
 
 const store = configureStore(state);

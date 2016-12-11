@@ -2,6 +2,13 @@ import React from 'react';
 
 function DefaultLayout(props) {
   const { title, user } = props;
+  const bundlejs = process.env.NODE_ENV === 'production'
+    ? <script src="/bundle.js" />
+    : <script src="http://localhost:8080/bundle.js" />;
+  const preloaded = user ? {
+    name: user.fullname,
+    roles: user.roles,
+  } : false;
   return (
     <html lang="en">
       <head>
@@ -16,11 +23,11 @@ function DefaultLayout(props) {
       <body>
         {props.children}
         <div id="devtools" />
-        {user && <input type="hidden" id="roles" value={JSON.stringify(user.roles)} />}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" />
-        {/* <script src="/bundle.js"></script> */}
+        {preloaded && <input type="hidden" id="preloaded" value={JSON.stringify(preloaded)} />}
+        {/* <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" /> */}
+        <script async defer src="https://buttons.github.io/buttons.js" />
         <script src="/material.min.js" />
-        <script src="http://localhost:8080/bundle.js" />
+        {bundlejs}
       </body>
     </html>
   );
