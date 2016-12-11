@@ -12,7 +12,7 @@ addons:
       - g++-4.8
 
 before_script:
-  - flow-typed install
+  - npm run flow:build
 
 script:
   - npm run lint
