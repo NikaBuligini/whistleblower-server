@@ -3,10 +3,42 @@ import { connect } from 'react-redux';
 import { addService } from '../../actions';
 import { ProjectPropType } from '../../propTypes';
 
+const Input = (props) => {
+  const { onChange, value, name, placeholder, className } = props;
+  const cls = `mdl-textfield mdl-js-textfield mdl-textfield--floating-label ${className}`;
+  return (
+    <div className={cls}>
+      <input
+        className="mdl-textfield__input"
+        type="text"
+        id={name}
+        name={name}
+        autoComplete="off"
+        onChange={onChange}
+        value={value}
+      />
+      <label className="mdl-textfield__label" htmlFor={name}>{placeholder}</label>
+    </div>
+  );
+};
+
+Input.propTypes = {
+  name: React.PropTypes.string.isRequired,
+  placeholder: React.PropTypes.string.isRequired,
+  onChange: React.PropTypes.func.isRequired,
+  value: React.PropTypes.string,
+  className: React.PropTypes.string,
+};
+
 class NewServiceForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { serviceName: '' };
+    this.state = {
+      error: '',
+      serviceName: '',
+      serviceType: '',
+    };
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -14,32 +46,39 @@ class NewServiceForm extends React.Component {
     componentHandler.upgradeDom();
   }
 
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
   handleSubmit(event) {
     event.preventDefault();
-    this.props.addService(this.state.serviceName, this.props.project.id);
-    this.props.handleCancel();
+
+    if (this.state.serviceName && this.state.serviceType) {
+      this.props.addService(this.state.serviceName, this.state.serviceType, this.props.project.id);
+    } else {
+      // this.setState({ error: 'Please, fill inputs' });
+    }
   }
 
   render() {
-    const { error } = this.props;
+    // const { error } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit} className="service-form">
-        <div className="mdl-textfield mdl-js-textfield">
-          <input
-            className="mdl-textfield__input"
-            type="text"
-            id="service-name"
-            autoComplete="off"
-            autoFocus="on"
-            onChange={(event) => {
-              this.setState({ serviceName: event.target.value });
-            }}
-            value={this.state.serviceName}
-          />
-          <label className="mdl-textfield__label" htmlFor="service-name">Name</label>
-          {error && <span className="mdl-textfield__error" style={{ visibility: 'visible' }}>{error}</span>}
-        </div>
+        <Input
+          className="first-block"
+          placeholder="Name"
+          onChange={this.handleChange}
+          value={this.state.serviceName}
+          name="serviceName"
+        />
+        <Input
+          placeholder="Type"
+          onChange={this.handleChange}
+          value={this.state.serviceType}
+          name="serviceType"
+        />
+        {/* {error && <span className="mdl-textfield__error" style={{ visibility: 'visible' }}>{error}</span>} */}
         <button
           className="mdl-button mdl-js-button mdl-button--accent add-service"
           type="submit"
@@ -62,7 +101,6 @@ NewServiceForm.propTypes = {
   addService: React.PropTypes.func.isRequired,
   handleCancel: React.PropTypes.func.isRequired,
   project: ProjectPropType.isRequired,
-  error: React.PropTypes.string,
 };
 
 function mapStateToProps() {

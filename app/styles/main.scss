@@ -139,6 +139,10 @@ $blue: rgb(68,138,255);
   }
 
   form.service-form {
+    .first-block {
+      display: block;
+    }
+
     .add-service {
       margin-left: 12px;
     }

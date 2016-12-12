@@ -27,7 +27,7 @@ module.exports = {
         }
 
         const result = project.services
-          .map(service => Object.assign({}, service.toObject(), { project: project.name }));
+          .map(service => service.toObject());
 
         return res.json(result);
       })
@@ -38,7 +38,7 @@ module.exports = {
   },
 
   create(req, res) {
-    const { projectId, name } = req.body;
+    const { projectId, name, type } = req.body;
 
     Project.getById(projectId)
       .then((project) => {
@@ -54,15 +54,15 @@ module.exports = {
 
         const service = new Service({
           name,
+          type,
           status: 'ok',
-          type: 'DISK_USAGE',
         });
         service.save();
 
         project.services.push(service);
         project.save();
 
-        return res.json(Object.assign({}, service.toObject(), { project: project.name }));
+        return res.json(service.toObject());
       })
       .catch((err) => {
         console.log(err);
