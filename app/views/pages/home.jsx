@@ -12,6 +12,7 @@ function HomeComponent(props) {
 HomeComponent.propTypes = {
   title: React.PropTypes.string.isRequired,
   user: React.PropTypes.shape({
+    name: React.PropTypes.string,
     roles: React.PropTypes.arrayOf(React.PropTypes.string),
   }),
 };

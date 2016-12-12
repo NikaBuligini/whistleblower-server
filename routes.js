@@ -12,8 +12,8 @@ const user = require('./app/controllers/user.controller');
 const authMiddleware = require('./app/middlewares/auth.js');
 
 router.get('/', authMiddleware.notAuthenticated, home.dashboard);
-router.get('/projects', project.list);
-router.get('/projects/:projectName', project.showSingleProject);
+router.get('/projects', authMiddleware.notAuthenticated, project.list);
+router.get('/projects/:projectName', authMiddleware.notAuthenticated, project.showSingleProject);
 
 router.get('/auth', auth.index);
 router.get('/auth/sign-up', auth.index);

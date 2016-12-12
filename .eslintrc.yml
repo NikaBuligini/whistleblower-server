@@ -17,6 +17,7 @@ rules:
   import/no-extraneous-dependencies: ["error", {"devDependencies": true, "optionalDependencies": false, "peerDependencies": false}]
   no-console: [0] #temp
   no-underscore-dangle: ["error", { "allow": ["_id"] }]
+  linebreak-style: [0, "unix"]
 
 settings:
   flowtype:
