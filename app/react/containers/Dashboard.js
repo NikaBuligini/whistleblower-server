@@ -1,24 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
-import DefaultLayout from './layouts/DefaultLayout';
 
 const Dashboard = (props) => {
   const { memory, params } = props;
 
   return (
-    <DefaultLayout>
-      <DocumentTitle title="Dashboard">
-        <div className="mdl-grid">
-          <div className="mdl-cell mdl-cell--10-col mdl-cell--1-offset">
-            {params.projectName}
-            <p>Available: {memory.available}</p>
-            <p>Free: {memory.free}</p>
-            <p>Total: {memory.total}</p>
-          </div>
+    <DocumentTitle title="Dashboard">
+      <div className="mdl-grid">
+        <div className="mdl-cell mdl-cell--10-col mdl-cell--1-offset">
+          {params.projectName}
+          <p>Available: {memory.available}</p>
+          <p>Free: {memory.free}</p>
+          <p>Total: {memory.total}</p>
         </div>
-      </DocumentTitle>
-    </DefaultLayout>
+      </div>
+    </DocumentTitle>
   );
 };
 

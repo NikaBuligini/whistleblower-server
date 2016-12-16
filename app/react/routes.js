@@ -11,9 +11,9 @@ import ProjectList from './containers/projects/ProjectList';
 import Project from './containers/projects/Project';
 
 export default (
-  <Route path="/">
+  <Route path="/" component={DefaultLayout}>
     <IndexRoute component={Dashboard} />
-    <Route path="projects" component={DefaultLayout}>
+    <Route path="projects">
       <IndexRoute component={ProjectList} />
       <Route path=":projectName" component={Project} />
     </Route>
