@@ -105,6 +105,12 @@ function fetchServices(projectId: string) {
   };
 }
 
+// Fetches a list of services for specific project from server.
+// Relies on Redux Thunk middleware.
+export function loadServices(projectId: string) {
+  return (dispatch: Function) => dispatch(fetchServices(projectId));
+}
+
 function fetchService(id: string) {
   return {
     [CALL_API]: {
@@ -116,10 +122,8 @@ function fetchService(id: string) {
   };
 }
 
-// Fetches a list of services for specific project from server.
-// Relies on Redux Thunk middleware.
-export function loadServices(projectId: string) {
-  return (dispatch: Function) => dispatch(fetchServices(projectId));
+export function loadService(serviceId: string) {
+  return (dispatch: Function) => dispatch(fetchService(serviceId));
 }
 
 

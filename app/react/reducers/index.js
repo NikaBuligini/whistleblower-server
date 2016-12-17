@@ -77,13 +77,16 @@ function services(state = {
   error: null,
 }, action): {error: ?string, isAdding: boolean, isFetching: boolean} {
   switch (action.type) {
-    case ActionTypes.SERVICES_REQUEST: {
+    case ActionTypes.SERVICES_REQUEST:
+    case ActionTypes.SERVICE_REQUEST: {
       return merge({}, state, { isFetching: true });
     }
-    case ActionTypes.SERVICES_SUCCESS: {
+    case ActionTypes.SERVICES_SUCCESS:
+    case ActionTypes.SERVICE_SUCCESS: {
       return merge({}, state, { isFetching: false });
     }
-    case ActionTypes.SERVICES_FAILURE: {
+    case ActionTypes.SERVICES_FAILURE:
+    case ActionTypes.SERVICE_FAILURE: {
       return merge({}, state, {
         isFetching: false,
         error: action.error,

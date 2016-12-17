@@ -119,7 +119,7 @@ class NewServiceForm extends React.Component {
           value={this.state.serviceName}
           name="serviceName"
         />
-        <div className="mdl-textfield mdl-js-textfield">
+        <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <Autocomplete
             inputProps={{
               name: 'service types',

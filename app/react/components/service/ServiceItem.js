@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { ServicePropType } from '../../propTypes';
 
 class ServiceItem extends React.Component {
@@ -12,7 +13,7 @@ class ServiceItem extends React.Component {
   }
 
   render() {
-    const { service } = this.props;
+    const { service, projectName } = this.props;
 
     const btnData = service.isActive
       ? { name: 'Disable', cls: 'mdl-button mdl-js-button mdl-button--primary' }
@@ -25,7 +26,9 @@ class ServiceItem extends React.Component {
       <li className="mdl-list__item">
         <span className="mdl-list__item-primary-content">
           <i className={iconCls}>work</i>
-          {service.name}
+          <Link to={`/projects/${projectName}/${service.id}`} className="name">
+            {service.name}
+          </Link>
         </span>
         <span className="service-status">
           <button
@@ -42,6 +45,7 @@ class ServiceItem extends React.Component {
 
 ServiceItem.propTypes = {
   service: ServicePropType.isRequired,
+  projectName: React.PropTypes.string.isRequired,
   handleActivationChange: React.PropTypes.func.isRequired,
 };
 

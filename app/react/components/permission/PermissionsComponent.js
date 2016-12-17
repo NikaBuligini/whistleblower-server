@@ -27,7 +27,7 @@ class PermissionsComponent extends React.Component {
     return (
       <section>
         <div className="title">
-          <h6>Users</h6>
+          <h6>Permissions</h6>
           <span className="actions">
             <button
               className="mdl-button mdl-js-button mdl-button--accent"

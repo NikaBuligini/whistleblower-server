@@ -2,6 +2,19 @@ const Project = require('../schemas/project');
 const Service = require('../schemas/service');
 
 module.exports = {
+  showSingleService(req, res) {
+    Service.getById(req.params.serviceId)
+      .then((service) => {
+        res.render('./pages/service', {
+          title: service.name,
+          user: req.user,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+
   get(req, res) {
     Service.getById(req.params.serviceId)
       .then((service) => {

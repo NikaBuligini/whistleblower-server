@@ -9,13 +9,17 @@ import Login from './containers/auth/Login';
 import SignUp from './containers/auth/SignUp';
 import ProjectList from './containers/projects/ProjectList';
 import Project from './containers/projects/Project';
+import Service from './containers/services/Service';
 
 export default (
-  <Route path="/" component={DefaultLayout}>
+  <Route path="/">
     <IndexRoute component={Dashboard} />
-    <Route path="projects">
+    <Route path="projects" component={DefaultLayout}>
       <IndexRoute component={ProjectList} />
-      <Route path=":projectName" component={Project} />
+      <Route path=":projectName">
+        <IndexRoute component={Project} />
+        <Route path=":serviceId" component={Service} />
+      </Route>
     </Route>
     <Route path="auth" component={AuthLayout}>
       <IndexRoute component={Login} />

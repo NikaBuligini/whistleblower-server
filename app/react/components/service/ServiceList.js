@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import Loading from '../../components/Loading';
 import ServiceItem from '../../components/service/ServiceItem';
 import { ServicePropType } from '../../propTypes';
@@ -10,6 +11,7 @@ class ServicesList extends React.Component {
 
   render() {
     const { isFetching, services, handleActivationChange } = this.props;
+    const { projectName } = this.props.params;
 
     if (isFetching) {
       return <Loading cls="loading" />;
@@ -25,6 +27,7 @@ class ServicesList extends React.Component {
           <ServiceItem
             key={index}
             service={service}
+            projectName={projectName}
             handleActivationChange={handleActivationChange}
           />
         ))}
@@ -35,8 +38,11 @@ class ServicesList extends React.Component {
 
 ServicesList.propTypes = {
   isFetching: React.PropTypes.bool.isRequired,
+  params: React.PropTypes.shape({
+    projectName: React.PropTypes.string,
+  }).isRequired,
   services: React.PropTypes.arrayOf(ServicePropType).isRequired,
   handleActivationChange: React.PropTypes.func.isRequired,
 };
 
-export default ServicesList;
+export default withRouter(ServicesList);

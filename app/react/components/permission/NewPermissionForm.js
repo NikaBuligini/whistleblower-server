@@ -61,7 +61,7 @@ class NewPermissionForm extends React.Component {
 
     return (
       <form onSubmit={this.handleSubmit} className="service-form">
-        <div className="mdl-textfield mdl-js-textfield">
+        <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <Autocomplete
             inputProps={{
               name: 'user names',
