@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import DocumentTitle from 'react-document-title';
 import { loadService } from '../../actions';
 import Loading from '../../components/Loading';
+import EditService from '../../components/service/EditService';
 import { ServicePropType } from '../../propTypes';
 
 const ProjectDetails = (props) => {
@@ -51,6 +52,7 @@ class Service extends React.Component {
               </div>
               <div className="mdl-card__supporting-text">
                 <ProjectDetails service={service} />
+                <EditService service={service} />
               </div>
             </section>
           </div>

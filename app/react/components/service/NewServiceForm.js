@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Autocomplete from '../Autocomplete';
 import { addService } from '../../actions';
+import Input from '../Input';
 import { ProjectPropType } from '../../propTypes';
 
 const style = {
@@ -23,34 +24,6 @@ const serviceTypes = [
     name: 'Disk usage',
   },
 ];
-
-const Input = (props) => {
-  const { onChange, value, name, placeholder, className, type } = props;
-  const cls = `mdl-textfield mdl-js-textfield mdl-textfield--floating-label ${className}`;
-  return (
-    <div className={cls}>
-      <input
-        className="mdl-textfield__input"
-        type={type || 'text'}
-        id={name}
-        name={name}
-        autoComplete="off"
-        onChange={onChange}
-        value={value}
-      />
-      <label className="mdl-textfield__label" htmlFor={name}>{placeholder}</label>
-    </div>
-  );
-};
-
-Input.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  placeholder: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  type: React.PropTypes.string,
-  value: React.PropTypes.string,
-  className: React.PropTypes.string,
-};
 
 class NewServiceForm extends React.Component {
   constructor(props) {
