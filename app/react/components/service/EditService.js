@@ -2,11 +2,33 @@
 
 import React from 'react';
 import Input from '../Input';
+import Autocomplete from '../Autocomplete';
 import { ServicePropType } from '../../propTypes';
+import type { Service } from '../../actions/types';
 
 type Props = {
-  service: { name: string, type: string },
+  service: Service,
 };
+
+const style = {
+  highlighted: {
+    cursor: 'default',
+    padding: '6px 12px',
+    color: 'white',
+    background: 'rgb(63, 149, 191)',
+  },
+  item: {
+    cursor: 'default',
+    padding: '6px 12px',
+  },
+};
+
+const serviceTypes = [
+  {
+    id: 0,
+    name: 'Disk usage',
+  },
+];
 
 class EditService extends React.Component {
   constructor(props: Props) {
@@ -14,6 +36,9 @@ class EditService extends React.Component {
     this.state = {
       name: props.service.name,
       type: props.service.type,
+      timeout: props.service.timeout || '',
+      types: serviceTypes,
+      loading: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,14 +47,35 @@ class EditService extends React.Component {
   state: {
     name: string,
     type: string,
+    timeout: string,
+    types: Object[],
+    loading: boolean,
   };
 
   componentDidMount() {
     componentHandler.upgradeDom();
   }
 
+  filterTypes(value: string, types: Object[]) {
+    if (value === '') {
+      this.setState({ types, loading: false });
+      return;
+    }
+
+    const valueLowerCase = value.toLowerCase();
+    const items = types.filter(user => user.name.toLowerCase().indexOf(valueLowerCase) !== -1);
+
+    setTimeout(() => {
+      let typeItems = items;
+      if (!items) typeItems = types;
+      this.setState({ types: typeItems, loading: false });
+    }, 100);
+  }
+
   handleChange: () => void;
   handleSubmit: () => void;
+  filterTypes: () => void;
+  autocomplete: Function;
 
   props: Props;
 
@@ -44,6 +90,8 @@ class EditService extends React.Component {
   }
 
   render() {
+    const { types } = this.state;
+
     return (
       <section>
         <form onSubmit={this.handleSubmit} className="service-form">
@@ -54,11 +102,42 @@ class EditService extends React.Component {
             value={this.state.name}
             onChange={this.handleChange}
           />
+          <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <Autocomplete
+              inputProps={{ name: 'type', id: 'type' }}
+              inputLabel={() => (
+                <label className="mdl-textfield__label" htmlFor="permission-input">
+                  Type
+                </label>
+              )}
+              ref={(c) => { this.autocomplete = c; }}
+              value={this.state.type}
+              items={this.state.types}
+              getItemValue={item => item.name}
+              onSelect={(value: string, item: Object) => {
+                // set the menu to only the selected item
+                this.setState({ type: value, types: [item] });
+              }}
+              onChange={(event: Event, value: string) => {
+                this.setState({ type: value, loading: true });
+                this.filterTypes(value, types);
+              }}
+              renderItem={(item: Object, isHighlighted: boolean) => (
+                <div
+                  style={isHighlighted ? style.highlighted : style.item}
+                  key={item.id}
+                  id={item.id}
+                >{item.name}</div>
+              )}
+              wrapperStyle={{ display: 'block' }}
+            />
+          </div>
           <Input
             className="block"
-            name="type"
-            placeholder="Type"
-            value={this.state.type}
+            type="number"
+            name="timeout"
+            placeholder="Timeout"
+            value={this.state.timeout}
             onChange={this.handleChange}
           />
           <button
