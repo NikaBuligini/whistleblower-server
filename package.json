@@ -98,5 +98,8 @@
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2",
     "yargs": "^6.3.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

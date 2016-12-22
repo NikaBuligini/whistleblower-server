@@ -19,18 +19,18 @@ const style = {
   },
 };
 
+function filterUsers(value, users, cb) {
+  if (value === '') return cb();
+
+  const valueLowerCase = value.toLowerCase();
+  const items = users.filter(user => user.fullname.toLowerCase().indexOf(valueLowerCase) !== -1);
+
+  return setTimeout(() => {
+    cb(items);
+  }, 100);
+}
+
 class NewPermissionForm extends React.Component {
-  static filterUsers(value, users, cb) {
-    if (value === '') return cb();
-
-    const valueLowerCase = value.toLowerCase();
-    const items = users.filter(user => user.fullname.toLowerCase().indexOf(valueLowerCase) !== -1);
-
-    return setTimeout(() => {
-      cb(items);
-    }, 100);
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -84,7 +84,7 @@ class NewPermissionForm extends React.Component {
             }}
             onChange={(event, value) => {
               this.setState({ value, loading: true });
-              this.filterUsers(value, users, (items) => {
+              filterUsers(value, users, (items) => {
                 let userItems = items;
                 if (!items) userItems = users;
                 this.setState({ users: userItems, loading: false });
