@@ -32,7 +32,6 @@ class NewServiceForm extends React.Component {
       error: '',
       serviceName: '',
       serviceType: '',
-      serviceTimeout: '',
       loading: false,
       types: serviceTypes,
     };
@@ -68,11 +67,10 @@ class NewServiceForm extends React.Component {
     event.preventDefault();
 
     if (this.state.serviceName && this.state.serviceType) {
-      const { serviceName, serviceType, serviceTimeout } = this.state;
+      const { serviceName, serviceType } = this.state;
       const formData = {
         name: serviceName,
         type: serviceType,
-        timeout: serviceTimeout,
       };
       this.props.addService(formData, this.props.project.id);
     } else {
@@ -127,14 +125,6 @@ class NewServiceForm extends React.Component {
             wrapperStyle={{ display: 'block' }}
           />
         </div>
-        <Input
-          className="first-block"
-          placeholder="Timeout"
-          type="number"
-          onChange={this.handleChange}
-          value={this.state.serviceTimeout}
-          name="serviceTimeout"
-        />
         {/* {error && <span className="mdl-textfield__error" style={{ visibility: 'visible' }}>{error}</span>} */}
         <button
           className="mdl-button mdl-js-button mdl-button--accent add-service"

@@ -20,4 +20,15 @@ export type Service = {
   status: string,
   type: string,
   isActive: boolean,
-}
+};
+
+export type AddServiceForm = {
+  name: string,
+  type: string,
+};
+
+export type EditServiceForm = {
+  name: string,
+  type: string,
+  timeout: number,
+};

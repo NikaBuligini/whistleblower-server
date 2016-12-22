@@ -31,6 +31,7 @@ router.put('/api/project', project.create);
 router.get('/api/service', service.getByProjectId);
 router.put('/api/service', service.create);
 router.get('/api/service/:serviceId', service.get);
+router.put('/api/service/:serviceId/store', service.store);
 router.post('/api/service/:serviceId/activate', service.activate);
 
 router.get('/api/user', user.getAll);

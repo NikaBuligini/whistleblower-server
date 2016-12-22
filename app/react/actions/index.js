@@ -1,6 +1,7 @@
 // @flow
 
 import _ from 'lodash';
+import type { AddServiceForm, EditServiceForm } from './types';
 import { CALL_API, Schemas } from '../middleware/api';
 import { SUBMIT_API } from '../middleware/submitApi';
 
@@ -131,16 +132,10 @@ export const CREATE_SERVICE_REQUEST: string = 'CREATE_SERVICE_REQUEST';
 export const CREATE_SERVICE_SUCCESS: string = 'CREATE_SERVICE_SUCCESS';
 export const CREATE_SERVICE_FAILURE: string = 'CREATE_SERVICE_FAILURE';
 
-type ServiceForm = {
-  name: string,
-  type: string,
-  timeout: number,
-};
-
 // Calls single service creator method.
 // Relies on the custom API middleware defined in ../middleware/submitApi.js.
-function callCreateService(newService: ServiceForm, projectId: string) {
-  const { name, type, timeout } = newService;
+function callCreateService(newService: AddServiceForm, projectId: string) {
+  const { name, type } = newService;
   return {
     [SUBMIT_API]: {
       types: [CREATE_SERVICE_REQUEST, CREATE_SERVICE_SUCCESS, CREATE_SERVICE_FAILURE],
@@ -149,7 +144,6 @@ function callCreateService(newService: ServiceForm, projectId: string) {
         projectId,
         name,
         type,
-        timeout,
       },
       method: 'PUT',
       schema: Schemas.SERVICE,
@@ -163,9 +157,7 @@ function callCreateService(newService: ServiceForm, projectId: string) {
           type: PROJECTS_SUCCESS,
           response: {
             entities: {
-              projects: {
-                [projectId]: project,
-              },
+              projects: { [projectId]: project },
             },
           },
         });
@@ -177,8 +169,39 @@ function callCreateService(newService: ServiceForm, projectId: string) {
 
 // Creates new service instance.
 // Relies on Redux Thunk middleware.
-export function addService(newService: ServiceForm, projectId: string) {
+export function addService(newService: AddServiceForm, projectId: string) {
   return (dispatch: Function) => dispatch(callCreateService(newService, projectId));
+}
+
+
+export const UPDATE_SERVICE_REQUEST: string = 'UPDATE_SERVICE_REQUEST';
+export const UPDATE_SERVICE_SUCCESS: string = 'UPDATE_SERVICE_SUCCESS';
+export const UPDATE_SERVICE_FAILURE: string = 'UPDATE_SERVICE_FAILURE';
+
+// Calls single service updater method.
+// Relies on the custom API middleware defined in ../middleware/submitApi.js.
+function callUpdateService(newService: EditServiceForm, serviceId: string) {
+  const { name, type, timeout } = newService;
+  return {
+    [SUBMIT_API]: {
+      types: [UPDATE_SERVICE_REQUEST, UPDATE_SERVICE_SUCCESS, UPDATE_SERVICE_FAILURE],
+      endpoint: `/api/service/${serviceId}/store`,
+      body: {
+        name,
+        type,
+        timeout,
+      },
+      method: 'PUT',
+      schema: Schemas.SERVICE,
+    },
+    type: 'SUBMIT_API',
+  };
+}
+
+// Updates new service instance.
+// Relies on Redux Thunk middleware.
+export function updateService(newService: EditServiceForm, serviceId: string) {
+  return (dispatch: Function) => dispatch(callUpdateService(newService, serviceId));
 }
 
 export const CHANGE_SERVICE_ACTIVATION_REQUEST: string = 'CHANGE_SERVICE_ACTIVATION_REQUEST';

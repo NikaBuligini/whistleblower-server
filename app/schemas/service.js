@@ -6,6 +6,7 @@ const ServiceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
   status: { type: String, required: true },
+  timeout: Number,
   is_active: { type: Boolean, default: false },
   uuid: { type: String, index: { unique: true } },
   created_at: Date,

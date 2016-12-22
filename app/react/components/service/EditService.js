@@ -1,13 +1,16 @@
 // @flow
 
 import React from 'react';
+import { connect } from 'react-redux';
 import Input from '../Input';
 import Autocomplete from '../Autocomplete';
+import { updateService } from '../../actions';
 import { ServicePropType } from '../../propTypes';
-import type { Service } from '../../actions/types';
+import type { Service, EditServiceForm } from '../../actions/types';
 
 type Props = {
   service: Service,
+  updateService: (form: EditServiceForm, projectId: string) => void,
 };
 
 const style = {
@@ -33,10 +36,12 @@ const serviceTypes = [
 class EditService extends React.Component {
   constructor(props: Props) {
     super(props);
+    let timeout = props.service.timeout || '';
+    if (typeof timeout !== 'string') timeout = timeout.toString();
     this.state = {
       name: props.service.name,
       type: props.service.type,
-      timeout: props.service.timeout || '',
+      timeout,
       types: serviceTypes,
       loading: false,
     };
@@ -85,8 +90,9 @@ class EditService extends React.Component {
 
   handleSubmit(event: Event): void {
     event.preventDefault();
-    console.log(this.state);
-    //
+    const { service } = this.props;
+    const { name, type, timeout } = this.state;
+    this.props.updateService({ name, type, timeout: parseInt(timeout, 10) }, service.id);
   }
 
   render() {
@@ -154,6 +160,13 @@ class EditService extends React.Component {
 
 EditService.propTypes = {
   service: ServicePropType,
+  updateService: React.PropTypes.func.isRequired,
 };
 
-export default EditService;
+function mapStateToProps() {
+  return {};
+}
+
+export default connect(mapStateToProps, {
+  updateService,
+})(EditService);

@@ -83,6 +83,25 @@ module.exports = {
       });
   },
 
+  store(req, res) {
+    const { serviceId } = req.params;
+    const { name, type, timeout } = req.body;
+
+    Service.findByIdAndUpdate(serviceId, { $set: { name, type, timeout } }, { new: true })
+      .exec()
+      .then((service) => {
+        if (!service) {
+          res.status(500).json({ message: 'service doesn\'t exists!' });
+        } else {
+          res.json(service.toObject());
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json(err);
+      });
+  },
+
   activate(req, res) {
     const { serviceId } = req.params;
 
