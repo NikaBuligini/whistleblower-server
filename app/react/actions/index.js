@@ -8,7 +8,7 @@ import { SUBMIT_API } from '../middleware/submitApi';
 export const RESET_ERROR_MESSAGE: string = 'RESET_ERROR_MESSAGE';
 
 // Resets the currently visible error message.
-export function resetErrorMessage(): {type: string} {
+export function resetErrorMessage(): { type: string } {
   return {
     type: RESET_ERROR_MESSAGE,
   };

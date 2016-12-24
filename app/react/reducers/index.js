@@ -74,6 +74,8 @@ function projects(state = {
 function services(state = {
   isAdding: false,
   isFetching: false,
+  isUpdating: false,
+  updateSuccess: null,
   error: null,
 }, action): {error: ?string, isAdding: boolean, isFetching: boolean} {
   switch (action.type) {
@@ -89,6 +91,25 @@ function services(state = {
     case ActionTypes.SERVICE_FAILURE: {
       return merge({}, state, {
         isFetching: false,
+        error: action.error,
+      });
+    }
+    case ActionTypes.UPDATE_SERVICE_REQUEST: {
+      return merge({}, state, {
+        isUpdating: true,
+        updateSuccess: null,
+      });
+    }
+    case ActionTypes.UPDATE_SERVICE_SUCCESS: {
+      return merge({}, state, {
+        isUpdating: false,
+        updateSuccess: 'Service has been updated.',
+      });
+    }
+    case ActionTypes.UPDATE_SERVICE_FAILURE: {
+      return merge({}, state, {
+        isUpdating: false,
+        updateSuccess: null,
         error: action.error,
       });
     }

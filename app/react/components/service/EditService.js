@@ -7,10 +7,16 @@ import Autocomplete from '../Autocomplete';
 import { updateService } from '../../actions';
 import { ServicePropType } from '../../propTypes';
 import type { Service, EditServiceForm } from '../../actions/types';
+import Loading from '../Loading';
+import Success from '../Success';
+import Error from '../Error';
 
 type Props = {
   service: Service,
   updateService: (form: EditServiceForm, projectId: string) => void,
+  isUpdating: boolean,
+  updateSuccess: string,
+  error: string,
 };
 
 const style = {
@@ -39,22 +45,22 @@ class EditService extends React.Component {
     let timeout = props.service.timeout || '';
     if (typeof timeout !== 'string') timeout = timeout.toString();
     this.state = {
-      name: props.service.name,
-      type: props.service.type,
-      timeout,
-      types: serviceTypes,
       loading: false,
+      name: props.service.name,
+      timeout,
+      type: props.service.type,
+      types: serviceTypes,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   state: {
-    name: string,
-    type: string,
-    timeout: string,
-    types: Object[],
     loading: boolean,
+    name: string,
+    timeout: string,
+    type: string,
+    types: Object[],
   };
 
   componentDidMount() {
@@ -97,6 +103,17 @@ class EditService extends React.Component {
 
   render() {
     const { types } = this.state;
+    const { isUpdating, updateSuccess, error } = this.props;
+
+    let statusComponent = false;
+
+    if (isUpdating) {
+      statusComponent = <Loading cls="inline-loading" />;
+    } else if (updateSuccess) {
+      statusComponent = <Success text={updateSuccess} />;
+    } else if (error) {
+      statusComponent = <Error text={error} />;
+    }
 
     return (
       <section>
@@ -104,9 +121,9 @@ class EditService extends React.Component {
           <Input
             className="block"
             name="name"
+            onChange={this.handleChange}
             placeholder="Name"
             value={this.state.name}
-            onChange={this.handleChange}
           />
           <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <Autocomplete
@@ -140,11 +157,11 @@ class EditService extends React.Component {
           </div>
           <Input
             className="block"
-            type="number"
             name="timeout"
-            placeholder="Timeout"
-            value={this.state.timeout}
             onChange={this.handleChange}
+            placeholder="Timeout"
+            type="number"
+            value={this.state.timeout}
           />
           <button
             className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
@@ -152,6 +169,7 @@ class EditService extends React.Component {
           >
             Update
           </button>
+          {statusComponent}
         </form>
       </section>
     );
@@ -161,10 +179,14 @@ class EditService extends React.Component {
 EditService.propTypes = {
   service: ServicePropType,
   updateService: React.PropTypes.func.isRequired,
+  isUpdating: React.PropTypes.bool.isRequired,
+  updateSuccess: React.PropTypes.string,
+  error: React.PropTypes.string,
 };
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  const { isUpdating, updateSuccess, error } = state.process.services;
+  return { isUpdating, updateSuccess, error };
 }
 
 export default connect(mapStateToProps, {

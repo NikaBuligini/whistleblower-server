@@ -1,6 +1,7 @@
 @import url('http://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
 $green: #4CAF50;
+$red: rgb(244,67,54);
 $blue: rgb(68,138,255);
 
 .navigation {
@@ -183,4 +184,16 @@ form.auth {
 
 .mdl-mega-footer {
   margin-top: 12px;
+}
+
+div.success {
+  display: inline-block;
+  color: $green;
+  margin-left: 12px;
+}
+
+div.error {
+  display: inline-block;
+  color: $red;
+  margin-left: 12px;
 }
