@@ -68,7 +68,6 @@ module.exports = {
         const service = new Service({
           name,
           type,
-          status: 'ok',
         });
         service.save();
 

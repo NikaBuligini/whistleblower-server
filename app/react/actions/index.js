@@ -312,3 +312,21 @@ function callRemovePermission(userId: string, projectId: string) {
 export function removePermission(userId: string, projectId: string) {
   return (dispatch: Function) => dispatch(callRemovePermission(userId, projectId));
 }
+
+
+// Fetches a projects for authorized user.
+// Relies on the custom API middleware defined in ../middleware/api.js.
+function fetchMyProjects() {
+  return {
+    [CALL_API]: {
+      types: [PROJECTS_REQUEST, PROJECTS_SUCCESS, PROJECTS_FAILURE],
+      endpoint: '/api/me/project',
+      schema: Schemas.PROJECT_ARRAY,
+    },
+    type: 'CALL_API',
+  };
+}
+
+export function loadUserServices() {
+  return (dispatch: Function) => dispatch(fetchMyProjects());
+}

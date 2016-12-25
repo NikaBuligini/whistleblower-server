@@ -5,7 +5,7 @@ const uuid = require('uuid');
 const ServiceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
-  status: { type: String, required: true },
+  status: { type: String, required: true, default: 'outdated', enum: ['ok', 'failed', 'outdated'] },
   timeout: { type: Number, default: 5 },
   is_active: { type: Boolean, default: false },
   uuid: { type: String, index: { unique: true } },

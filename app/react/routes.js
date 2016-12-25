@@ -4,7 +4,7 @@ import { Route, IndexRoute } from 'react-router';
 import DefaultLayout from './containers/layouts/DefaultLayout';
 import AuthLayout from './containers/layouts/AuthLayout';
 
-import Dashboard from './containers/Dashboard';
+import Dashboard from './containers/dashboard';
 import Login from './containers/auth/Login';
 import SignUp from './containers/auth/SignUp';
 import ProjectList from './containers/projects/ProjectList';

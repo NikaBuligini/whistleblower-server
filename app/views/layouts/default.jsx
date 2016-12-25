@@ -6,6 +6,7 @@ function DefaultLayout(props) {
     ? <script src="/bundle.js" />
     : <script src="http://localhost:8080/bundle.js" />;
   const preloaded = user ? {
+    id: user.id,
     name: user.fullname,
     roles: user.roles,
   } : false;

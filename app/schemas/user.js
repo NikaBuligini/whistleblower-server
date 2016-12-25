@@ -63,6 +63,7 @@ UserSchema.statics = {
 
   getById(id) {
     return this.findById(id)
+      .populate('projects')
       .exec();
   },
 

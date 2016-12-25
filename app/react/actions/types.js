@@ -32,3 +32,8 @@ export type EditServiceForm = {
   type: string,
   timeout: number,
 };
+
+export type Project = {
+  name: string,
+  services: Service[],
+}

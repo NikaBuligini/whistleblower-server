@@ -44,18 +44,6 @@ ProjectSchema.methods = {
       this.save();
     }
   },
-
-  /**
-   * Remove permission for user
-   *
-   * @param userId
-   * @api private
-   */
-  removePermission(userId) {
-    const uid = this.users.indexOf(userId);
-    if (uid !== -1) this.users.splice(uid, 1);
-    this.save();
-  },
 };
 
 ProjectSchema.statics = {
@@ -102,6 +90,18 @@ ProjectSchema.statics = {
     return this.findById(id)
       .populate('services')
       .populate('users')
+      .exec();
+  },
+
+  /**
+   * Get projects for specific user
+   *
+   * @param {userId} user id
+   * @api public
+   */
+  getByUserId(userId) {
+    return this.find({ users: userId })
+      .populate('services')
       .exec();
   },
 

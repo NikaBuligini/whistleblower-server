@@ -96,6 +96,15 @@ module.exports = {
       });
   },
 
+  getProjectsForUser(req, res) {
+    Project.getByUserId(req.user.id)
+      .then(projects => res.json(projects))
+      .catch((err) => {
+        console.log(err);
+        res.json(err);
+      });
+  },
+
   clear(req, res) {
     Project.remove({}).exec();
     res.send('Done');
