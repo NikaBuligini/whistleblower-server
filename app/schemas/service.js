@@ -7,7 +7,7 @@ const ServiceSchema = new mongoose.Schema({
   type: { type: String, required: true },
   status: { type: String, required: true, default: 'outdated', enum: ['ok', 'failed', 'outdated'] },
   timeout: { type: Number, default: 5 },
-  is_active: { type: Boolean, default: false },
+  isActive: { type: Boolean, default: false },
   uuid: { type: String, index: { unique: true } },
   created_at: Date,
   updated_at: { type: Date, default: Date.now },
@@ -40,6 +40,17 @@ ServiceSchema.statics = {
    */
   getById(id) {
     return this.findById(id)
+      .exec();
+  },
+
+  /**
+   * Changes activation status for service
+   *
+   * @param {shouldBeActive} activation status
+   * @api private
+   */
+  changeActivation(serviceId, shouldBeActive) {
+    return this.findByIdAndUpdate(serviceId, { $set: { isActive: shouldBeActive } }, { new: true })
       .exec();
   },
 };

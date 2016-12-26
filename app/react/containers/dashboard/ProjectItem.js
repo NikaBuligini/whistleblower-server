@@ -32,7 +32,9 @@ ProjectItem.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   const { project } = ownProps;
-  const services = project.services.map(id => state.entities.services[id]);
+  const services = project.services
+    .map(id => state.entities.services[id])
+    .filter(service => service.isActive);
   return { services };
 }
 

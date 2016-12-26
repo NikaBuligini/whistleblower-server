@@ -221,7 +221,8 @@ function callServiceActivationChange(service: {id: string, isActive: boolean}) {
         serviceId: id,
         isActive: !isActive,
       },
-      success: fetchService(id),
+      method: 'POST',
+      schema: Schemas.SERVICE,
     },
     type: 'SUBMIT_API',
   };

@@ -103,19 +103,10 @@ module.exports = {
 
   activate(req, res) {
     const { serviceId } = req.params;
+    const { isActive } = req.body;
 
-    Service.getById(serviceId)
-      .then((service) => {
-        if (!service) {
-          return res.status(500).json({ message: 'service doesn\'t exists!' });
-        }
-
-        const activatedService = service;
-        activatedService.is_active = req.body.isActive;
-        activatedService.save();
-
-        return res.json(activatedService);
-      })
+    Service.changeActivation(serviceId, isActive)
+      .then(service => res.json(service))
       .catch((err) => {
         console.log(err);
         res.json(err);
