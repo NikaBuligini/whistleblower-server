@@ -6,7 +6,10 @@ const mongoose = require('mongoose');
 const promise = require('bluebird');
 const path = require('path');
 const dbSeeder = require('./database/seeds/databaseSeeder');
+const monitor = require('./app/jobs');
 require('dotenv').config();
+
+monitor.start();
 
 const app = express();
 const port = process.env.PORT || 8000;
