@@ -9,6 +9,10 @@ const ServiceSchema = new mongoose.Schema({
   timeout: { type: Number, default: 5 },
   isActive: { type: Boolean, default: false },
   uuid: { type: String, index: { unique: true } },
+  payload: [{
+    data: mongoose.Schema.Types.Mixed,
+    created_at: Date,
+  }],
   created_at: Date,
   updated_at: { type: Date, default: Date.now },
 });

@@ -39,10 +39,6 @@ router.get('/api/user', user.getAll);
 router.get('/api/me/project', authMiddleware.notAuthenticated, project.getProjectsForUser);
 
 router.get('/api/projects/clear', project.clear);
-router.post('/test', (req, res) => {
-  req.io.sockets.emit('action', { type: 'MEMORY_UPDATE', info: req.body });
-
-  res.json({ greet: 'hi' });
-});
+router.post('/test', service.test);
 
 module.exports = router;

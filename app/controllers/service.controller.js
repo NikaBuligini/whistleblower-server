@@ -112,4 +112,29 @@ module.exports = {
         res.json(err);
       });
   },
+
+  test(req, res) {
+    // req.io.sockets.emit('action', { type: 'MEMORY_UPDATE', info: req.body });
+    const { uuid, data } = req.body;
+    console.log(req.body);
+    Service.findOne({ uuid })
+      .exec()
+      .then((service) => {
+        console.log(service);
+
+        if (!service) return res.json('Invalid serviceId');
+
+        service.payload.push({
+          data,
+          created_at: new Date(),
+        });
+        service.save();
+
+        return res.json({ success: true });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json(err);
+      });
+  },
 };
