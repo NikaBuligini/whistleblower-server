@@ -114,6 +114,7 @@ module.exports = {
   },
 
   test(req, res) {
+    /* eslint-disable no-param-reassign */
     // req.io.sockets.emit('action', { type: 'MEMORY_UPDATE', info: req.body });
     const { uuid, data } = req.body;
     console.log(req.body);
@@ -124,6 +125,7 @@ module.exports = {
 
         if (!service) return res.json('Invalid serviceId');
 
+        service.status = 'ok';
         service.payload.push({
           data,
           created_at: new Date(),
