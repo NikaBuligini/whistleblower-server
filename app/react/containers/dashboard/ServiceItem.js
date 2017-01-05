@@ -30,7 +30,7 @@ const ServiceItem = (props: Props) => {
     default:
 
   }
-  console.log(service);
+
   return (
     <li className="mdl-list__item">
       <span className="mdl-list__item-primary-content">

@@ -132,6 +132,12 @@ module.exports = {
         });
         service.save();
 
+        req.io.sockets.emit('action', {
+          type: 'SERVICE_IS_OK',
+          schema: 'service',
+          socketAPI: { payload: service },
+        });
+
         return res.json({ success: true });
       })
       .catch((err) => {

@@ -7,17 +7,17 @@ const jobTypes = process.env.JOB_TYPES ? process.env.JOB_TYPES.split(',') : defa
 
 const jobs = [];
 
-function setup() {
+function setup(io) {
   jobTypes.forEach((type) => {
-    const job = require(`./${type}`)(CronJob);
+    const job = require(`./${type}`)(CronJob, io);
     jobs.push(job);
   });
 }
 
 module.exports = {
-  start: () => {
+  start: (io) => {
     if (jobs.length === 0) {
-      setup();
+      setup(io);
     } else {
       console.error('jobs are already started');
     }

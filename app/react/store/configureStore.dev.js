@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import thunk from 'redux-thunk';
 // import createLogger from 'redux-logger';
 import api from '../middleware/api';
+import websocket from '../middleware/websocket';
 import rootReducer from '../reducers';
 // import devTools from 'remote-redux-devtools';
 
@@ -26,7 +27,7 @@ export default function configureStore(preloadedState) {
     rootReducer,
     preloadedState,
     compose(
-      applyMiddleware(thunk, socketIoMiddleware, api),
+      applyMiddleware(thunk, socketIoMiddleware, api, websocket),
       // devTools({ realtime: true })
       window.devToolsExtension ? window.devToolsExtension() : null,
     ),

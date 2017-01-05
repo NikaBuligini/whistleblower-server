@@ -3,6 +3,7 @@ import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 import thunk from 'redux-thunk';
 import api from '../middleware/api';
+import websocket from '../middleware/websocket';
 import rootReducer from '../reducers';
 
 export default function configureStore(preloadedState) {
@@ -18,7 +19,7 @@ export default function configureStore(preloadedState) {
     rootReducer,
     preloadedState,
     compose(
-      applyMiddleware(thunk, socketIoMiddleware, api),
+      applyMiddleware(thunk, socketIoMiddleware, api, websocket),
     ),
   );
 

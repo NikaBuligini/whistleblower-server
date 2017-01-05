@@ -12,10 +12,10 @@ function isOutdated(payload, { timeout }) {
   return diff >= timeout;
 }
 
-const setup = (CronJob) => {
+const setup = (CronJob, io) => {
   /* eslint-disable no-param-reassign */
 
-  const cron = new CronJob('*/5 * * * * *', () => {
+  const cron = new CronJob('*/10 * * * * *', () => {
     Service.find({ isActive: true, status: { $ne: 'outdated' } })
       .exec()
       .then((services) => {
@@ -27,6 +27,11 @@ const setup = (CronJob) => {
               console.log('service is outdated');
               service.status = 'outdated';
               service.save();
+              io.sockets.emit('action', {
+                type: 'SERVICE_OUTDATED',
+                schema: 'service',
+                socketAPI: { payload: service },
+              });
             }
           });
         }

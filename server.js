@@ -9,8 +9,6 @@ const dbSeeder = require('./database/seeds/databaseSeeder');
 const monitor = require('./app/jobs');
 require('dotenv').config();
 
-monitor.start();
-
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -19,6 +17,8 @@ const io = require('socket.io')(http.Server(app));
 require('./socketEvents')(io);
 
 io.listen(3000);
+
+monitor.start(io);
 
 // to support JSON-encoded bodies
 app.use(bodyParser.json());
