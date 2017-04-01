@@ -1,4 +1,4 @@
-import { Schema, arrayOf, normalize } from 'normalizr';
+import { schema as Schema, normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
 import fetch from 'isomorphic-fetch';
 import submitApi from './submitApi';
@@ -35,23 +35,23 @@ function callApi(endpoint, schema) {
 // leading to a frozen UI as it wouldn't find "someuser" in the entities.
 // That's why we're forcing lower cases down there.
 
-const projectSchema = new Schema('projects');
-const serviceSchema = new Schema('services');
-const userSchema = new Schema('users');
+const projectSchema = new Schema.Entity('projects');
+const serviceSchema = new Schema.Entity('services');
+const userSchema = new Schema.Entity('users');
 
 projectSchema.define({
-  services: arrayOf(serviceSchema),
-  users: arrayOf(userSchema),
+  services: [serviceSchema],
+  users: [userSchema],
 });
 
 // Schemas for Github API responses.
 export const Schemas = {
   PROJECT: projectSchema,
-  PROJECT_ARRAY: arrayOf(projectSchema),
+  PROJECT_ARRAY: [projectSchema],
   SERVICE: serviceSchema,
-  SERVICE_ARRAY: arrayOf(serviceSchema),
+  SERVICE_ARRAY: [serviceSchema],
   USER: userSchema,
-  USER_ARRAY: arrayOf(userSchema),
+  USER_ARRAY: [userSchema],
 };
 
 // Action key that carries API call info interpreted by this Redux middleware.

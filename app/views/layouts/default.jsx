@@ -2,9 +2,7 @@ import React from 'react';
 
 function DefaultLayout(props) {
   const { title, user } = props;
-  const bundlejs = process.env.NODE_ENV === 'production'
-    ? <script src="/bundle.js" />
-    : <script src="http://localhost:8080/bundle.js" />;
+  const host = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : '';
   const preloaded = user ? {
     id: user.id,
     name: user.fullname,
@@ -20,6 +18,7 @@ function DefaultLayout(props) {
         <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.red-blue.min.css" />
         {/* <link rel="stylesheet" href="/material.min.css" /> */}
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <link rel="stylesheet" href={`${host}/main.min.css`} />
       </head>
       <body>
         {props.children}
@@ -28,7 +27,8 @@ function DefaultLayout(props) {
         {/* <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" /> */}
         <script async defer src="https://buttons.github.io/buttons.js" />
         <script src="/material.min.js" />
-        {bundlejs}
+        <script src={`${host}/vendor.min.js`} />
+        <script src={`${host}/bundle.js`} />
       </body>
     </html>
   );
