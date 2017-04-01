@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // const bcrypt = require('bcrypt');
 // const SALT_ROUNDS = 10;

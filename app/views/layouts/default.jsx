@@ -42,4 +42,8 @@ DefaultLayout.propTypes = {
   }),
 };
 
+DefaultLayout.defaultProps = {
+  user: {},
+};
+
 export default DefaultLayout;

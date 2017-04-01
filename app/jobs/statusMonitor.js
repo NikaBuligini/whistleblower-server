@@ -1,4 +1,4 @@
-const Service = require('../schemas/service');
+import Service from '../schemas/service';
 
 function isOutdated(payload, { timeout }) {
   if (payload.length === 0) return true;

@@ -1,20 +1,26 @@
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const http = require('http');
-const mongoose = require('mongoose');
-const promise = require('bluebird');
-const path = require('path');
-const dbSeeder = require('./database/seeds/databaseSeeder');
-const monitor = require('./app/jobs');
-require('dotenv').config();
+import express from 'express';
+import session from 'express-session';
+import bodyParser from 'body-parser';
+import http from 'http';
+import mongoose from 'mongoose';
+import promise from 'bluebird';
+import path from 'path';
+import dotenv from 'dotenv';
+import socket from 'socket.io';
+import expressReactViews from 'express-react-views';
+import dbSeeder from './database/seeds/databaseSeeder';
+import monitor from './app/jobs';
+import socketEvents from './socketEvents';
+import routes from './routes';
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8000;
 
 // Initialize socket.io
-const io = require('socket.io')(http.Server(app));
-require('./socketEvents')(io);
+const io = socket(http.Server(app));
+socketEvents(io);
 
 io.listen(3000);
 
@@ -37,7 +43,7 @@ app.use(session({
 // Set jsx as the templating engine
 app.set('views', path.resolve(__dirname, 'app/views'));
 app.set('view engine', 'jsx');
-app.engine('jsx', require('express-react-views').createEngine());
+app.engine('jsx', expressReactViews.createEngine());
 
 app.use((req, res, next) => {
   const reqSession = req.session;
@@ -83,10 +89,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', require('./routes'));
+app.use('/', routes);
 
 // Set /public as our static content dir
-app.use('/', express.static(path.join(__dirname, '/public/')));
+app.use('/', express.static(path.resolve(__dirname, 'public')));
 
 // Fire it up (start our server)
 const server = http.createServer(app);

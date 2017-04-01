@@ -1,6 +1,6 @@
-require('../../app/schemas/project');
-require('../../app/schemas/service');
-const User = require('../../app/schemas/user');
+import '../../app/schemas/project';
+import '../../app/schemas/service';
+import User from '../../app/schemas/user';
 
 function seed() {
   User.findOne({ roles: 'admin' })

@@ -1,4 +1,4 @@
-const User = require('../schemas/user');
+import User from '../schemas/user';
 
 function authorize(req, user, next) {
   req.session.regenerate(() => {
@@ -11,33 +11,31 @@ function authorize(req, user, next) {
   });
 }
 
-module.exports = {
-  index(req, res) {
-    res.render('./pages/auth', {
-      title: 'Login',
-    });
-  },
+export function index(req, res) {
+  res.render('./pages/auth', {
+    title: 'Login',
+  });
+}
 
-  login(req, res) {
-    const { email, password } = req.body;
+export function login(req, res) {
+  const { email, password } = req.body;
 
-    User.authenticate(email, password, (user) => {
-      if (!user) return res.redirect('/auth');
+  User.authenticate(email, password, (user) => {
+    if (!user) return res.redirect('/auth');
 
-      return authorize(req, user, () => res.redirect('/'));
-    });
-  },
+    return authorize(req, user, () => res.redirect('/'));
+  });
+}
 
-  signUp(req, res) {
-    const { email, password, fullname } = req.body;
+export function signUp(req, res) {
+  const { email, password, fullname } = req.body;
 
-    const user = new User({ email, password, fullname });
-    user.save();
+  const user = new User({ email, password, fullname });
+  user.save();
 
-    authorize(req, user, () => res.redirect('/'));
-  },
+  authorize(req, user, () => res.redirect('/'));
+}
 
-  logout(req, res) {
-    req.session.destroy(() => res.redirect('/auth'));
-  },
-};
+export function logout(req, res) {
+  req.session.destroy(() => res.redirect('/auth'));
+}

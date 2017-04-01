@@ -1,6 +1,6 @@
 /* eslint-disable global-require, import/no-dynamic-require */
 
-const { CronJob } = require('cron');
+import { CronJob } from 'cron';
 
 const defaultJobs = ['statusMonitor'];
 const jobTypes = process.env.JOB_TYPES ? process.env.JOB_TYPES.split(',') : defaultJobs;

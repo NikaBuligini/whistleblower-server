@@ -17,4 +17,8 @@ HomeComponent.propTypes = {
   }),
 };
 
+HomeComponent.defaultProps = {
+  user: {},
+};
+
 export default HomeComponent;

@@ -1,20 +1,21 @@
-const express = require('express');
+import express from 'express';
+
+import 'express-session';
+
+import dashboard from './app/controllers/home.controller';
+import * as auth from './app/controllers/auth.controller';
+import * as project from './app/controllers/project.controller';
+import * as service from './app/controllers/service.controller';
+import getAllUsers from './app/controllers/user.controller';
+
+import { notAuthenticated } from './app/middlewares/auth';
 
 const router = express.Router();
-require('express-session');
 
-const home = require('./app/controllers/home.controller');
-const auth = require('./app/controllers/auth.controller');
-const project = require('./app/controllers/project.controller');
-const service = require('./app/controllers/service.controller');
-const user = require('./app/controllers/user.controller');
-
-const authMiddleware = require('./app/middlewares/auth.js');
-
-router.get('/', authMiddleware.notAuthenticated, home.dashboard);
-router.get('/projects', authMiddleware.notAuthenticated, project.list);
-router.get('/projects/:projectName', authMiddleware.notAuthenticated, project.showSingleProject);
-router.get('/projects/:projectName/:serviceId', authMiddleware.notAuthenticated, service.showSingleService);
+router.get('/', notAuthenticated, dashboard);
+router.get('/projects', notAuthenticated, project.list);
+router.get('/projects/:projectName', notAuthenticated, project.showSingleProject);
+router.get('/projects/:projectName/:serviceId', notAuthenticated, service.showSingleService);
 
 router.get('/auth', auth.index);
 router.get('/auth/sign-up', auth.index);
@@ -34,11 +35,11 @@ router.get('/api/service/:serviceId', service.get);
 router.put('/api/service/:serviceId/store', service.store);
 router.post('/api/service/:serviceId/activate', service.activate);
 
-router.get('/api/user', user.getAll);
+router.get('/api/user', getAllUsers);
 
-router.get('/api/me/project', authMiddleware.notAuthenticated, project.getProjectsForUser);
+router.get('/api/me/project', notAuthenticated, project.getProjectsForUser);
 
 router.get('/api/projects/clear', project.clear);
 router.post('/test', service.test);
 
-module.exports = router;
+export default router;

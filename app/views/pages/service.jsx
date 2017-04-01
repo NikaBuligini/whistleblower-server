@@ -17,4 +17,8 @@ ServiceComponent.propTypes = {
   }),
 };
 
+ServiceComponent.defaultProps = {
+  user: {},
+};
+
 export default ServiceComponent;

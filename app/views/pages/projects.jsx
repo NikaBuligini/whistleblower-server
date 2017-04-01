@@ -17,4 +17,8 @@ ProjectsComponent.propTypes = {
   }),
 };
 
+ProjectsComponent.defaultProps = {
+  user: {},
+};
+
 export default ProjectsComponent;
