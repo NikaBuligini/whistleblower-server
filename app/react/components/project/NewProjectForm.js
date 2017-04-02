@@ -67,4 +67,8 @@ NewProjectForm.propTypes = {
   error: React.PropTypes.string,
 };
 
+NewProjectForm.defaultProps = {
+  error: '',
+};
+
 export default NewProjectForm;

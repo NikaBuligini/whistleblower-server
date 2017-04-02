@@ -1,4 +1,4 @@
-import Service from '../schemas/service';
+import { ServiceSchema as Service } from '../graph/models/schemas';
 
 function isOutdated(payload, { timeout }) {
   if (payload.length === 0) return true;
@@ -44,4 +44,4 @@ const setup = (CronJob, io) => {
   return cron;
 };
 
-module.exports = setup;
+export default setup;

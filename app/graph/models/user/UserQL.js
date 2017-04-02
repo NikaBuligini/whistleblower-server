@@ -1,0 +1,5 @@
+import UserType from './UserTypeQL';
+import UserQueries from './UserQueriesQL';
+import UserMutations from './UserMutationsQL';
+
+export { UserType, UserQueries, UserMutations };

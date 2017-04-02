@@ -1,6 +1,4 @@
-import Project from '../schemas/project';
-import User from '../schemas/user';
-import '../schemas/service';
+import { UserSchema as User, ProjectSchema as Project } from '../graph/models/schemas';
 
 export function list(req, res) {
   res.render('./pages/projects', {
@@ -61,38 +59,37 @@ export function create(req, res) {
     });
 }
 
-export function addPermission(req, res) {
-  let project;
-  Project.getById(req.params.projectId)
-    .then((existingProject) => {
-      if (!existingProject) return res.status(500).json({ message: 'Project doesn\'t exists!' });
-      project = existingProject;
-      return User.getById(req.body.userId);
-    })
-    .then((user) => {
-      if (!user) return res.status(500).json({ message: 'Invalid user!' });
-      project.addPermission(user);
-      return res.json(project);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json(err);
-    });
+/**
+ * Gives user permission over project
+ * @param {projectId} int
+ * @param {userId} int
+ * @api protected
+ */
+export async function addPermission(req, res) {
+  const project = await Project.getById(req.params.projectId);
+  if (!project) {
+    return res.status(500).json({ message: 'Project doesn\'t exists!' });
+  }
+
+  const user = await User.getById(req.body.userId);
+  if (!user) {
+    return res.status(500).json({ message: 'Invalid user!' });
+  }
+
+  project.addPermission(user);
+
+  return res.json(project);
 }
 
-export function removePermission(req, res) {
-  Project.findById(req.params.projectId)
-    .exec()
-    .then((project) => {
-      if (!project) return res.status(500).json({ message: 'Project doesn\'t exists!' });
-      project.removePermission(req.body.userId);
-      return Project.getById(req.params.projectId);
-    })
-    .then(project => res.json(project))
-    .catch((err) => {
-      console.log(err);
-      res.json(err);
-    });
+/**
+ * Gives user permission over project
+ * @param {projectId} int
+ * @param {userId} int
+ * @api protected
+ */
+export async function removePermission(req, res) {
+  const project = await Project.removePermission(req.params.projectId, req.body.userId);
+  return res.json(project);
 }
 
 export function getProjectsForUser(req, res) {

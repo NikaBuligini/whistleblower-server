@@ -1,4 +1,4 @@
-import User from '../schemas/user';
+import { UserSchema as User } from '../graph/models/schemas';
 
 function authorize(req, user, next) {
   req.session.regenerate(() => {

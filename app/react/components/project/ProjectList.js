@@ -21,4 +21,8 @@ ProjectList.propTypes = {
   data: React.PropTypes.arrayOf(ProjectPropType),
 };
 
+ProjectList.defaultProps = {
+  data: [],
+};
+
 export default ProjectList;

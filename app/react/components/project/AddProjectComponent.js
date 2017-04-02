@@ -43,6 +43,7 @@ AddProjectComponent.propTypes = {
 
 AddProjectComponent.defaultProps = {
   isAdding: false,
+  error: '',
 };
 
 function mapStateToProps(state) {

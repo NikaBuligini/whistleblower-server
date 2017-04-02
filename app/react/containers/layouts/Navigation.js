@@ -64,3 +64,7 @@ Navigation.propTypes = {
   name: React.PropTypes.string,
   roles: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
 };
+
+Navigation.defaultProps = {
+  name: '',
+};

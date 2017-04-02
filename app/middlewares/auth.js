@@ -1,4 +1,4 @@
-import User from '../schemas/user';
+import { UserSchema as User } from '../graph/models/schemas';
 
 /**
  * Redirects to login page if user is not authenticated

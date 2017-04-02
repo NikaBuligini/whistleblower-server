@@ -184,6 +184,12 @@ EditService.propTypes = {
   error: React.PropTypes.string,
 };
 
+EditService.defaultProps = {
+  service: {},
+  updateSuccess: '',
+  error: '',
+};
+
 function mapStateToProps(state) {
   const { isUpdating, updateSuccess, error } = state.process.services;
   return { isUpdating, updateSuccess, error };

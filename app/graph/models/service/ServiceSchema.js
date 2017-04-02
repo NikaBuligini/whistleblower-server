@@ -17,7 +17,7 @@ const ServiceSchema = new mongoose.Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
-function save(next) {
+ServiceSchema.pre('save', function save(next) {
   // get the current date
   const currentDate = new Date();
 
@@ -32,27 +32,16 @@ function save(next) {
   if (!this.created_at) this.created_at = currentDate;
 
   next();
-}
-
-ServiceSchema.pre('save', save);
+});
 
 ServiceSchema.statics = {
-  /**
-   * Get first project
-   *
-   * @api private
-   */
+  // deprecated
   getById(id) {
     return this.findById(id)
       .exec();
   },
 
-  /**
-   * Changes activation status for service
-   *
-   * @param {shouldBeActive} activation status
-   * @api private
-   */
+   // deprecated
   changeActivation(serviceId, shouldBeActive) {
     return this.findByIdAndUpdate(serviceId, { $set: { isActive: shouldBeActive } }, { new: true })
       .exec();
@@ -60,4 +49,29 @@ ServiceSchema.statics = {
 };
 
 // Return a Service model based upon the defined schema
-module.exports = mongoose.model('Service', ServiceSchema);
+const Service = mongoose.model('Service', ServiceSchema);
+
+/**
+ * Get single service by id
+ * @param {id} string
+ * @api public
+ */
+export function getById(root, { id }) {
+  return Service.findById(id);
+}
+
+/**
+ * Changes activation status for service
+ * @param {id} string
+ * @param {isActive} boolean
+ * @api protected
+ */
+export function changeActivationStatus(root, { id, isActive }) {
+  return Service.findByIdAndUpdate(
+    id,
+    { $set: { isActive } },
+    { new: true },
+  );
+}
+
+export default Service;

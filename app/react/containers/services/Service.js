@@ -69,11 +69,12 @@ Service.propTypes = {
   params: React.PropTypes.shape({
     serviceId: React.PropTypes.string.isRequired,
     projectName: React.PropTypes.string,
-  }),
+  }).isRequired,
 };
 
 Service.defaultProps = {
   isFetching: true,
+  service: {},
 };
 
 function mapStateToProps(state, ownProps) {

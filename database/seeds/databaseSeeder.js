@@ -1,6 +1,4 @@
-import '../../app/schemas/project';
-import '../../app/schemas/service';
-import User from '../../app/schemas/user';
+import { UserSchema as User } from '../../app/graph/models/schemas';
 
 function seed() {
   User.findOne({ roles: 'admin' })

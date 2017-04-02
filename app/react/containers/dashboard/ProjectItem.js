@@ -30,6 +30,10 @@ ProjectItem.propTypes = {
   services: React.PropTypes.arrayOf(ServicePropType),
 };
 
+ProjectItem.defaultProps = {
+  services: [],
+};
+
 function mapStateToProps(state, ownProps) {
   const { project } = ownProps;
   const services = project.services

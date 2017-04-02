@@ -11,7 +11,7 @@ const ProjectSchema = new mongoose.Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
-function save(next) {
+ProjectSchema.pre('save', function save(next) {
   // get the current date
   const currentDate = new Date();
 
@@ -26,16 +26,13 @@ function save(next) {
   if (!this.created_at) this.created_at = currentDate;
 
   next();
-}
-
-ProjectSchema.pre('save', save);
+});
 
 ProjectSchema.methods = {
   /**
    * Adds permission for user
-   *
-   * @param user
-   * @api private
+   * @param {user} user
+   * @api protected
    */
   addPermission(user) {
     const userIds = this.users.map(u => u.id);
@@ -58,21 +55,13 @@ ProjectSchema.statics = {
       .exec();
   },
 
-  /**
-   * Get all projects
-   * @api public
-   */
+  // deprecated
   getAll() {
     return this.find({})
       .exec();
   },
 
-  /**
-   * Get project by name
-   *
-   * @param {name} project name
-   * @api public
-   */
+  // deprecated
   getByName(name) {
     return this.findOne({ name })
       .populate('services')
@@ -80,12 +69,7 @@ ProjectSchema.statics = {
       .exec();
   },
 
-  /**
-   * Get project by id
-   *
-   * @param {id} project id
-   * @api public
-   */
+  // deprecated
   getById(id) {
     return this.findById(id)
       .populate('services')
@@ -93,12 +77,7 @@ ProjectSchema.statics = {
       .exec();
   },
 
-  /**
-   * Get projects for specific user
-   *
-   * @param {userId} user id
-   * @api public
-   */
+  // deprecated
   getByUserId(userId) {
     return this.find({ users: userId })
       .populate('services')
@@ -106,8 +85,22 @@ ProjectSchema.statics = {
   },
 
   /**
+   * Adds permission for user
+   * @param {userId} int
+   * @api protected
+   */
+  async removePermission(projectId, userId) {
+    const project = await this.findByIdAndUpdate(
+      projectId,
+      { $pull: { users: userId } },
+      { safe: true, new: true },
+    );
+
+    return project;
+  },
+
+  /**
    * Get project by name, populated with services
-   *
    * @param {name} project name
    * @api public
    */
@@ -120,4 +113,45 @@ ProjectSchema.statics = {
 };
 
 // Return a Project model based upon the defined schema
-module.exports = mongoose.model('Project', ProjectSchema);
+const Project = mongoose.model('Project', ProjectSchema);
+
+/**
+ * Get projects by id, name or userId
+ * @param {id?} string
+ * @param {name?} string
+ * @param {userId?} string
+ * @api public
+ */
+export function getProjects(root, { id, name, userId }) {
+  if (id) {
+    return Project.findById(id);
+  } else if (name) {
+    return Project.find({ name });
+  } else if (userId) {
+    return Project.find({ users: userId });
+  }
+
+  return Project.find({});
+}
+
+/**
+   * Get project services
+   * @param {project} Project
+   * @api public
+   */
+export async function getProjectServices(project) {
+  const populated = await Project.populate(project, 'services');
+  return populated.services;
+}
+
+/**
+   * Get project users
+   * @param {project} Project
+   * @api public
+   */
+export async function getProjectUsers(project) {
+  const populated = await Project.populate(project, 'users');
+  return populated.users;
+}
+
+export default Project;

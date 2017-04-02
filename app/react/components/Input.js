@@ -54,4 +54,8 @@ Input.propTypes = {
   className: React.PropTypes.string,
 };
 
+Input.defaultProps = {
+  value: '',
+};
+
 export default Input;

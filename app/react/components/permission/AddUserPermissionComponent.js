@@ -26,6 +26,10 @@ AddUserPermissionComponent.propTypes = {
   error: React.PropTypes.string,
 };
 
+AddUserPermissionComponent.defaultProps = {
+  error: '',
+};
+
 function mapStateToProps(state) {
   const { error } = state.process.projects;
   return { error };

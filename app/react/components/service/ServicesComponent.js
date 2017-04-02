@@ -69,6 +69,7 @@ ServicesComponent.propTypes = {
 ServicesComponent.defaultProps = {
   services: [],
   isFetching: true,
+  project: {},
 };
 
 function mapStateToProps(state, ownProps) {

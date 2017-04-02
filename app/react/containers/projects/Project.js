@@ -69,11 +69,12 @@ Project.propTypes = {
   project: ProjectPropType,
   params: React.PropTypes.shape({
     projectName: React.PropTypes.string,
-  }),
+  }).isRequired,
 };
 
 Project.defaultProps = {
   isFetching: true,
+  project: {},
 };
 
 function mapStateToProps(state, ownProps) {

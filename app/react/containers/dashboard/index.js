@@ -47,6 +47,10 @@ Dashboard.propTypes = {
   projects: React.PropTypes.arrayOf(ProjectPropType),
 };
 
+Dashboard.defaultProps = {
+  projects: [],
+};
+
 function mapStateToProps(state) {
   const { id } = state.preloaded;
   const { projects } = state.entities;

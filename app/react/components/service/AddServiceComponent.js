@@ -26,6 +26,10 @@ AddServiceComponent.propTypes = {
   error: React.PropTypes.string,
 };
 
+AddServiceComponent.defaultProps = {
+  error: '',
+};
+
 function mapStateToProps(state) {
   const { error } = state.process.projects;
   return { error };

@@ -1,5 +1,4 @@
-import Project from '../schemas/project';
-import Service from '../schemas/service';
+import { ProjectSchema as Project, ServiceSchema as Service } from '../graph/models/schemas';
 
 export function showSingleService(req, res) {
   Service.getById(req.params.serviceId)

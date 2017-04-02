@@ -9,12 +9,12 @@ const jobs = [];
 
 function setup(io) {
   jobTypes.forEach((type) => {
-    const job = require(`./${type}`)(CronJob, io);
-    jobs.push(job);
+    const job = require(`./${type}`).default;
+    jobs.push(job(CronJob, io));
   });
 }
 
-module.exports = {
+const Monitor = {
   start: (io) => {
     if (jobs.length === 0) {
       setup(io);
@@ -24,3 +24,5 @@ module.exports = {
   },
   stop: () => { },
 };
+
+export default Monitor;

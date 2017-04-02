@@ -9,11 +9,12 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, index: { unique: true } },
   password: { type: String, required: true, select: false },
   roles: [String],
+  last_login: Date,
   created_at: Date,
   updated_at: { type: Date, default: Date.now },
 });
 
-function save(next) {
+UserSchema.pre('save', function save(next) {
   // get the current date
   const currentDate = new Date();
 
@@ -34,9 +35,7 @@ function save(next) {
   //   user.password = hash;
   //   next();
   // });
-}
-
-UserSchema.pre('save', save);
+});
 
 UserSchema.statics = {
   /**
@@ -61,16 +60,14 @@ UserSchema.statics = {
       });
   },
 
+  // deprecated
   getById(id) {
     return this.findById(id)
       .populate('projects')
       .exec();
   },
 
-  /**
-   * Get all projects
-   * @api public
-   */
+  // deprecated
   getAll() {
     return this.find({})
       .exec();
@@ -78,4 +75,23 @@ UserSchema.statics = {
 };
 
 // Return a User model based upon the defined schema
-module.exports = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
+
+/**
+ * Get all registered user
+ * @api public
+ */
+export function getAllUsers() {
+  return User.find({});
+}
+
+/**
+ * Get single  user
+ * @param {id} string
+ * @api public
+ */
+export function getById(root, { id }) {
+  return User.findById(id);
+}
+
+export default User;

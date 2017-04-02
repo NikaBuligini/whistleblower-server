@@ -33,4 +33,8 @@ PermissionList.propTypes = {
   handlePermissionDelete: React.PropTypes.func.isRequired,
 };
 
+PermissionList.defaultProps = {
+  permissions: [],
+};
+
 export default PermissionList;

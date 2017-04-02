@@ -45,4 +45,8 @@ ServiceItem.propTypes = {
   service: ServicePropType,
 };
 
+ServiceItem.defaultProps = {
+  service: {},
+};
+
 export default ServiceItem;

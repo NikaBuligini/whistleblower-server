@@ -8,10 +8,12 @@ import path from 'path';
 import dotenv from 'dotenv';
 import socket from 'socket.io';
 import expressReactViews from 'express-react-views';
+import graphqlHTTP from 'express-graphql';
 import dbSeeder from './database/seeds/databaseSeeder';
 import monitor from './app/jobs';
 import socketEvents from './socketEvents';
 import routes from './routes';
+import graphqlSchema from './app/graph';
 
 dotenv.config();
 
@@ -89,6 +91,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/graphql', graphqlHTTP(() => ({ schema: graphqlSchema, graphiql: true })));
 app.use('/', routes);
 
 // Set /public as our static content dir

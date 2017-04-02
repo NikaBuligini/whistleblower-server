@@ -128,6 +128,11 @@ NewPermissionForm.propTypes = {
   users: React.PropTypes.arrayOf(UserPropType),
 };
 
+NewPermissionForm.defaultProps = {
+  error: '',
+  users: [],
+};
+
 function mapStateToProps(state, ownProps) {
   const { error } = state.process.users;
   const allUsers = _.values(state.entities.users).map(user => user.id);

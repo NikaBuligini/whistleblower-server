@@ -6,10 +6,8 @@ class Loading extends React.Component {
   }
 
   render() {
-    const cls = this.props.cls || 'default-loading';
-
     return (
-      <div className={cls}>
+      <div className={this.props.cls}>
         <div className="mdl-spinner mdl-js-spinner is-active" />
       </div>
     );
@@ -18,6 +16,10 @@ class Loading extends React.Component {
 
 Loading.propTypes = {
   cls: React.PropTypes.string,
+};
+
+Loading.defaultProps = {
+  cls: 'default-loading',
 };
 
 export default Loading;

@@ -66,7 +66,7 @@ ProjectCard.propTypes = {
   project: ProjectPropType.isRequired,
   router: React.PropTypes.shape({
     push: React.PropTypes.func.isRequired,
-  }),
+  }).isRequired,
 };
 
 export default withRouter(ProjectCard);

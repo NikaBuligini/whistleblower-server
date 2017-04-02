@@ -23,4 +23,8 @@ Input.propTypes = {
   id: React.PropTypes.string.isRequired,
 };
 
+Input.defaultProps = {
+  text: '',
+};
+
 export default Input;

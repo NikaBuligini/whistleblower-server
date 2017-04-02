@@ -1,4 +1,4 @@
-import User from '../schemas/user';
+import { UserSchema as User } from '../graph/models/schemas';
 
 export default function getAll(req, res) {
   User.getAll()
