@@ -11,6 +11,7 @@ const RootQuery = new GraphQLObjectType({
     user: UserQueries.user,
     projects: ProjectQueries.projects,
     services: ServiceQueries.services,
+    viewer: ProjectQueries.viewer,
   }),
 });
 

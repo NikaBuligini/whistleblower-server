@@ -3,7 +3,7 @@
     "react",
     "env",
     "flow",
-    "stage-2"
+    "stage-2",
   ],
   "env": {
     "start": {
@@ -11,5 +11,8 @@
         "react-hmre"
       ]
     }
-  }
+  },
+  "plugins": [
+    "./app/graph/babelRelayPlugin"
+  ]
 }

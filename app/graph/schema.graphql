@@ -1,0 +1,67 @@
+type Mutation {
+  createProject(type: String): Project
+  createService(type: String): Service
+}
+
+# Payload for service
+type Payload {
+  id: ID!
+  data: String
+  created_at: String
+}
+
+# A project
+type Project {
+  id: ID!
+  name: String
+  uuid: String
+  services: [Service]
+  users: [User]
+  created_at: String
+  updated_at: String
+}
+
+type Query {
+  # Get all users
+  users: [User]
+
+  # Get single user by id
+  user(
+    # User id
+    id: String!
+  ): User
+  projects(id: String, name: String, userId: String): [Project]
+  services(id: String!): [Service]
+  viewer: Viewer
+}
+
+# A service
+type Service {
+  id: ID!
+  name: String
+  type: String
+  status: String
+  timeout: Int
+  isActive: Boolean
+  uuid: String
+  payload: [Payload]
+  created_at: String
+  updated_at: String
+}
+
+# A user
+type User {
+  id: ID
+  fullname: String
+  email: String
+  roles: [String]
+  last_login: String
+  created_at: String
+  updated_at: String
+}
+
+# A viewer
+type Viewer {
+  id: ID
+  projects: [Project]
+}
