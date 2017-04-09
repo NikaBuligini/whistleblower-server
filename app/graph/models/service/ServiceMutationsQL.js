@@ -8,7 +8,7 @@ import {
   // GraphQLID,
   } from 'graphql';
 
-import ServiceType from './ServiceTypeQL';
+import { ServiceType } from '../types';
 // import Service from './ServiceSchema';
 
 export default {

@@ -8,7 +8,7 @@ import {
   // GraphQLID,
   } from 'graphql';
 
-import ProjectType from './ProjectTypeQL';
+import { ProjectType } from '../types';
 // import Project from './ProjectSchema';
 
 export default {

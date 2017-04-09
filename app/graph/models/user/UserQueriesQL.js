@@ -4,7 +4,7 @@ import {
   GraphQLList,
   } from 'graphql';
 
-import UserType from './UserTypeQL';
+import { UserType } from '../types';
 import { getAllUsers, getById } from './UserSchema';
 
 export default {

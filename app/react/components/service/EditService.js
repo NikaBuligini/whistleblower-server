@@ -19,6 +19,12 @@ type Props = {
   error: string,
 };
 
+type DefaultProps = {
+  service: Service,
+  updateSuccess: string,
+  error: string,
+};
+
 const style = {
   highlighted: {
     cursor: 'default',
@@ -33,13 +39,26 @@ const style = {
 };
 
 const serviceTypes = [
-  {
-    id: 0,
-    name: 'Disk usage',
-  },
+  { id: 0, name: 'Disk usage' },
 ];
 
 class EditService extends React.Component {
+  static defaultProps: DefaultProps;
+
+  static propTypes = {
+    service: ServicePropType,
+    updateService: React.PropTypes.func.isRequired,
+    isUpdating: React.PropTypes.bool.isRequired,
+    updateSuccess: React.PropTypes.string,
+    error: React.PropTypes.string,
+  }
+
+  static defaultProps = {
+    service: {},
+    updateSuccess: '',
+    error: '',
+  }
+
   constructor(props: Props) {
     super(props);
     let timeout = props.service.timeout || '';
@@ -175,20 +194,6 @@ class EditService extends React.Component {
     );
   }
 }
-
-EditService.propTypes = {
-  service: ServicePropType,
-  updateService: React.PropTypes.func.isRequired,
-  isUpdating: React.PropTypes.bool.isRequired,
-  updateSuccess: React.PropTypes.string,
-  error: React.PropTypes.string,
-};
-
-EditService.defaultProps = {
-  service: {},
-  updateSuccess: '',
-  error: '',
-};
 
 function mapStateToProps(state) {
   const { isUpdating, updateSuccess, error } = state.process.services;

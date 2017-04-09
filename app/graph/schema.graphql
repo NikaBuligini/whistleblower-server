@@ -1,6 +1,40 @@
+input AuthenticationInput {
+  email: String!
+  password: String!
+  clientMutationId: String
+}
+
+type AuthenticationPayload {
+  viewer: User
+  clientMutationId: String
+}
+
 type Mutation {
+  # Authenticate user using email and password
+  authenticate(input: AuthenticationInput!): AuthenticationPayload
   createProject(type: String): Project
   createService(type: String): Service
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
 }
 
 # Payload for service
@@ -11,14 +45,34 @@ type Payload {
 }
 
 # A project
-type Project {
+type Project implements Node {
+  # The ID of an object
   id: ID!
   name: String
   uuid: String
-  services: [Service]
-  users: [User]
+
+  # Services for project
+  services(after: String, first: Int, before: String, last: Int): ServiceConnection
   created_at: String
   updated_at: String
+}
+
+# A connection to a list of items.
+type ProjectConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [ProjectEdge]
+}
+
+# An edge in a connection.
+type ProjectEdge {
+  # The item at the end of the edge
+  node: Project
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
 type Query {
@@ -32,11 +86,12 @@ type Query {
   ): User
   projects(id: String, name: String, userId: String): [Project]
   services(id: String!): [Service]
-  viewer: Viewer
+  viewer: User
 }
 
 # A service
-type Service {
+type Service implements Node {
+  # The ID of an object
   id: ID!
   name: String
   type: String
@@ -49,19 +104,35 @@ type Service {
   updated_at: String
 }
 
+# A connection to a list of items.
+type ServiceConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [ServiceEdge]
+}
+
+# An edge in a connection.
+type ServiceEdge {
+  # The item at the end of the edge
+  node: Service
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
 # A user
-type User {
-  id: ID
+type User implements Node {
+  # The ID of an object
+  id: ID!
   fullname: String
   email: String
   roles: [String]
   last_login: String
   created_at: String
   updated_at: String
-}
 
-# A viewer
-type Viewer {
-  id: ID
-  projects: [Project]
+  # Visible projects for user
+  projects(after: String, first: Int, before: String, last: Int): ProjectConnection
 }

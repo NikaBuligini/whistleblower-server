@@ -1,15 +1,42 @@
 import {
-  // GraphQLObjectType,
-  // GraphQLSchema,
+  GraphQLNonNull,
   GraphQLString,
-  // GraphQLInt,
-  // GraphQLNonNull,
-  // GraphQLList,
-  // GraphQLID,
   } from 'graphql';
 
-import UserType from './UserTypeQL';
+import {
+  fromGlobalId,
+  globalIdField,
+  mutationWithClientMutationId,
+  cursorForObjectInConnection,
+} from 'graphql-relay';
+
+import { authenticate, getById } from './UserSchema';
+import { UserType } from '../types';
 // import User from './UserSchema';
+
+const AuthenticationMutation = mutationWithClientMutationId({
+  name: 'Authentication',
+  description: 'Authenticate user using email and password',
+  inputFields: {
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    password: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    viewer: {
+      type: UserType,
+      resolve: ({ user }) => user,
+    },
+  },
+  mutateAndGetPayload: async ({ email, password }, req) => {
+    const user = await authenticate(email, password);
+    if (user) {
+      const { session } = req;
+      session.userId = user._id;
+      session.save(err => console.error(err));
+    }
+    return { user };
+  },
+});
 
 export default {
   addUser: {
@@ -22,4 +49,5 @@ export default {
     },
     resolve: () => ({}),
   },
+  authenticate: AuthenticationMutation,
 };

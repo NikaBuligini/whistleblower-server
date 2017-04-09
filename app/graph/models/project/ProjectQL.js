@@ -1,4 +1,4 @@
-import ProjectType from './ProjectTypeQL';
+import { ProjectType } from '../types';
 import ProjectQueries from './ProjectQueriesQL';
 import ProjectMutations from './ProjectMutationsQL';
 

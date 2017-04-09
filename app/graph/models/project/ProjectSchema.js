@@ -154,4 +154,13 @@ export async function getProjectUsers(project) {
   return populated.users;
 }
 
+/**
+   * Get visible projects for user
+   * @param {userId} String
+   * @api public
+   */
+export async function getProjectsByUserId(userId) {
+  return Project.find({ users: userId });
+}
+
 export default Project;

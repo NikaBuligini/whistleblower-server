@@ -4,7 +4,7 @@ import {
   GraphQLNonNull,
   } from 'graphql';
 
-import ServiceType from './ServiceTypeQL';
+import { ServiceType } from '../types';
 import { getById } from './ServiceSchema';
 
 export default {

@@ -1,31 +1,62 @@
 // @flow
 
 import React from 'react';
-import { connect } from 'react-redux';
+import Relay from 'react-relay';
+// import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import Layout from '../layouts/DefaultLayout';
 import ProjectItem from './ProjectItem';
-import { loadUserServices } from '../../actions';
+// import { loadUserServices } from '../../actions';
 import type { Project } from '../../actions/types';
 import { ProjectPropType } from '../../propTypes';
 
+type ProjectEdge = {
+  node: {
+    id: string,
+    name: string,
+  }
+}
+
+type Viewer = {
+  projects: {
+    edges: Array<ProjectEdge>,
+  },
+}
+
 type Props = {
+  viewer: Viewer,
   projects: Project[],
-  loadUserServices: () => void,
+  // loadUserServices: () => void,
+}
+
+type DefaultProps = {
+  projects: Project[],
 }
 
 class Dashboard extends React.Component {
-  componentDidMount() {
-    this.props.loadUserServices();
+  static defaultProps: DefaultProps;
+
+  static propTypes = {
+    // loadUserServices: React.PropTypes.func.isRequired,
+    projects: React.PropTypes.arrayOf(ProjectPropType),
   }
+
+  static defaultProps = {
+    projects: [],
+  }
+
+  // componentDidMount() {
+  //   this.props.loadUserServices();
+  // }
 
   Props: Props;
 
   render() {
-    const { projects } = this.props;
+    const { projects } = this.props.viewer;
+    console.log(projects);
 
-    const projectItems = projects.map((project, index) => (
-      <ProjectItem key={index} project={project} />
+    const projectItems = projects.edges.map(({ node }) => (
+      <ProjectItem key={node.id} project={node} />
     ));
 
     return (
@@ -42,30 +73,39 @@ class Dashboard extends React.Component {
   }
 }
 
-Dashboard.propTypes = {
-  loadUserServices: React.PropTypes.func.isRequired,
-  projects: React.PropTypes.arrayOf(ProjectPropType),
-};
+// function mapStateToProps(state) {
+//   const { id } = state.preloaded;
+//   const { projects } = state.entities;
+//
+//   const userProjects = [];
+//   Object.keys(projects).forEach((key) => {
+//     const project = projects[key];
+//     if (project.users.indexOf(id) !== -1) {
+//       userProjects.push(project);
+//     }
+//   });
+//
+//   return { projects: userProjects };
+// }
 
-Dashboard.defaultProps = {
-  projects: [],
-};
+export default Relay.createContainer(Dashboard, {
+  initialVariables: { count: 10 },
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on User {
+        projects(first: $count) {
+          edges {
+            node {
+              id
+              ${ProjectItem.getFragment('project')},
+            }
+          }
+        }
+      }
+    `,
+  },
+});
 
-function mapStateToProps(state) {
-  const { id } = state.preloaded;
-  const { projects } = state.entities;
-
-  const userProjects = [];
-  Object.keys(projects).forEach((key) => {
-    const project = projects[key];
-    if (project.users.indexOf(id) !== -1) {
-      userProjects.push(project);
-    }
-  });
-
-  return { projects: userProjects };
-}
-
-export default connect(mapStateToProps, {
-  loadUserServices,
-})(Dashboard);
+// export default connect(mapStateToProps, {
+//   loadUserServices,
+// })(Dashboard);

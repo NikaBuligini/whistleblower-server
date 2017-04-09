@@ -1,8 +1,8 @@
 // @flow
 
 import React from 'react';
+import Relay from 'react-relay';
 import type { Service } from '../../actions/types';
-import { ServicePropType } from '../../propTypes';
 
 const styles = {
   green: { color: '#4CAF50' },
@@ -41,12 +41,15 @@ const ServiceItem = (props: Props) => {
   );
 };
 
-ServiceItem.propTypes = {
-  service: ServicePropType,
-};
-
-ServiceItem.defaultProps = {
-  service: {},
-};
-
-export default ServiceItem;
+export default Relay.createContainer(ServiceItem, {
+  fragments: {
+    service: () => Relay.QL`
+      fragment on Service {
+        name
+        type
+        status
+        isActive
+      }
+    `,
+  },
+});

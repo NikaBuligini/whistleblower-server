@@ -1,45 +1,54 @@
 // @flow
 
 import React from 'react';
-import { connect } from 'react-redux';
+import Relay from 'react-relay';
+// import { connect } from 'react-redux';
 import ServiceItem from './ServiceItem';
-import type { Project, Service } from '../../actions/types';
-import { ProjectPropType, ServicePropType } from '../../propTypes';
+import type { Project } from '../../actions/types';
 
 type Props = {
   project: Project,
-  services: Service[],
 }
 
 const ProjectItem = (props: Props) => {
-  const { project, services } = props;
+  const { project } = props;
   return (
     <div>
-      <h6>{project.name} ({project.services.length})</h6>
+      <h6>{project.name} ({project.services.edges.length})</h6>
       <ul className="mdl-list">
-        {services.map((service, index) => (
-          <ServiceItem key={index} service={service} />
+        {project.services.edges.map(({ node }) => (
+          <ServiceItem key={node.id} service={node} />
         ))}
       </ul>
     </div>
   );
 };
 
-ProjectItem.propTypes = {
-  project: ProjectPropType.isRequired,
-  services: React.PropTypes.arrayOf(ServicePropType),
-};
+// function mapStateToProps(state, ownProps) {
+//   const { project } = ownProps;
+//   const services = project.services
+//     .map(id => state.entities.services[id])
+//     .filter(service => service.isActive);
+//   return { services };
+// }
 
-ProjectItem.defaultProps = {
-  services: [],
-};
+export default Relay.createContainer(ProjectItem, {
+  fragments: {
+    project: () => Relay.QL`
+      fragment on Project {
+        name
+        uuid
+        services(first: 10) {
+          edges {
+            node {
+              id
+              ${ServiceItem.getFragment('service')}
+            }
+          }
+        }
+      }
+    `,
+  },
+});
 
-function mapStateToProps(state, ownProps) {
-  const { project } = ownProps;
-  const services = project.services
-    .map(id => state.entities.services[id])
-    .filter(service => service.isActive);
-  return { services };
-}
-
-export default connect(mapStateToProps, {})(ProjectItem);
+// export default connect(mapStateToProps, {})(ProjectItem);

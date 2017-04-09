@@ -1,8 +1,9 @@
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 
-import { UserQueries } from './models/user/UserQL';
+import { UserQueries, UserMutations } from './models/user/UserQL';
 import { ProjectQueries, ProjectMutations } from './models/project/ProjectQL';
 import { ServiceQueries, ServiceMutations } from './models/service/ServiceQL';
+import viewer from './models/viewer';
 
 const RootQuery = new GraphQLObjectType({
   name: 'Query',  // Return this type of object
@@ -11,13 +12,14 @@ const RootQuery = new GraphQLObjectType({
     user: UserQueries.user,
     projects: ProjectQueries.projects,
     services: ServiceQueries.services,
-    viewer: ProjectQueries.viewer,
+    viewer,
   }),
 });
 
 const RootMutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
+    authenticate: UserMutations.authenticate,
     createProject: ProjectMutations.createProject,
     createService: ServiceMutations.createService,
   }),

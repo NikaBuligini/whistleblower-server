@@ -11,8 +11,28 @@ type Props = {
   className: ?string,
 }
 
+type DefaultProps = {
+  type: string,
+  className: ?string,
+}
+
 class Input extends React.Component {
-  static defaultProps: { type: string, className: ?string };
+  static defaultProps: DefaultProps;
+
+  static propTypes = {
+    name: React.PropTypes.string.isRequired,
+    placeholder: React.PropTypes.string.isRequired,
+    onChange: React.PropTypes.func.isRequired,
+    type: React.PropTypes.string,
+    value: React.PropTypes.string,
+    className: React.PropTypes.string,
+  }
+
+  static defaultProps = {
+    type: 'text',
+    className: '',
+    value: '',
+  }
 
   onChange: () => void;
 
@@ -42,20 +62,5 @@ class Input extends React.Component {
     );
   }
 }
-
-Input.defaultProps = { type: 'text', className: '' };
-
-Input.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  placeholder: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  type: React.PropTypes.string,
-  value: React.PropTypes.string,
-  className: React.PropTypes.string,
-};
-
-Input.defaultProps = {
-  value: '',
-};
 
 export default Input;

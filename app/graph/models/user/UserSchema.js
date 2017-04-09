@@ -78,6 +78,19 @@ UserSchema.statics = {
 const User = mongoose.model('User', UserSchema);
 
 /**
+ * Authenticate user
+ *
+ * @param {email} String
+ * @param {password} String
+ * @param {next} function
+ * @api private
+ */
+export async function authenticate(email, password) {
+  const user = await User.findOne({ email }).select('+password');
+  return user.password === password ? user : null;
+}
+
+/**
  * Get all registered user
  * @api public
  */
