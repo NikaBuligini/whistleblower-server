@@ -4,6 +4,10 @@ $green: #4CAF50;
 $red: rgb(244,67,54);
 $blue: rgb(68,138,255);
 
+#mount, #mount .mdl-layout {
+  min-height: 100vh;
+}
+
 .navigation {
   .account-icon {
     cursor: default;

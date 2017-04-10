@@ -1,3 +1,13 @@
+# An admin
+type Admin {
+  # The ID of an object
+  id: ID!
+  fullname: String
+
+  # List of projects for administrator
+  projects(after: String, first: Int, before: String, last: Int): ProjectConnection
+}
+
 input AuthenticationInput {
   email: String!
   password: String!
@@ -87,6 +97,7 @@ type Query {
   projects(id: String, name: String, userId: String): [Project]
   services(id: String!): [Service]
   viewer: User
+  admin: Admin
 }
 
 # A service

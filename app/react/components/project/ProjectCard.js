@@ -2,15 +2,22 @@ import React from 'react';
 import { Link, withRouter } from 'react-router';
 import moment from 'moment';
 import { ProjectPropType } from '../../propTypes';
+import type { Project } from '../../actions/types';
+
+type ProjectCardProps = {
+  project: Project,
+}
 
 class ProjectCard extends React.Component {
+  props: ProjectCardProps
+
   goToLink(url) {
     this.props.router.push(url);
   }
 
   render() {
     const { project } = this.props;
-    project.createdAt = new Date(project.createdAt);
+    const createdAt = moment(project.created_at);
 
     const editUrl = `/projects/${project.name}`;
 
@@ -23,18 +30,18 @@ class ProjectCard extends React.Component {
             </Link>
           </h2>
         </div>
-        <div className="mdl-card__supporting-text">
+        {/* <div className="mdl-card__supporting-text">
           <span>Services: {project.services.length}, Secret: {project.uuid}</span>
-        </div>
+        </div> */}
         <div className="mdl-card__actions">
           <a href="(URL or function)">Services</a>
         </div>
         <div className="mdl-card-actions">
           <span
-            title={project.createdAt.toLocaleDateString()}
+            title={createdAt.format('L')}
             className="default timespan"
           >
-            {moment(project.createdAt).fromNow()}
+            {createdAt.fromNow()}
           </span>
 
           <button

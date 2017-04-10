@@ -1,32 +1,49 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import Relay from 'react-relay';
 import DocumentTitle from 'react-document-title';
-import _ from 'lodash';
-import { loadProjects, createProject } from '../../actions';
 import Loading from '../../components/Loading';
 import AddProjectComponent from '../../components/project/AddProjectComponent';
 import List from '../../components/project/ProjectList';
-import { ProjectPropType } from '../../propTypes';
+import type { Project } from '../../actions/types';
+
+type ProjectEdges = {
+  edges: Array<{ node: Project }>,
+}
+
+type ProjectListProps = {
+  admin: {
+    projects: Array<ProjectEdges>,
+  }
+}
 
 class ProjectList extends React.Component {
-  componentWillMount() {
-    this.props.loadProjects();
+  componentDidMount() {
+    console.log('cdm', this.props);
+    this.props.relay.forceFetch();
   }
 
-  render() {
-    const { isFetching, projects } = this.props;
+  props: ProjectListProps
 
-    if (isFetching && typeof projects !== 'undefined') {
+  render() {
+    const { projects } = this.props.admin;
+
+    console.log(this.props);
+
+    if (!projects) {
       return <Loading />;
     }
+
+    // if (isFetching && typeof projects !== 'undefined') {
+    //   return <Loading />;
+    // }
 
     return (
       <DocumentTitle title="Projects">
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--10-col mdl-cell--1-offset">
             <div className="projects">
-              <AddProjectComponent />
-              <List data={projects} />
+              {/* <AddProjectComponent /> */}
+              <List data={projects.edges} />
             </div>
           </div>
         </div>
@@ -35,23 +52,21 @@ class ProjectList extends React.Component {
   }
 }
 
-ProjectList.propTypes = {
-  projects: React.PropTypes.arrayOf(ProjectPropType).isRequired,
-  isFetching: React.PropTypes.bool.isRequired,
-  loadProjects: React.PropTypes.func.isRequired,
-};
-
-ProjectList.defaultProps = {
-  projects: [],
-  isFetching: true,
-};
-
-function mapStateToProps(state) {
-  const { isFetching } = state.process.projects;
-  const projects = _.values(state.entities.projects);
-  return { isFetching, projects };
-}
-
-export default connect(mapStateToProps, {
-  loadProjects, createProject,
-})(ProjectList);
+export default Relay.createContainer(ProjectList, {
+  initialVariables: { count: 10 },
+  fragments: {
+    admin: () => Relay.QL`
+      fragment on Admin {
+        projects(first: $count) {
+          edges {
+            node {
+              id
+              name
+              created_at
+            }
+          }
+        }
+      }
+    `,
+  },
+});

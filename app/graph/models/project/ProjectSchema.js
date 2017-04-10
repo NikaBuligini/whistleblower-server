@@ -116,6 +116,14 @@ ProjectSchema.statics = {
 const Project = mongoose.model('Project', ProjectSchema);
 
 /**
+ * Get all projects
+ * @api protected
+ */
+export function getAll() {
+  return Project.find({});
+}
+
+/**
  * Get projects by id, name or userId
  * @param {id?} string
  * @param {name?} string
@@ -161,6 +169,14 @@ export async function getProjectUsers(project) {
    */
 export async function getProjectsByUserId(userId) {
   return Project.find({ users: userId });
+}
+
+/**
+   * Get total count of projects
+   * @api public
+   */
+export function getTotalCount() {
+  return Project.count({ });
 }
 
 export default Project;

@@ -22,6 +22,7 @@ import Project, {
   getById as getProjectById,
   getProjectsByUserId,
   getProjectServices,
+  getTotalCount as getProjectsTotalCount,
 } from './project/ProjectSchema';
 import Service, {
   getById as getServiceById,
@@ -95,10 +96,6 @@ const ProjectType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: async (project, args) => connectionFromArray(await getProjectServices(project), args),
     },
-    // services: {
-    //   type: new GraphQLList(ServiceType),
-    //   resolve: getProjectServices,
-    // },
     // users: {
     //   type: new GraphQLList(UserType),
     //   resolve: getProjectUsers,
@@ -109,7 +106,17 @@ const ProjectType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
-const { connectionType: ProjectConnectionType } = connectionDefinitions({ name: 'Project', nodeType: ProjectType });
+const { connectionType: ProjectConnectionType } = connectionDefinitions({
+  name: 'Project',
+  nodeType: ProjectType,
+  // connectionFields: () => ({
+  //   totalCount: {
+  //     type: GraphQLInt,
+  //     description: 'Total count of projects',
+  //     resolve: () => getProjectsTotalCount(),
+  //   },
+  // }),
+});
 
 export { ProjectType, ProjectConnectionType };
 

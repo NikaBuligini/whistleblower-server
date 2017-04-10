@@ -4,6 +4,7 @@ import { UserQueries, UserMutations } from './models/user/UserQL';
 import { ProjectQueries, ProjectMutations } from './models/project/ProjectQL';
 import { ServiceQueries, ServiceMutations } from './models/service/ServiceQL';
 import viewer from './models/viewer';
+import admin from './models/admin';
 
 const RootQuery = new GraphQLObjectType({
   name: 'Query',  // Return this type of object
@@ -13,6 +14,7 @@ const RootQuery = new GraphQLObjectType({
     projects: ProjectQueries.projects,
     services: ServiceQueries.services,
     viewer,
+    admin,
   }),
 });
 

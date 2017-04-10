@@ -1,6 +1,7 @@
 import React from 'react';
-import Relay from 'react-relay';
 import { Route, IndexRoute } from 'react-router';
+
+import { ViewerQueries, AdminQueries } from '../queries';
 
 import { AuthLayout, DefaultLayout } from '../containers/layouts';
 
@@ -10,22 +11,14 @@ import ProjectList from '../containers/projects/ProjectList';
 import Project from '../containers/projects/Project';
 import Service from '../containers/services/Service';
 
-const ProjectQueries = {
-  viewer: () => Relay.QL`
-    query {
-      viewer
-    }
-  `,
-};
-
 export default (
   <Route
     path="/"
     // queries={ViewerQueries}
   >
-    <IndexRoute component={Dashboard} queries={ProjectQueries} />
+    <IndexRoute component={Dashboard} queries={ViewerQueries} />
     <Route path="projects" component={DefaultLayout}>
-      <IndexRoute component={ProjectList} />
+      <IndexRoute component={ProjectList} queries={AdminQueries} />
       <Route path=":projectName">
         <IndexRoute component={Project} />
         <Route path=":serviceId" component={Service} />

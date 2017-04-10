@@ -7,7 +7,7 @@
     "type": "git"
   },
   "scripts": {
-    "start": "nodemon ./server.js --exec babel-node",
+    "start": "nodemon ./server.js --exec babel-node --ignore app/react",
     "build": "webpack --progress --colors && gulp build",
     "watch": "webpack-dev-server --hot --inline",
     "update-schema": "babel-node ./scripts/updateSchema.js",

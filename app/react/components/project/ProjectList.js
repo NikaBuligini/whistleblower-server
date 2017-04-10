@@ -1,28 +1,26 @@
 import React from 'react';
 import ProjectCard from '../../components/project/ProjectCard';
-import { ProjectPropType } from '../../propTypes';
+import type { Project } from '../../actions/types';
+
+type ProjectListProps = {
+  data: Array<Project>,
+}
 
 class ProjectList extends React.Component {
   componentDidMount() {
     componentHandler.upgradeDom();
   }
 
+  props: ProjectListProps
+
   render() {
     const { data } = this.props;
     return (
       <div className="list">
-        {data.map((project, index) => <ProjectCard key={index} project={project} />)}
+        {data.map(({ node }) => <ProjectCard key={node.id} project={node} />)}
       </div>
     );
   }
 }
-
-ProjectList.propTypes = {
-  data: React.PropTypes.arrayOf(ProjectPropType),
-};
-
-ProjectList.defaultProps = {
-  data: [],
-};
 
 export default ProjectList;
