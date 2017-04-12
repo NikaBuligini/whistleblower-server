@@ -1,13 +1,3 @@
-# An admin
-type Admin {
-  # The ID of an object
-  id: ID!
-  fullname: String
-
-  # List of projects for administrator
-  projects(after: String, first: Int, before: String, last: Int): ProjectConnection
-}
-
 input AuthenticationInput {
   email: String!
   password: String!
@@ -74,6 +64,9 @@ type ProjectConnection {
 
   # A list of edges.
   edges: [ProjectEdge]
+
+  # Total count of projects
+  totalCount: Int
 }
 
 # An edge in a connection.
@@ -86,6 +79,12 @@ type ProjectEdge {
 }
 
 type Query {
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+
   # Get all users
   users: [User]
 
@@ -97,7 +96,6 @@ type Query {
   projects(id: String, name: String, userId: String): [Project]
   services(id: String!): [Service]
   viewer: User
-  admin: Admin
 }
 
 # A service
@@ -146,4 +144,7 @@ type User implements Node {
 
   # Visible projects for user
   projects(after: String, first: Int, before: String, last: Int): ProjectConnection
+
+  # List of projects for administrator
+  allProjects(after: String, first: Int, before: String, last: Int): ProjectConnection
 }

@@ -4,17 +4,17 @@ import { UserQueries, UserMutations } from './models/user/UserQL';
 import { ProjectQueries, ProjectMutations } from './models/project/ProjectQL';
 import { ServiceQueries, ServiceMutations } from './models/service/ServiceQL';
 import viewer from './models/viewer';
-import admin from './models/admin';
+import { nodeField } from './models/types';
 
 const RootQuery = new GraphQLObjectType({
   name: 'Query',  // Return this type of object
   fields: () => ({
+    node: nodeField,
     users: UserQueries.users,
     user: UserQueries.user,
     projects: ProjectQueries.projects,
     services: ServiceQueries.services,
     viewer,
-    admin,
   }),
 });
 

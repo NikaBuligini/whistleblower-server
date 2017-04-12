@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
-import { ViewerQueries, AdminQueries } from '../queries';
+import { ViewerQueries } from '../queries';
 
 import { AuthLayout, DefaultLayout } from '../containers/layouts';
 
@@ -18,7 +18,7 @@ export default (
   >
     <IndexRoute component={Dashboard} queries={ViewerQueries} />
     <Route path="projects" component={DefaultLayout}>
-      <IndexRoute component={ProjectList} queries={AdminQueries} />
+      <IndexRoute component={ProjectList} queries={ViewerQueries} />
       <Route path=":projectName">
         <IndexRoute component={Project} />
         <Route path=":serviceId" component={Service} />

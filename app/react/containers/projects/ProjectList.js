@@ -3,7 +3,7 @@ import Relay from 'react-relay';
 import DocumentTitle from 'react-document-title';
 import Loading from '../../components/Loading';
 import AddProjectComponent from '../../components/project/AddProjectComponent';
-import List from '../../components/project/ProjectList';
+import ProjectCard from '../../components/project/ProjectCard';
 import type { Project } from '../../actions/types';
 
 type ProjectEdges = {
@@ -11,25 +11,22 @@ type ProjectEdges = {
 }
 
 type ProjectListProps = {
-  admin: {
-    projects: Array<ProjectEdges>,
+  viewer: {
+    allProjects: Array<ProjectEdges>,
   }
 }
 
 class ProjectList extends React.Component {
   componentDidMount() {
-    console.log('cdm', this.props);
-    this.props.relay.forceFetch();
+    componentHandler.upgradeDom();
   }
 
   props: ProjectListProps
 
   render() {
-    const { projects } = this.props.admin;
+    const { allProjects } = this.props.viewer;
 
-    console.log(this.props);
-
-    if (!projects) {
+    if (!allProjects) {
       return <Loading />;
     }
 
@@ -43,7 +40,9 @@ class ProjectList extends React.Component {
           <div className="mdl-cell mdl-cell--10-col mdl-cell--1-offset">
             <div className="projects">
               {/* <AddProjectComponent /> */}
-              <List data={projects.edges} />
+              <div className="list">
+                {allProjects.edges.map(({ node }) => <ProjectCard key={node.id} project={node} />)}
+              </div>
             </div>
           </div>
         </div>
@@ -55,9 +54,9 @@ class ProjectList extends React.Component {
 export default Relay.createContainer(ProjectList, {
   initialVariables: { count: 10 },
   fragments: {
-    admin: () => Relay.QL`
-      fragment on Admin {
-        projects(first: $count) {
+    viewer: () => Relay.QL`
+      fragment on User {
+        allProjects(first: $count) {
           edges {
             node {
               id

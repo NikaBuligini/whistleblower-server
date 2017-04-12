@@ -17,11 +17,11 @@ import {
 
 import ServicePayloadType from './service/ServicePayloadTypeQL';
 
-import User, { getById as getUserById } from './user/UserSchema';
+import User from './user/UserSchema';
 import Project, {
-  getById as getProjectById,
   getProjectsByUserId,
   getProjectServices,
+  getAll as getAllProjects,
   getTotalCount as getProjectsTotalCount,
 } from './project/ProjectSchema';
 import Service, {
@@ -31,10 +31,11 @@ import Service, {
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
     const { type, id } = fromGlobalId(globalId);
+    console.log(type, id);
     if (type === 'User') {
-      return getUserById(id);
+      return User.getById(id);
     } else if (type === 'Project') {
-      return getProjectById(id);
+      return Project.getById(id);
     } else if (type === 'Service') {
       return getServiceById(id);
     }
@@ -51,6 +52,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     return null;
   },
 );
+
+export { nodeInterface, nodeField };
 
 /**
  * ServiceTypeQL
@@ -109,13 +112,13 @@ const ProjectType = new GraphQLObjectType({
 const { connectionType: ProjectConnectionType } = connectionDefinitions({
   name: 'Project',
   nodeType: ProjectType,
-  // connectionFields: () => ({
-  //   totalCount: {
-  //     type: GraphQLInt,
-  //     description: 'Total count of projects',
-  //     resolve: () => getProjectsTotalCount(),
-  //   },
-  // }),
+  connectionFields: () => ({
+    totalCount: {
+      type: GraphQLInt,
+      description: 'Total count of projects',
+      resolve: () => getProjectsTotalCount(),
+    },
+  }),
 });
 
 export { ProjectType, ProjectConnectionType };
@@ -139,6 +142,15 @@ const UserType = new GraphQLObjectType({
       description: 'Visible projects for user',
       args: connectionArgs,
       resolve: async (viewer, args) => connectionFromArray(await getProjectsByUserId(viewer.id), args),
+    },
+    allProjects: {
+      type: ProjectConnectionType,
+      description: 'List of projects for administrator',
+      args: connectionArgs,
+      resolve: async (viewer, args) => {
+        if (viewer.roles.indexOf('admin') === -1) return null;
+        return connectionFromArray(await getAllProjects(), args);
+      },
     },
   }),
   interfaces: [nodeInterface],

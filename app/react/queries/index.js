@@ -7,11 +7,3 @@ export const ViewerQueries = {
     }
   `,
 };
-
-export const AdminQueries = {
-  admin: () => Relay.QL`
-    query {
-      admin
-    }
-  `,
-};
