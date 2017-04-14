@@ -1,4 +1,5 @@
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { maskErrors } from 'graphql-errors';
 
 import { UserQueries, UserMutations } from './models/user/UserQL';
 import { ProjectQueries, ProjectMutations } from './models/project/ProjectQL';
@@ -40,5 +41,7 @@ const schema = new GraphQLSchema({
   mutation: RootMutation,
   // subscription: RootSubscription,
 });
+
+maskErrors(schema);
 
 export default schema;

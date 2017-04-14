@@ -9,10 +9,22 @@ type AuthenticationPayload {
   clientMutationId: String
 }
 
+input CreateProjectInput {
+  name: String!
+  clientMutationId: String
+}
+
+type CreateProjectPayload {
+  payload: Project
+  clientMutationId: String
+}
+
 type Mutation {
   # Authenticate user using email and password
   authenticate(input: AuthenticationInput!): AuthenticationPayload
-  createProject(type: String): Project
+
+  # Create new project
+  createProject(input: CreateProjectInput!): CreateProjectPayload
   createService(type: String): Service
 }
 

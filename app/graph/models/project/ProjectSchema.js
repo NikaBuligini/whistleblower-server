@@ -1,8 +1,32 @@
+// @flow
+
 import mongoose from 'mongoose';
 import uuid from 'uuid';
 
+type ProjectType = {
+  name: string,
+  uuid: string,
+  services: Array<any>,
+  users: Array<any>,
+  created_at: Date,
+  updated_at: Date,
+};
+
+type ProjectSchemaType = {
+  pre: (string, (Function) => void) => void,
+  methods: {
+    addPermission: ({}) => void,
+  },
+  statics: {},
+  find: ({}) => Array<ProjectType>,
+  findById: (string) => ProjectType,
+  findOne: ({}) => ProjectType,
+  count: ({}) => number,
+  populate: (ProjectType, string) => ProjectType,
+};
+
 // Create a new schema for our tweet data
-const ProjectSchema = new mongoose.Schema({
+const ProjectSchema: ProjectSchemaType = new mongoose.Schema({
   name: { type: String, required: true, index: { unique: true } },
   uuid: { type: String, index: { unique: true } },
   services: [{ type: mongoose.Schema.ObjectId, ref: 'Service' }],
@@ -11,9 +35,9 @@ const ProjectSchema = new mongoose.Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
-ProjectSchema.pre('save', function save(next) {
+ProjectSchema.pre('save', function save(next: Function) {
   // get the current date
-  const currentDate = new Date();
+  const currentDate: Date = new Date();
 
   if (!this.uuid) {
     this.uuid = uuid.v1();
@@ -35,7 +59,7 @@ ProjectSchema.methods = {
    * @api protected
    */
   addPermission(user) {
-    const userIds = this.users.map(u => u.id);
+    const userIds: Array<string> = this.users.map(u => u.id);
     if (userIds.indexOf(user.id) === -1) {
       this.users.push(user);
       this.save();
@@ -89,8 +113,8 @@ ProjectSchema.statics = {
    * @param {userId} int
    * @api protected
    */
-  async removePermission(projectId, userId) {
-    const project = await this.findByIdAndUpdate(
+  async removePermission(projectId: string, userId: string) {
+    const project: ProjectType = await this.findByIdAndUpdate(
       projectId,
       { $pull: { users: userId } },
       { safe: true, new: true },
@@ -104,7 +128,7 @@ ProjectSchema.statics = {
    * @param {name} project name
    * @api public
    */
-  getProjectServices(name) {
+  getProjectServices(name: string) {
     return this.findOne({ name })
       .populate('services')
       .populate('users')
@@ -113,7 +137,7 @@ ProjectSchema.statics = {
 };
 
 // Return a Project model based upon the defined schema
-const Project = mongoose.model('Project', ProjectSchema);
+const Project: ProjectSchemaType = mongoose.model('Project', ProjectSchema);
 
 /**
  * Get all projects
@@ -130,7 +154,7 @@ export function getAll() {
  * @param {userId?} string
  * @api public
  */
-export function getProjects(root, { id, name, userId }) {
+export function getProjects(_: {}, { id, name, userId }: { id: string, name: string, userId: string }) {
   if (id) {
     return Project.findById(id);
   } else if (name) {
@@ -147,7 +171,7 @@ export function getProjects(root, { id, name, userId }) {
    * @param {project} Project
    * @api public
    */
-export async function getProjectServices(project) {
+export async function getProjectServices(project: ProjectType) {
   const populated = await Project.populate(project, 'services');
   return populated.services;
 }
@@ -157,7 +181,7 @@ export async function getProjectServices(project) {
    * @param {project} Project
    * @api public
    */
-export async function getProjectUsers(project) {
+export async function getProjectUsers(project: ProjectType) {
   const populated = await Project.populate(project, 'users');
   return populated.users;
 }
@@ -167,8 +191,17 @@ export async function getProjectUsers(project) {
    * @param {userId} String
    * @api public
    */
-export async function getProjectsByUserId(userId) {
+export async function getProjectsByUserId(userId: string) {
   return Project.find({ users: userId });
+}
+
+/**
+   * Get project by name
+   * @param {name} String
+   * @api public
+   */
+export function getByName(name: string) {
+  return Project.findOne({ name });
 }
 
 /**
@@ -176,7 +209,7 @@ export async function getProjectsByUserId(userId) {
    * @api public
    */
 export function getTotalCount() {
-  return Project.count({ });
+  return Project.count({});
 }
 
 export default Project;

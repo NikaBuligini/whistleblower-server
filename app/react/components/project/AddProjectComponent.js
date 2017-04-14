@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { createProject } from '../../actions';
+// import { connect } from 'react-redux';
+// import { createProject } from '../../actions';
 import NewProjectForm from './NewProjectForm';
 
 class AddProjectComponent extends React.Component {
@@ -27,7 +27,7 @@ class AddProjectComponent extends React.Component {
           <NewProjectForm
             isAdding={this.props.isAdding}
             error={this.props.error}
-            createProject={this.props.createProject}
+            // createProject={this.props.createProject}
           />
         )}
       </div>
@@ -37,7 +37,7 @@ class AddProjectComponent extends React.Component {
 
 AddProjectComponent.propTypes = {
   isAdding: React.PropTypes.bool.isRequired,
-  createProject: React.PropTypes.func.isRequired,
+  // createProject: React.PropTypes.func.isRequired,
   error: React.PropTypes.string,
 };
 
@@ -46,11 +46,13 @@ AddProjectComponent.defaultProps = {
   error: '',
 };
 
-function mapStateToProps(state) {
-  const { isAdding, error } = state.process.projects;
-  return { isAdding, error };
-}
+// function mapStateToProps(state) {
+//   const { isAdding, error } = state.process.projects;
+//   return { isAdding, error };
+// }
 
-export default connect(mapStateToProps, {
-  createProject,
-})(AddProjectComponent);
+export default AddProjectComponent;
+
+// export default connect(mapStateToProps, {
+//   createProject,
+// })(AddProjectComponent);

@@ -1,12 +1,16 @@
 import React from 'react';
+import Relay from 'react-relay';
 import Loading from '../Loading';
+import CreateProjectMutation from '../../containers/projects/CreateProjectMutation';
+
+type NewProjectFormProps = {
+  isAdding: boolean,
+  error: '',
+};
 
 class NewProjectForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { projectName: '' };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+  state = {
+    name: '',
   }
 
   componentDidMount() {
@@ -21,14 +25,34 @@ class NewProjectForm extends React.Component {
     // notification.MaterialSnackbar.showSnackbar(data);
   }
 
-  handleChange(event) {
-    this.setState({ projectName: event.target.value });
+  props: NewProjectFormProps
+
+  handleChange = (event) => {
+    this.setState({ name: event.target.value });
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
-    this.props.createProject(this.state.projectName);
-    this.setState({ projectName: '' });
+
+    const onSuccess = (response) => {
+      console.log('success', response);
+    };
+
+    const onFailure = (transaction) => {
+      console.log(transaction.getError());
+    };
+
+    const mutation = new CreateProjectMutation(
+      {
+        input: {
+          name: this.state.name,
+        },
+      },
+    );
+
+    this.props.relay.commitUpdate(
+      mutation, { onFailure, onSuccess },
+    );
   }
 
   render() {
@@ -44,7 +68,7 @@ class NewProjectForm extends React.Component {
             autoComplete="off"
             autoFocus="on"
             onChange={this.handleChange}
-            value={this.state.projectName}
+            value={this.state.name}
           />
           <label className="mdl-textfield__label" htmlFor="project-name">Name</label>
           {error && <span className="mdl-textfield__error" style={{ visibility: 'visible' }}>{error}</span>}
@@ -61,14 +85,14 @@ class NewProjectForm extends React.Component {
   }
 }
 
-NewProjectForm.propTypes = {
-  isAdding: React.PropTypes.bool.isRequired,
-  createProject: React.PropTypes.func.isRequired,
-  error: React.PropTypes.string,
-};
-
-NewProjectForm.defaultProps = {
-  error: '',
-};
-
-export default NewProjectForm;
+export default Relay.createContainer(NewProjectForm, {
+  fragments: {
+    project: () => Relay.QL`
+      fragment on Project {
+        id
+        name
+        created_at
+      }
+    `,
+  },
+});
