@@ -9,14 +9,15 @@ import {
 } from 'graphql';
 
 import {
+  cursorForObjectInConnection,
   mutationWithClientMutationId,
 } from 'graphql-relay';
 
 import { UserError } from 'graphql-errors';
 
-import { UserType, ProjectType } from '../types';
+import { UserType, ProjectEdgeType } from '../types';
 import User from '../user/UserSchema';
-import Project, { getByName } from './ProjectSchema';
+import Project, { getByName, getAll } from './ProjectSchema';
 
 const CreateProjectMutation = mutationWithClientMutationId({
   name: 'CreateProject',
@@ -25,19 +26,25 @@ const CreateProjectMutation = mutationWithClientMutationId({
     name: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
-    payload: {
-      type: ProjectType,
-      resolve: ({ project }) => project,
+    projectEdge: {
+      type: new GraphQLNonNull(ProjectEdgeType),
+      resolve: async ({ project }) => ({
+        cursor: cursorForObjectInConnection(await getAll(), project),
+        node: project,
+      }),
     },
     viewer: {
-      type: UserType,
+      type: new GraphQLNonNull(UserType),
       resolve: ({ user }) => user,
     },
   },
   mutateAndGetPayload: async ({ name }, { session }) => {
     const { userId } = session;
-    console.log(session);
     const user = userId ? User.findById(userId) : null;
+
+    if (!user) {
+      throw new UserError('unauthorized');
+    }
 
     const existingProject = await getByName(name);
     if (existingProject) {

@@ -109,7 +109,7 @@ const ProjectType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
-const { connectionType: ProjectConnectionType } = connectionDefinitions({
+const { connectionType: ProjectConnectionType, edgeType: ProjectEdgeType } = connectionDefinitions({
   name: 'Project',
   nodeType: ProjectType,
   connectionFields: () => ({
@@ -121,7 +121,7 @@ const { connectionType: ProjectConnectionType } = connectionDefinitions({
   }),
 });
 
-export { ProjectType, ProjectConnectionType };
+export { ProjectType, ProjectConnectionType, ProjectEdgeType };
 
 /**
  * UserTypeQL

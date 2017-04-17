@@ -17,10 +17,23 @@ class CreateProjectMutation extends Relay.Mutation {
     console.log('getFatQuery');
     return Relay.QL`
       fragment on CreateProjectPayload {
-        payload {
+        projectEdge {
+          node {
+            id
+            name
+            created_at
+          }
+        }
+        viewer {
           id
-          name
-          created_at
+          allProjects(first: 10) {
+            edges {
+              node {
+                id
+                name
+              }
+            }
+          }
         }
       }
     `;
@@ -30,10 +43,10 @@ class CreateProjectMutation extends Relay.Mutation {
     console.log('getConfigs', this.props);
     return [{
       type: 'RANGE_ADD',
-      parentName: 'user',
+      parentName: 'viewer',
       parentID: this.props.viewer.id,
       connectionName: 'allProjects',
-      edgeName: 'edge',
+      edgeName: 'projectEdge',
       rangeBehaviors: {
         '': 'append',
       },
