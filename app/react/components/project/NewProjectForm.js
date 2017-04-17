@@ -5,7 +5,11 @@ import CreateProjectMutation from '../../containers/projects/CreateProjectMutati
 
 type NewProjectFormProps = {
   isAdding: boolean,
-  error: '',
+  error: string,
+  viewer: any,
+  relay: {
+    commitUpdate: () => void,
+  },
 };
 
 class NewProjectForm extends React.Component {
@@ -42,11 +46,12 @@ class NewProjectForm extends React.Component {
       console.log(transaction.getError());
     };
 
+    console.log(this.props);
+
     const mutation = new CreateProjectMutation(
       {
-        input: {
-          name: this.state.name,
-        },
+        name: this.state.name,
+        viewer: this.props.viewer,
       },
     );
 

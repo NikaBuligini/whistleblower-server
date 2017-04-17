@@ -2,17 +2,19 @@ import Relay from 'react-relay';
 
 class CreateProjectMutation extends Relay.Mutation {
   getMutation() {
+    console.log('getMutation', this.props);
     return Relay.QL`mutation { createProject(input: $input) }`;
   }
 
   getVariables() {
-    console.log(this.props);
+    console.log('getVariables', this.props);
     return {
       name: this.props.name,
     };
   }
 
   getFatQuery() {
+    console.log('getFatQuery');
     return Relay.QL`
       fragment on CreateProjectPayload {
         payload {
@@ -25,10 +27,15 @@ class CreateProjectMutation extends Relay.Mutation {
   }
 
   getConfigs() {
+    console.log('getConfigs', this.props);
     return [{
-      type: 'FIELDS_CHANGE',
-      fieldIDs: {
-        payload: this.props.name,
+      type: 'RANGE_ADD',
+      parentName: 'user',
+      parentID: this.props.viewer.id,
+      connectionName: 'allProjects',
+      edgeName: 'edge',
+      rangeBehaviors: {
+        '': 'append',
       },
     }];
   }

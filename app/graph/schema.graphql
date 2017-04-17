@@ -16,6 +16,7 @@ input CreateProjectInput {
 
 type CreateProjectPayload {
   payload: Project
+  viewer: User
   clientMutationId: String
 }
 

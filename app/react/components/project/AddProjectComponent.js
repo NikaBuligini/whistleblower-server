@@ -3,14 +3,25 @@ import React from 'react';
 // import { createProject } from '../../actions';
 import NewProjectForm from './NewProjectForm';
 
+type AddProjectProps = {
+  isAdding: boolean,
+  error: string,
+  viewer: any,
+}
+
 class AddProjectComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { showInputs: false };
-    this.showInputFields = this.showInputFields.bind(this);
+  static defaultProps = {
+    isAdding: false,
+    error: '',
   }
 
-  showInputFields() {
+  state = {
+    showInputs: false,
+  }
+
+  props: AddProjectProps
+
+  showInputFields = () => {
     this.setState({ showInputs: true });
   }
 
@@ -26,8 +37,9 @@ class AddProjectComponent extends React.Component {
         {this.state.showInputs && (
           <NewProjectForm
             isAdding={this.props.isAdding}
+            viewer={this.props.viewer}
+            project={null}
             error={this.props.error}
-            // createProject={this.props.createProject}
           />
         )}
       </div>
@@ -35,24 +47,4 @@ class AddProjectComponent extends React.Component {
   }
 }
 
-AddProjectComponent.propTypes = {
-  isAdding: React.PropTypes.bool.isRequired,
-  // createProject: React.PropTypes.func.isRequired,
-  error: React.PropTypes.string,
-};
-
-AddProjectComponent.defaultProps = {
-  isAdding: false,
-  error: '',
-};
-
-// function mapStateToProps(state) {
-//   const { isAdding, error } = state.process.projects;
-//   return { isAdding, error };
-// }
-
 export default AddProjectComponent;
-
-// export default connect(mapStateToProps, {
-//   createProject,
-// })(AddProjectComponent);

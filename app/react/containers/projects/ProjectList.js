@@ -39,7 +39,9 @@ class ProjectList extends React.Component {
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--10-col mdl-cell--1-offset">
             <div className="projects">
-              <AddProjectComponent />
+              <AddProjectComponent
+                viewer={this.props.viewer}
+              />
               <div className="list">
                 {allProjects.edges.map(({ node }) => <ProjectCard key={node.id} project={node} />)}
               </div>
@@ -56,6 +58,7 @@ export default Relay.createContainer(ProjectList, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
+        id
         allProjects(first: $count) {
           edges {
             node {
