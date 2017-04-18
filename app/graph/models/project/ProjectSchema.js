@@ -196,6 +196,15 @@ export async function getProjectsByUserId(userId: string) {
 }
 
 /**
+   * Get project by id
+   * @param {id} String
+   * @api public
+   */
+export function getById(id: string) {
+  return Project.findById(id);
+}
+
+/**
    * Get project by name
    * @param {name} String
    * @api public

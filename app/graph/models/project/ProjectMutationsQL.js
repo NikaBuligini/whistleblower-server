@@ -1,19 +1,15 @@
 import {
-  // GraphQLObjectType,
-  // GraphQLSchema,
   GraphQLString,
-  // GraphQLInt,
   GraphQLNonNull,
-  // GraphQLList,
-  // GraphQLID,
 } from 'graphql';
 
 import {
-  cursorForObjectInConnection,
   mutationWithClientMutationId,
+  offsetToCursor,
 } from 'graphql-relay';
 
 import { UserError } from 'graphql-errors';
+import _ from 'lodash';
 
 import { UserType, ProjectEdgeType } from '../types';
 import User from '../user/UserSchema';
@@ -28,10 +24,14 @@ const CreateProjectMutation = mutationWithClientMutationId({
   outputFields: {
     projectEdge: {
       type: new GraphQLNonNull(ProjectEdgeType),
-      resolve: async ({ project }) => ({
-        cursor: cursorForObjectInConnection(await getAll(), project),
-        node: project,
-      }),
+      resolve: async ({ project }) => {
+        const all = await getAll();
+        const index = _.findIndex(all, { _id: project._id });
+        return {
+          cursor: offsetToCursor(index),
+          node: all[index],
+        };
+      },
     },
     viewer: {
       type: new GraphQLNonNull(UserType),
@@ -52,7 +52,7 @@ const CreateProjectMutation = mutationWithClientMutationId({
     }
 
     const project = new Project({ name });
-    project.save();
+    await project.save();
 
     return { project, user };
   },

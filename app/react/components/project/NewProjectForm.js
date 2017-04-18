@@ -1,11 +1,11 @@
 import React from 'react';
 import Relay from 'react-relay';
 import Loading from '../Loading';
+import Errors from '../../components/Errors';
 import CreateProjectMutation from '../../containers/projects/CreateProjectMutation';
 
 type NewProjectFormProps = {
   isAdding: boolean,
-  error: string,
   viewer: any,
   relay: {
     commitUpdate: () => void,
@@ -15,6 +15,7 @@ type NewProjectFormProps = {
 class NewProjectForm extends React.Component {
   state = {
     name: '',
+    errors: [],
   }
 
   componentDidMount() {
@@ -40,13 +41,14 @@ class NewProjectForm extends React.Component {
 
     const onSuccess = (response) => {
       console.log('success', response);
+      this.setState({ name: '' });
     };
 
     const onFailure = (transaction) => {
-      console.log(transaction.getError());
+      const error = transaction.getError();
+      this.setState({ errors: error.source.errors.map(e => e.message) });
+      console.error(error);
     };
-
-    console.log(this.props);
 
     const mutation = new CreateProjectMutation(
       {
@@ -61,10 +63,12 @@ class NewProjectForm extends React.Component {
   }
 
   render() {
-    const { error, isAdding } = this.props;
+    const { isAdding } = this.props;
+    const { errors } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit}>
+        <Errors data={errors} />
         <div className="mdl-textfield mdl-js-textfield">
           <input
             className="mdl-textfield__input"
@@ -76,7 +80,6 @@ class NewProjectForm extends React.Component {
             value={this.state.name}
           />
           <label className="mdl-textfield__label" htmlFor="project-name">Name</label>
-          {error && <span className="mdl-textfield__error" style={{ visibility: 'visible' }}>{error}</span>}
         </div>
         <button
           className="mdl-button mdl-js-button mdl-button--accent create"
