@@ -20,13 +20,28 @@ type CreateProjectPayload {
   clientMutationId: String
 }
 
+input CreateServiceInput {
+  projectId: String!
+  name: String!
+  type: String!
+  clientMutationId: String
+}
+
+type CreateServicePayload {
+  serviceEdge: ServiceEdge!
+  viewer: User!
+  clientMutationId: String
+}
+
 type Mutation {
   # Authenticate user using email and password
   authenticate(input: AuthenticationInput!): AuthenticationPayload
 
   # Create new project
   createProject(input: CreateProjectInput!): CreateProjectPayload
-  createService(type: String): Service
+
+  # Create new service for project
+  createService(input: CreateServiceInput!): CreateServicePayload
 }
 
 # An object with an ID
@@ -160,4 +175,7 @@ type User implements Node {
 
   # List of projects for administrator
   allProjects(after: String, first: Int, before: String, last: Int): ProjectConnection
+
+  # Single project
+  project(name: String!): Project
 }

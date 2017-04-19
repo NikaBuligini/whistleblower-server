@@ -7,3 +7,13 @@ export const ViewerQueries = {
     }
   `,
 };
+
+export const ProjectQuery = {
+  viewer: (Component, vars) => Relay.QL`
+    query {
+      viewer {
+        ${Component.getFragment('viewer', vars)}
+      }
+    }
+  `,
+};

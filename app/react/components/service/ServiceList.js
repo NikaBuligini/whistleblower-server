@@ -10,12 +10,10 @@ class ServicesList extends React.Component {
   }
 
   render() {
-    const { isFetching, services, handleActivationChange } = this.props;
+    const { services, handleActivationChange } = this.props;
     const { projectName } = this.props.params;
 
-    if (isFetching) {
-      return <Loading cls="loading" />;
-    }
+    console.log(services);
 
     if (services.length === 0) {
       return <span className="no-data">No services</span>;
@@ -37,7 +35,6 @@ class ServicesList extends React.Component {
 }
 
 ServicesList.propTypes = {
-  isFetching: React.PropTypes.bool.isRequired,
   params: React.PropTypes.shape({
     projectName: React.PropTypes.string,
   }).isRequired,

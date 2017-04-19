@@ -12,7 +12,7 @@ import routes from './routes/index';
 import '../styles/main.scss';
 
 Relay.injectNetworkLayer(
-  new Relay.DefaultNetworkLayer('graphql', {
+  new Relay.DefaultNetworkLayer('/graphql', {
     credentials: 'same-origin',
   }),
 );

@@ -4,6 +4,7 @@ import {
   GraphQLInt,
   GraphQLBoolean,
   GraphQLList,
+  GraphQLNonNull,
   } from 'graphql';
 
 import {
@@ -20,6 +21,7 @@ import ServicePayloadType from './service/ServicePayloadTypeQL';
 import User from './user/UserSchema';
 import Project, {
   getProjectsByUserId,
+  getProjectByName,
   getProjectServices,
   getAll as getAllProjects,
   getTotalCount as getProjectsTotalCount,
@@ -79,9 +81,12 @@ const ServiceType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
-const { connectionType: ServiceConnectionType } = connectionDefinitions({ name: 'Service', nodeType: ServiceType });
+const { connectionType: ServiceConnectionType, edgeType: ServiceEdgeType } = connectionDefinitions({
+  name: 'Service',
+  nodeType: ServiceType,
+});
 
-export { ServiceType, ServiceConnectionType };
+export { ServiceType, ServiceConnectionType, ServiceEdgeType };
 
 /**
  * ProjectTypeQL
@@ -151,6 +156,14 @@ const UserType = new GraphQLObjectType({
         if (viewer.roles.indexOf('admin') === -1) return null;
         return connectionFromArray(await getAllProjects(), args);
       },
+    },
+    project: {
+      type: ProjectType,
+      description: 'Single project',
+      args: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: getProjectByName,
     },
   }),
   interfaces: [nodeInterface],

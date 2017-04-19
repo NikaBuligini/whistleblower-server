@@ -167,6 +167,15 @@ export function getProjects(_: {}, { id, name, userId }: { id: string, name: str
 }
 
 /**
+ * Get projects by name
+ * @param {name} string
+ * @api public
+ */
+export async function getProjectByName(_: {}, { name }: { name: string }) {
+  return Project.findOne({ name });
+}
+
+/**
    * Get project services
    * @param {project} Project
    * @api public

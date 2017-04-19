@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
-import { ViewerQueries } from '../queries';
+import { ViewerQueries, ProjectQuery } from '../queries';
 
 import { AuthLayout, DefaultLayout } from '../containers/layouts';
 
@@ -20,7 +20,7 @@ export default (
     <Route path="projects" component={DefaultLayout}>
       <IndexRoute component={ProjectList} queries={ViewerQueries} />
       <Route path=":projectName">
-        <IndexRoute component={Project} />
+        <IndexRoute component={Project} queries={ProjectQuery} />
         <Route path=":serviceId" component={Service} />
       </Route>
     </Route>

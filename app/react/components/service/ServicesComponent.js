@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import _ from 'lodash';
-import AddServiceComponent from './AddServiceComponent';
-import { loadServices, changeServiceActivation } from '../../actions';
+import Relay from 'react-relay';
+import NewServiceForm from './NewServiceForm';
+// import { loadServices, changeServiceActivation } from '../../actions';
+import CreateServiceMutation from '../../mutations/CreateServiceMutation';
 import List from './ServiceList';
 import { ProjectPropType, ServicePropType } from '../../propTypes';
 
@@ -14,8 +14,29 @@ class ServicesComponent extends React.Component {
     this.handleServiceActivationChange = this.handleServiceActivationChange.bind(this);
   }
 
-  componentWillMount() {
-    this.props.loadServices(this.props.project.id);
+  onServiceCreate = (name, type) => {
+    const onSuccess = (response) => {
+      console.log('success', response);
+      this.setState({ name: '' });
+    };
+
+    const onFailure = (transaction) => {
+      const error = transaction.getError();
+      this.setState({ errors: error.source.errors.map(e => e.message) });
+      console.error(error);
+    };
+
+    const mutation = new CreateServiceMutation(
+      {
+        projectId: '12234',
+        name,
+        type,
+      },
+    );
+
+    this.props.relay.commitUpdate(
+      mutation, { onFailure, onSuccess },
+    );
   }
 
   handleAddingCancel() {
@@ -27,7 +48,7 @@ class ServicesComponent extends React.Component {
   }
 
   render() {
-    const { isFetching, services, project } = this.props;
+    const { project } = this.props;
 
     return (
       <section>
@@ -42,15 +63,16 @@ class ServicesComponent extends React.Component {
             </button>
           </span>
         </div>
-        <AddServiceComponent
-          showInputs={this.state.isAddingService}
-          handleCancel={this.handleAddingCancel}
-          project={project}
-        />
+        {this.state.isAddingService && (
+          <NewServiceForm
+            onServiceCreate={this.onServiceCreate}
+            handleCancel={this.handleAddingCancel}
+            project={project}
+          />
+        )}
         <List
-          isFetching={isFetching}
-          changeActivation={changeServiceActivation}
-          services={services}
+          changeActivation={this.handleServiceActivationChange}
+          services={project.services.edges}
           handleActivationChange={this.handleServiceActivationChange}
         />
       </section>
@@ -59,27 +81,29 @@ class ServicesComponent extends React.Component {
 }
 
 ServicesComponent.propTypes = {
-  services: React.PropTypes.arrayOf(ServicePropType).isRequired,
-  isFetching: React.PropTypes.bool.isRequired,
-  loadServices: React.PropTypes.func.isRequired,
-  changeServiceActivation: React.PropTypes.func.isRequired,
-  project: ProjectPropType,
+  // services: React.PropTypes.arrayOf(ServicePropType).isRequired,
+  // project: ProjectPropType,
 };
 
 ServicesComponent.defaultProps = {
-  services: [],
+  // services: [],
   isFetching: true,
-  project: {},
+  // project: {},
 };
 
-function mapStateToProps(state, ownProps) {
-  const { isFetching } = state.process.services;
-  const services = _.values(ownProps.project.services)
-    .map(key => state.entities.services[key])
-    .filter(service => typeof service !== 'undefined');
-  return { isFetching, services };
-}
-
-export default connect(mapStateToProps, {
-  loadServices, changeServiceActivation,
-})(ServicesComponent);
+export default Relay.createContainer(ServicesComponent, {
+  fragments: {
+    project: () => Relay.QL`
+      fragment on Project {
+        services(first: 10) {
+          edges {
+            node {
+              id
+              name
+            }
+          }
+        }
+      }
+    `,
+  },
+});
