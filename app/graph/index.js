@@ -25,6 +25,7 @@ const RootMutation = new GraphQLObjectType({
     authenticate: UserMutations.authenticate,
     createProject: ProjectMutations.createProject,
     createService: ServiceMutations.createService,
+    changeServiceStatus: ServiceMutations.changeServiceStatus,
   }),
 });
 

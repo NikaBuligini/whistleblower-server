@@ -9,6 +9,18 @@ type AuthenticationPayload {
   clientMutationId: String
 }
 
+input ChangeServiceStatusInput {
+  serviceId: String!
+  status: Boolean!
+  clientMutationId: String
+}
+
+type ChangeServiceStatusPayload {
+  service: Service!
+  viewer: User!
+  clientMutationId: String
+}
+
 input CreateProjectInput {
   name: String!
   clientMutationId: String
@@ -42,6 +54,9 @@ type Mutation {
 
   # Create new service for project
   createService(input: CreateServiceInput!): CreateServicePayload
+
+  # Change status of service
+  changeServiceStatus(input: ChangeServiceStatusInput!): ChangeServiceStatusPayload
 }
 
 # An object with an ID

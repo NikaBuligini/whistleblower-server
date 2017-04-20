@@ -50,7 +50,7 @@ const ProjectComponent = ({ viewer }: ProjectComponentProps) => {
             </div>
             <div className="mdl-card__supporting-text">
               <ProjectDetails {...project} />
-              <ServicesComponent project={project} />
+              <ServicesComponent project={project} viewer={viewer} />
               {/* <PermissionsComponent project={project} /> */}
             </div>
           </section>

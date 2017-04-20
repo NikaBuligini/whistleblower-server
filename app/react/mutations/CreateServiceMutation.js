@@ -12,9 +12,9 @@ class CreateServiceMutation extends Relay.Mutation {
 
   getVariables() {
     console.log('getVariables', this.props);
-    const { projectId, name, type } = this.props;
+    const { project, name, type } = this.props;
     return {
-      projectId,
+      projectId: project.id,
       name,
       type,
     };
@@ -23,7 +23,7 @@ class CreateServiceMutation extends Relay.Mutation {
   getFatQuery() {
     console.log('getFatQuery');
     return Relay.QL`
-      fragment on CreateProjectPayload {
+      fragment on CreateServicePayload {
         serviceEdge {
           node {
             id
@@ -32,11 +32,14 @@ class CreateServiceMutation extends Relay.Mutation {
         }
         viewer {
           id
-          project(name: "eLoan") {
+          project(name: "${this.props.project.name}") {
             services(first: 10) {
-              node {
-                id
-                name
+              edges {
+                node {
+                  id
+                  name
+                  isActive
+                }
               }
             }
           }

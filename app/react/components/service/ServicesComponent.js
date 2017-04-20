@@ -1,17 +1,13 @@
 import React from 'react';
 import Relay from 'react-relay';
 import NewServiceForm from './NewServiceForm';
-// import { loadServices, changeServiceActivation } from '../../actions';
 import CreateServiceMutation from '../../mutations/CreateServiceMutation';
+import ChangeServiceStatusMutation from '../../mutations/ChangeServiceStatusMutation';
 import List from './ServiceList';
-import { ProjectPropType, ServicePropType } from '../../propTypes';
 
 class ServicesComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { isAddingService: false };
-    this.handleAddingCancel = this.handleAddingCancel.bind(this);
-    this.handleServiceActivationChange = this.handleServiceActivationChange.bind(this);
+  state = {
+    isAddingService: false,
   }
 
   onServiceCreate = (name, type) => {
@@ -22,29 +18,48 @@ class ServicesComponent extends React.Component {
 
     const onFailure = (transaction) => {
       const error = transaction.getError();
+      console.log(error.source);
       this.setState({ errors: error.source.errors.map(e => e.message) });
       console.error(error);
     };
 
     const mutation = new CreateServiceMutation(
       {
-        projectId: '12234',
+        project: this.props.project,
         name,
         type,
+        viewer: this.props.viewer,
       },
     );
 
-    this.props.relay.commitUpdate(
-      mutation, { onFailure, onSuccess },
-    );
+    this.props.relay.commitUpdate(mutation, { onFailure, onSuccess });
   }
 
-  handleAddingCancel() {
+  props: {
+    project: any,
+    viewer: any,
+    relay: {
+      commitUpdate: () => void,
+    }
+  }
+
+  handleAddingCancel = () => {
     this.setState({ isAddingService: false });
   }
 
-  handleServiceActivationChange(service) {
-    this.props.changeServiceActivation(service);
+  handleServiceActivationChange = (service) => {
+    console.log(service);
+
+    const onFailure = (transaction) => {
+      const error = transaction.getError();
+      console.log(error.source);
+      this.setState({ errors: error.source.errors.map(e => e.message) });
+      console.error(error);
+    };
+
+    const mutation = new ChangeServiceStatusMutation({ service });
+
+    this.props.relay.commitUpdate(mutation, { onFailure });
   }
 
   render() {
@@ -72,7 +87,7 @@ class ServicesComponent extends React.Component {
         )}
         <List
           changeActivation={this.handleServiceActivationChange}
-          services={project.services.edges}
+          services={project.services.edges.map(edge => edge.node)}
           handleActivationChange={this.handleServiceActivationChange}
         />
       </section>
@@ -80,26 +95,17 @@ class ServicesComponent extends React.Component {
   }
 }
 
-ServicesComponent.propTypes = {
-  // services: React.PropTypes.arrayOf(ServicePropType).isRequired,
-  // project: ProjectPropType,
-};
-
-ServicesComponent.defaultProps = {
-  // services: [],
-  isFetching: true,
-  // project: {},
-};
-
 export default Relay.createContainer(ServicesComponent, {
   fragments: {
     project: () => Relay.QL`
       fragment on Project {
+        id
         services(first: 10) {
           edges {
             node {
               id
               name
+              isActive
             }
           }
         }

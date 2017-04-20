@@ -13,8 +13,6 @@ class ServicesList extends React.Component {
     const { services, handleActivationChange } = this.props;
     const { projectName } = this.props.params;
 
-    console.log(services);
-
     if (services.length === 0) {
       return <span className="no-data">No services</span>;
     }
