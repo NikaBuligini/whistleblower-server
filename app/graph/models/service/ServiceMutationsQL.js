@@ -1,12 +1,9 @@
+/* eslint-disable import/no-named-as-default-member */
+
 import {
-  // GraphQLObjectType,
-  // GraphQLSchema,
   GraphQLString,
-  // GraphQLInt,
   GraphQLBoolean,
   GraphQLNonNull,
-  // GraphQLList,
-  // GraphQLID,
 } from 'graphql';
 
 import {
@@ -21,10 +18,9 @@ import _ from 'lodash';
 import { UserType, ServiceType, ServiceEdgeType } from '../types';
 import User from '../user/UserSchema';
 import Project from '../project/ProjectSchema';
-import Service, { getByName, getAll } from './ServiceSchema';
+import Service, { getAll } from './ServiceSchema';
 
-/** createService
-  */
+/** createService */
 const CreateServiceMutation = mutationWithClientMutationId({
   name: 'CreateService',
   description: 'Create new service for project',

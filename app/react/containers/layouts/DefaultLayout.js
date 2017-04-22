@@ -1,29 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router';
-// import { connect } from 'react-redux';
 import Navigation from './Navigation';
 import Footer from './Footer';
 
-const Drawer = (props) => {
-  const { roles } = props;
-  return (
-    <div className="mdl-layout__drawer">
-      <span className="mdl-layout-title">Whistleblower</span>
-      <nav className="mdl-navigation">
-        <Link to={'/'} className="mdl-navigation__link">Dashboard</Link>
-        {roles.indexOf('admin') !== -1 && (
-          <Link to={'/projects'} className="mdl-navigation__link">Projects</Link>
-        )}
-      </nav>
-    </div>
-  );
-};
+type DrawerProps = {
+  roles: Array<string>,
+}
 
-Drawer.propTypes = {
-  roles: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-};
+const Drawer = ({ roles }: DrawerProps) => (
+  <div className="mdl-layout__drawer">
+    <span className="mdl-layout-title">Whistleblower</span>
+    <nav className="mdl-navigation">
+      <Link to={'/'} className="mdl-navigation__link">Dashboard</Link>
+      {roles.indexOf('admin') !== -1 && (
+        <Link to={'/projects'} className="mdl-navigation__link">Projects</Link>
+      )}
+    </nav>
+  </div>
+);
 
-const Layout = ({ name, roles, children }) => {
+type LayoutProps = {
+  name: string,
+  roles: Array<string>,
+  children: any,
+}
+
+const Layout = ({ name, roles, children }: LayoutProps) => {
   const fullname = name || 'Nikoloz Buligini';
   const viewerRoles = roles || ['admin'];
   return (
@@ -42,17 +44,4 @@ const Layout = ({ name, roles, children }) => {
   );
 };
 
-Layout.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  name: React.PropTypes.string,
-  roles: React.PropTypes.arrayOf(React.PropTypes.string),
-};
-
-// function mapStateToProps(state) {
-//   const { name, roles } = state.preloaded;
-//   return { name, roles };
-// }
-
 export default Layout;
-
-// export default connect(mapStateToProps, {})(Layout);

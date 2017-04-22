@@ -1,13 +1,21 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import Loading from '../../components/Loading';
 import ServiceItem from '../../components/service/ServiceItem';
-import { ServicePropType } from '../../propTypes';
+
+type ServicesListProps = {
+  params: {
+    projectName: string,
+  },
+  services: Array<any>,
+  handleActivationChange: () => void,
+}
 
 class ServicesList extends React.Component {
   componentDidUpdate() {
     componentHandler.upgradeDom();
   }
+
+  props: ServicesListProps
 
   render() {
     const { services, handleActivationChange } = this.props;
@@ -31,13 +39,5 @@ class ServicesList extends React.Component {
     );
   }
 }
-
-ServicesList.propTypes = {
-  params: React.PropTypes.shape({
-    projectName: React.PropTypes.string,
-  }).isRequired,
-  services: React.PropTypes.arrayOf(ServicePropType).isRequired,
-  handleActivationChange: React.PropTypes.func.isRequired,
-};
 
 export default withRouter(ServicesList);

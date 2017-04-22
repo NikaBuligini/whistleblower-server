@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 import Relay from 'react-relay';
 
 class ChangeServiceStatusMutation extends Relay.Mutation {
@@ -10,7 +12,6 @@ class ChangeServiceStatusMutation extends Relay.Mutation {
   }
 
   getVariables() {
-    console.log('getVariables', this.props);
     const { service } = this.props;
     return {
       serviceId: service.id,
@@ -29,7 +30,6 @@ class ChangeServiceStatusMutation extends Relay.Mutation {
   }
 
   getConfigs() {
-    console.log('getConfigs', this.props);
     return [{
       type: 'FIELDS_CHANGE',
       fieldIDs: {

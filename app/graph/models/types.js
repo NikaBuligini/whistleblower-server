@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default-member, no-use-before-define */
+
 import {
   GraphQLObjectType,
   GraphQLString,

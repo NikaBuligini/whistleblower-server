@@ -1,10 +1,10 @@
+/* eslint-disable react/no-unused-prop-types */
+
 import React from 'react';
 import Relay from 'react-relay';
 import DocumentTitle from 'react-document-title';
-import Loading from '../../components/Loading';
 import ServicesComponent from '../../components/service/ServicesComponent';
-import PermissionsComponent from '../../components/permission/PermissionsComponent';
-import { ProjectPropType } from '../../propTypes';
+// import PermissionsComponent from '../../components/permission/PermissionsComponent';
 
 type Project = {
   id: string,
@@ -13,7 +13,8 @@ type Project = {
   created_at: string,
 };
 
-const ProjectDetails = ({ uuid, created_at }: Project) => {
+const ProjectDetails = (props: Project) => {
+  const { uuid, created_at } = props;
   const createdAt = new Date(created_at);
   return (
     <section style={{ padding: '12px 0' }}>

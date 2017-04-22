@@ -2,7 +2,7 @@ import React from 'react';
 import Relay from 'react-relay';
 import Loading from '../Loading';
 import Errors from '../../components/Errors';
-import CreateProjectMutation from '../../containers/projects/CreateProjectMutation';
+import CreateProjectMutation from '../../mutations/CreateProjectMutation';
 
 type NewProjectFormProps = {
   isAdding: boolean,

@@ -1,8 +1,9 @@
+/* eslint-disable class-methods-use-this */
+
 import Relay from 'react-relay';
 
 class CreateServiceMutation extends Relay.Mutation {
   getMutation() {
-    console.log('getMutation', this.props);
     return Relay.QL`
       mutation {
         createService(input: $input)
@@ -11,7 +12,6 @@ class CreateServiceMutation extends Relay.Mutation {
   }
 
   getVariables() {
-    console.log('getVariables', this.props);
     const { project, name, type } = this.props;
     return {
       projectId: project.id,
@@ -21,7 +21,6 @@ class CreateServiceMutation extends Relay.Mutation {
   }
 
   getFatQuery() {
-    console.log('getFatQuery');
     return Relay.QL`
       fragment on CreateServicePayload {
         serviceEdge {
@@ -49,7 +48,6 @@ class CreateServiceMutation extends Relay.Mutation {
   }
 
   getConfigs() {
-    console.log('getConfigs', this.props);
     return [{
       type: 'RANGE_ADD',
       parentName: 'viewer',

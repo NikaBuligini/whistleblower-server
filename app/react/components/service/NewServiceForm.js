@@ -1,9 +1,6 @@
 import React from 'react';
 import Autocomplete from '../Autocomplete';
-// import { addService } from '../../actions';
 import Input from '../Input';
-import CreateServiceMutation from '../../mutations/CreateServiceMutation';
-// import { ProjectPropType } from '../../propTypes';
 
 const style = {
   highlighted: {
@@ -143,10 +140,5 @@ class NewServiceForm extends React.Component {
     );
   }
 }
-
-NewServiceForm.propTypes = {
-  handleCancel: React.PropTypes.func.isRequired,
-  // project: ProjectPropType.isRequired,
-};
 
 export default NewServiceForm;

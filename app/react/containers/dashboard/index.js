@@ -1,14 +1,12 @@
+/* eslint-disable react/no-unused-prop-types */
 // @flow
 
 import React from 'react';
 import Relay from 'react-relay';
-// import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import Layout from '../layouts/DefaultLayout';
 import ProjectItem from './ProjectItem';
-// import { loadUserServices } from '../../actions';
 import type { Project } from '../../actions/types';
-import { ProjectPropType } from '../../propTypes';
 
 type ProjectEdge = {
   node: {
@@ -26,7 +24,6 @@ type Viewer = {
 type Props = {
   viewer: Viewer,
   projects: Project[],
-  // loadUserServices: () => void,
 }
 
 type DefaultProps = {
@@ -36,24 +33,14 @@ type DefaultProps = {
 class Dashboard extends React.Component {
   static defaultProps: DefaultProps;
 
-  static propTypes = {
-    // loadUserServices: React.PropTypes.func.isRequired,
-    projects: React.PropTypes.arrayOf(ProjectPropType),
-  }
-
   static defaultProps = {
     projects: [],
   }
 
-  // componentDidMount() {
-  //   this.props.loadUserServices();
-  // }
-
-  Props: Props;
+  props: Props;
 
   render() {
     const { projects } = this.props.viewer;
-    console.log(projects);
 
     const projectItems = projects.edges.map(({ node }) => (
       <ProjectItem key={node.id} project={node} />
@@ -73,21 +60,6 @@ class Dashboard extends React.Component {
   }
 }
 
-// function mapStateToProps(state) {
-//   const { id } = state.preloaded;
-//   const { projects } = state.entities;
-//
-//   const userProjects = [];
-//   Object.keys(projects).forEach((key) => {
-//     const project = projects[key];
-//     if (project.users.indexOf(id) !== -1) {
-//       userProjects.push(project);
-//     }
-//   });
-//
-//   return { projects: userProjects };
-// }
-
 export default Relay.createContainer(Dashboard, {
   initialVariables: { count: 10 },
   fragments: {
@@ -105,7 +77,3 @@ export default Relay.createContainer(Dashboard, {
     `,
   },
 });
-
-// export default connect(mapStateToProps, {
-//   loadUserServices,
-// })(Dashboard);

@@ -1,20 +1,23 @@
+/* eslint-disable class-methods-use-this */
+
 import Relay from 'react-relay';
 
 class CreateProjectMutation extends Relay.Mutation {
   getMutation() {
-    console.log('getMutation', this.props);
-    return Relay.QL`mutation { createProject(input: $input) }`;
+    return Relay.QL`
+      mutation {
+        createProject(input: $input)
+      }
+    `;
   }
 
   getVariables() {
-    console.log('getVariables', this.props);
     return {
       name: this.props.name,
     };
   }
 
   getFatQuery() {
-    console.log('getFatQuery');
     return Relay.QL`
       fragment on CreateProjectPayload {
         projectEdge {
@@ -40,7 +43,6 @@ class CreateProjectMutation extends Relay.Mutation {
   }
 
   getConfigs() {
-    console.log('getConfigs', this.props);
     return [{
       type: 'RANGE_ADD',
       parentName: 'viewer',

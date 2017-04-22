@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { ServicePropType } from '../../propTypes';
 
 type ServiceItemProps = {
   service: any,
+  projectName: string,
   handleActivationChange: (any) => void,
 }
 

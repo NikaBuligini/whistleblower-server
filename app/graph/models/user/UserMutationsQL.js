@@ -3,16 +3,10 @@ import {
   GraphQLString,
   } from 'graphql';
 
-import {
-  fromGlobalId,
-  globalIdField,
-  mutationWithClientMutationId,
-  cursorForObjectInConnection,
-} from 'graphql-relay';
+import { mutationWithClientMutationId } from 'graphql-relay';
 
-import { authenticate, getById } from './UserSchema';
+import { authenticate } from './UserSchema';
 import { UserType } from '../types';
-// import User from './UserSchema';
 
 const AuthenticationMutation = mutationWithClientMutationId({
   name: 'Authentication',

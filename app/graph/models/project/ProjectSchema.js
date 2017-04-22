@@ -15,7 +15,7 @@ type ProjectType = {
 type ProjectSchemaType = {
   pre: (string, (Function) => void) => void,
   methods: {
-    addPermission: ({}) => void,
+    addPermission: ({ id: string }) => void,
   },
   statics: {},
   find: ({}) => Array<ProjectType>,
