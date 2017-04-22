@@ -4,7 +4,7 @@ import React from 'react';
 import Relay from 'react-relay';
 import DocumentTitle from 'react-document-title';
 import ServicesComponent from '../../components/service/ServicesComponent';
-// import PermissionsComponent from '../../components/permission/PermissionsComponent';
+import PermissionsComponent from '../../components/permission/PermissionsComponent';
 
 type Project = {
   id: string,
@@ -52,7 +52,7 @@ const ProjectComponent = ({ viewer }: ProjectComponentProps) => {
             <div className="mdl-card__supporting-text">
               <ProjectDetails {...project} />
               <ServicesComponent project={project} viewer={viewer} />
-              {/* <PermissionsComponent project={project} /> */}
+              <PermissionsComponent project={project} viewer={viewer} />
             </div>
           </section>
         </div>
@@ -76,6 +76,11 @@ export default Relay.createContainer(ProjectComponent, {
           uuid
           created_at
           ${ServicesComponent.getFragment('project')}
+          ${PermissionsComponent.getFragment('project')}
+        }
+        allUsers {
+          id
+          fullname
         }
       }
     `,

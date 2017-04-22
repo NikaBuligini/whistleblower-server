@@ -10,12 +10,15 @@ type ProjectType = {
   users: Array<any>,
   created_at: Date,
   updated_at: Date,
+
+  populate: (string) => ProjectType,
+  exec: () => ProjectType,
 };
 
 type ProjectSchemaType = {
   pre: (string, (Function) => void) => void,
   methods: {
-    addPermission: ({ id: string }) => void,
+    addPermission: (Function) => any,
   },
   statics: {},
   find: ({}) => Array<ProjectType>,
@@ -23,6 +26,7 @@ type ProjectSchemaType = {
   findOne: ({}) => ProjectType,
   count: ({}) => number,
   populate: (ProjectType, string) => ProjectType,
+  findByIdAndUpdate: (string, any, any) => ProjectType,
 };
 
 // Create a new schema for our tweet data
@@ -58,12 +62,14 @@ ProjectSchema.methods = {
    * @param {user} user
    * @api protected
    */
-  addPermission(user) {
-    const userIds: Array<string> = this.users.map(u => u.id);
-    if (userIds.indexOf(user.id) === -1) {
-      this.users.push(user);
+  async addPermission(getPermissionUser) {
+    const permission: { _id: string } = await getPermissionUser();
+    if (this.users.indexOf(permission._id) === -1) {
+      this.users.push(permission._id);
       this.save();
     }
+
+    return permission;
   },
 };
 
@@ -114,13 +120,11 @@ ProjectSchema.statics = {
    * @api protected
    */
   async removePermission(projectId: string, userId: string) {
-    const project: ProjectType = await this.findByIdAndUpdate(
+    return this.findByIdAndUpdate(
       projectId,
       { $pull: { users: userId } },
       { safe: true, new: true },
     );
-
-    return project;
   },
 
   /**
@@ -145,6 +149,17 @@ const Project: ProjectSchemaType = mongoose.model('Project', ProjectSchema);
  */
 export function getAll() {
   return Project.find({});
+}
+
+/**
+ * Get all perrmisions for project
+ * @param {projectId} string
+ * @api protected
+ */
+export function getAllPermissions(projectId: string) {
+  return Project.findById(projectId)
+    .populate('users')
+    .exec();
 }
 
 /**
@@ -228,6 +243,20 @@ export function getByName(name: string) {
    */
 export function getTotalCount() {
   return Project.count({});
+}
+
+/**
+   * Remove access permission on project
+   * @param {projectId} string
+   * @param {userId} string
+   * @api protected
+   */
+export function removePermission(projectId: string, userId: string) {
+  return Project.findByIdAndUpdate(
+    projectId,
+    { $pull: { users: userId } },
+    { safe: true, new: true },
+  );
 }
 
 export default Project;

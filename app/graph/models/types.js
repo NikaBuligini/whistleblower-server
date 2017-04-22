@@ -20,11 +20,14 @@ import {
 
 import ServicePayloadType from './service/ServicePayloadTypeQL';
 
-import User from './user/UserSchema';
+import User, {
+  getAllUsers,
+} from './user/UserSchema';
 import Project, {
   getProjectsByUserId,
   getProjectByName,
   getProjectServices,
+  getProjectUsers,
   getAll as getAllProjects,
   getTotalCount as getProjectsTotalCount,
 } from './project/ProjectSchema';
@@ -106,10 +109,12 @@ const ProjectType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: async (project, args) => connectionFromArray(await getProjectServices(project), args),
     },
-    // users: {
-    //   type: new GraphQLList(UserType),
-    //   resolve: getProjectUsers,
-    // },
+    users: {
+      type: UserConnectionType,
+      description: 'Users who have access to project',
+      args: connectionArgs,
+      resolve: async (project, args) => connectionFromArray(await getProjectUsers(project), args),
+    },
     created_at: { type: GraphQLString },
     updated_at: { type: GraphQLString },
   }),
@@ -167,10 +172,18 @@ const UserType = new GraphQLObjectType({
       },
       resolve: getProjectByName,
     },
+    allUsers: {
+      type: new GraphQLList(UserType),
+      description: 'List of users for administrator',
+      resolve: () => getAllUsers(),
+    },
   }),
   interfaces: [nodeInterface],
 });
 
-const { connectionType: UserConnectionType } = connectionDefinitions({ name: 'User', nodeType: UserType });
+const { connectionType: UserConnectionType, edgeType: UserEdgeType } = connectionDefinitions({
+  name: 'User',
+  nodeType: UserType,
+});
 
-export { UserType, UserConnectionType };
+export { UserType, UserConnectionType, UserEdgeType };

@@ -3,7 +3,15 @@ import Relay from 'react-relay';
 import NewServiceForm from './NewServiceForm';
 import CreateServiceMutation from '../../mutations/CreateServiceMutation';
 import ChangeServiceStatusMutation from '../../mutations/ChangeServiceStatusMutation';
-import List from './ServiceList';
+import ServiceList from './ServiceList';
+
+type ServicesComponentProps = {
+  project: any,
+  viewer: any,
+  relay: {
+    commitUpdate: () => void,
+  }
+};
 
 class ServicesComponent extends React.Component {
   state = {
@@ -35,13 +43,7 @@ class ServicesComponent extends React.Component {
     this.props.relay.commitUpdate(mutation, { onFailure, onSuccess });
   }
 
-  props: {
-    project: any,
-    viewer: any,
-    relay: {
-      commitUpdate: () => void,
-    }
-  }
+  props: ServicesComponentProps
 
   handleAddingCancel = () => {
     this.setState({ isAddingService: false });
@@ -85,7 +87,7 @@ class ServicesComponent extends React.Component {
             project={project}
           />
         )}
-        <List
+        <ServiceList
           changeActivation={this.handleServiceActivationChange}
           services={project.services.edges.map(edge => edge.node)}
           handleActivationChange={this.handleServiceActivationChange}

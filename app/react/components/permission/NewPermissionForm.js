@@ -1,10 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import _ from 'lodash';
-// import Autocomplete from 'react-autocomplete';
 import Autocomplete from '../Autocomplete';
-import { loadUsers, addPermission } from '../../actions';
-import { ProjectPropType, UserPropType } from '../../propTypes';
+
+type User = {
+  id: string,
+  fullname: string,
+}
 
 const style = {
   highlighted: {
@@ -30,119 +31,106 @@ function filterUsers(value, users, cb) {
   }, 100);
 }
 
+function differentiate(all: Array<User> = [], actual: Array<User> = []) {
+  return _.differenceWith(all, actual, o => o.id);
+}
+
+type NewPermissionFormProps = {
+  permissions: Array<User>,
+  users: Array<User>,
+  onPermissionCreate: (string) => void,
+  handleCancel: () => void,
+}
+
 class NewPermissionForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-      loading: false,
-      users: [],
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
+  state = {
+    error: '',
+    value: '',
+    loading: false,
+    users: differentiate(this.props.users, this.props.permissions),
   }
 
   componentDidMount() {
-    this.props.loadUsers();
+    componentHandler.upgradeDom();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { users } = nextProps;
-    this.setState({ users });
+    this.setState({ users: differentiate(nextProps.users, nextProps.permissions) });
   }
 
-  handleSubmit(event) {
+  props: NewPermissionFormProps
+
+  handleSubmit = (event) => {
     event.preventDefault();
-    this.props.addPermission(this.state.item.id, this.props.project.id);
-    this.props.handleCancel();
+    const { item } = this.state;
+
+    if (item) {
+      this.props.onPermissionCreate(item);
+    } else {
+      // this.setState({ error: 'Please, fill inputs' });
+    }
   }
 
   render() {
-    const { error, users } = this.props;
+    const { error, users } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit} className="service-form">
-        <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <Autocomplete
-            inputProps={{
-              name: 'user names',
-              id: 'permission-input',
-            }}
-            inputLabel={() => (
-              <label className="mdl-textfield__label" htmlFor="permission-input">
-                Name
-              </label>
-            )}
-            ref={(c) => {
-              this.autocomplete = c;
-            }}
-            value={this.state.value}
-            items={this.state.users}
-            getItemValue={item => item.fullname}
-            onSelect={(value, item) => {
-              // set the menu to only the selected item
-              this.setState({ value, item, users: [item] });
-            }}
-            onChange={(event, value) => {
-              this.setState({ value, loading: true });
-              filterUsers(value, users, (items) => {
-                let userItems = items;
-                if (!items) userItems = users;
-                this.setState({ users: userItems, loading: false });
-              });
-            }}
-            renderItem={(item, isHighlighted) => (
-              <div
-                style={isHighlighted ? style.highlighted : style.item}
-                key={item.id}
-                id={item.id}
-              >{item.fullname}</div>
-            )}
-            wrapperStyle={{ display: 'block' }}
-          />
-          {error && <span className="mdl-textfield__error" style={{ visibility: 'visible' }}>{error}</span>}
-        </div>
-        <button
-          className="mdl-button mdl-js-button mdl-button--accent add-service"
-          type="submit"
-        >
-          Add
-        </button>
-        <button
-          className="mdl-button mdl-js-button mdl-button--primary cancel"
-          type="button"
-          onClick={this.props.handleCancel}
-        >
-          Cancel
-        </button>
-      </form>
+      <div className="add">
+        <form onSubmit={this.handleSubmit} className="service-form">
+          <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <Autocomplete
+              inputProps={{
+                name: 'user names',
+                id: 'permission-input',
+              }}
+              inputLabel={() => (
+                <label className="mdl-textfield__label" htmlFor="permission-input">
+                  Name
+                </label>
+              )}
+              ref={(c) => {
+                this.autocomplete = c;
+              }}
+              value={this.state.value}
+              items={this.state.users}
+              getItemValue={item => item.fullname}
+              onSelect={(value, item) => this.setState({ value, item, users: [item] })}
+              onChange={(event, value) => {
+                this.setState({ value, loading: true });
+                filterUsers(value, users, (items) => {
+                  let userItems = items;
+                  if (!items) userItems = users;
+                  this.setState({ users: userItems, loading: false });
+                });
+              }}
+              renderItem={(item, isHighlighted) => (
+                <div
+                  style={isHighlighted ? style.highlighted : style.item}
+                  key={item.id}
+                  id={item.id}
+                >{item.fullname}</div>
+              )}
+              wrapperStyle={{ display: 'block' }}
+            />
+            {error && <span className="mdl-textfield__error" style={{ visibility: 'visible' }}>{error}</span>}
+          </div>
+          <button
+            className="mdl-button mdl-js-button mdl-button--accent add-service"
+            type="submit"
+          >
+            Add
+          </button>
+          <button
+            className="mdl-button mdl-js-button mdl-button--primary cancel"
+            type="button"
+            onClick={this.props.handleCancel}
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
     );
   }
 }
 
-NewPermissionForm.propTypes = {
-  error: React.PropTypes.string,
-  loadUsers: React.PropTypes.func.isRequired,
-  addPermission: React.PropTypes.func.isRequired,
-  handleCancel: React.PropTypes.func.isRequired,
-  project: ProjectPropType.isRequired,
-  users: React.PropTypes.arrayOf(UserPropType),
-};
-
-NewPermissionForm.defaultProps = {
-  error: '',
-  users: [],
-};
-
-function mapStateToProps(state, ownProps) {
-  const { error } = state.process.users;
-  const allUsers = _.values(state.entities.users).map(user => user.id);
-  const users = _.difference(allUsers, ownProps.project.users)
-    .map(id => state.entities.users[id])
-    .filter(user => typeof user !== 'undefined');
-
-  return { error, users };
-}
-
-export default connect(mapStateToProps, {
-  loadUsers, addPermission,
-})(NewPermissionForm);
+export default NewPermissionForm;

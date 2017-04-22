@@ -1,28 +1,72 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import AddUserPermissionComponent from './AddUserPermissionComponent';
-import { removePermission } from '../../actions';
+import Relay from 'react-relay';
+import CreatePermissionMutation from '../../mutations/CreatePermissionMutation';
+import DeletePermissionMutation from '../../mutations/DeletePermissionMutation';
+import NewPermissionForm from './NewPermissionForm';
 import PermissionList from './PermissionList';
-import { ProjectPropType, UserPropType } from '../../propTypes';
+
+type PermissionsComponentProps = {
+  project: any,
+  viewer: any,
+  relay: {
+    commitUpdate: () => void,
+  }
+}
 
 class PermissionsComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { isAddingPermission: false };
-    this.handleAddingCancel = this.handleAddingCancel.bind(this);
-    this.handlePermissionDelete = this.handlePermissionDelete.bind(this);
+  state = {
+    isAddingPermission: false,
   }
 
-  handleAddingCancel() {
+  onPermissionCreate = (user) => {
+    const onSuccess = (response) => {
+      console.log('success', response);
+      this.setState({ isAddingPermission: false });
+    };
+
+    const onFailure = (transaction) => {
+      const error = transaction.getError();
+      console.log(error.source);
+      this.setState({ errors: error.source.errors.map(e => e.message) });
+      console.error(error);
+    };
+
+    const mutation = new CreatePermissionMutation(
+      {
+        project: this.props.project,
+        user,
+      },
+    );
+
+    this.props.relay.commitUpdate(mutation, { onFailure, onSuccess });
+  }
+
+  onDelete = (permissionId: string) => {
+    const onFailure = (transaction) => {
+      const error = transaction.getError();
+      console.log(error.source);
+      this.setState({ errors: error.source.errors.map(e => e.message) });
+      console.error(error);
+    };
+
+    const mutation = new DeletePermissionMutation({
+      project: this.props.project,
+      userId: permissionId,
+      viewer: this.props.viewer,
+    });
+
+    this.props.relay.commitUpdate(mutation, { onFailure });
+  }
+
+  handleAddingCancel = () => {
     this.setState({ isAddingPermission: false });
   }
 
-  handlePermissionDelete(permission) {
-    this.props.removePermission(permission.id, this.props.project.id);
-  }
+  props: PermissionsComponentProps
 
   render() {
-    const { isFetching, project, permissions } = this.props;
+    const { project } = this.props;
+    const permissions = project.users.edges.map(edge => edge.node);
 
     return (
       <section>
@@ -37,48 +81,38 @@ class PermissionsComponent extends React.Component {
             </button>
           </span>
         </div>
-        <AddUserPermissionComponent
-          showInputs={this.state.isAddingPermission}
-          handleCancel={this.handleAddingCancel}
-          project={project}
-        />
+        {this.state.isAddingPermission && (
+          <NewPermissionForm
+            onPermissionCreate={this.onPermissionCreate}
+            handleCancel={this.handleAddingCancel}
+            project={project}
+            permissions={permissions}
+            users={this.props.viewer.allUsers}
+          />
+        )}
         <PermissionList
-          isFetching={isFetching}
           permissions={permissions}
-          handlePermissionDelete={this.handlePermissionDelete}
+          onDelete={this.onDelete}
         />
       </section>
     );
   }
 }
 
-PermissionsComponent.propTypes = {
-  permissions: React.PropTypes.arrayOf(UserPropType).isRequired,
-  isFetching: React.PropTypes.bool.isRequired,
-  removePermission: React.PropTypes.func.isRequired,
-  project: ProjectPropType.isRequired,
-};
-
-PermissionsComponent.defaultProps = {
-  permissions: [],
-  isFetching: true,
-};
-
-function mapStateToProps(state, ownProps) {
-  const { isFetching } = state.process.users;
-  const permissions = [];
-
-  ownProps.project.users
-    .forEach((key) => {
-      const permission = state.entities.users[key];
-      if (typeof permission !== 'undefined') {
-        permissions.push(permission);
+export default Relay.createContainer(PermissionsComponent, {
+  fragments: {
+    project: () => Relay.QL`
+      fragment on Project {
+        id
+        users(first: 10) {
+          edges {
+            node {
+              id
+              fullname
+            }
+          }
+        }
       }
-    });
-
-  return { isFetching, permissions };
-}
-
-export default connect(mapStateToProps, {
-  removePermission,
-})(PermissionsComponent);
+    `,
+  },
+});

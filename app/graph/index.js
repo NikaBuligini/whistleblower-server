@@ -26,6 +26,8 @@ const RootMutation = new GraphQLObjectType({
     createProject: ProjectMutations.createProject,
     createService: ServiceMutations.createService,
     changeServiceStatus: ServiceMutations.changeServiceStatus,
+    createPermission: ProjectMutations.createPermission,
+    deletePermission: ProjectMutations.deletePermission,
   }),
 });
 
