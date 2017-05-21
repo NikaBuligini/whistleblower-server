@@ -3,7 +3,9 @@
 import { CronJob } from 'cron';
 
 const defaultJobs = ['statusMonitor'];
-const jobTypes = process.env.JOB_TYPES ? process.env.JOB_TYPES.split(',') : defaultJobs;
+const jobTypes = process.env.JOB_TYPES
+  ? process.env.JOB_TYPES.split(',')
+  : defaultJobs;
 
 const jobs = [];
 
@@ -22,7 +24,7 @@ const Monitor = {
       console.error('jobs are already started');
     }
   },
-  stop: () => { },
+  stop: () => {},
 };
 
 export default Monitor;

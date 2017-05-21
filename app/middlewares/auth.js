@@ -6,12 +6,11 @@ import { UserSchema as User } from '../graph/models/schemas';
 export function notAuthenticated(req, res, next) {
   const { userId } = req.session;
   if (userId) {
-    User.getById(userId)
-      .then((user) => {
-        /* eslint no-param-reassign: ["error", { "props": false }]*/
-        req.user = user;
-        next();
-      });
+    User.getById(userId).then((user) => {
+      /* eslint no-param-reassign: ["error", { "props": false }]*/
+      req.user = user;
+      next();
+    });
   } else {
     res.redirect('/auth');
   }

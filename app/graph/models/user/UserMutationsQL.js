@@ -1,7 +1,4 @@
-import {
-  GraphQLNonNull,
-  GraphQLString,
-  } from 'graphql';
+import { GraphQLNonNull, GraphQLString } from 'graphql';
 
 import { mutationWithClientMutationId } from 'graphql-relay';
 

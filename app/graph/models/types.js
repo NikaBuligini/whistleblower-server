@@ -7,7 +7,7 @@ import {
   GraphQLBoolean,
   GraphQLList,
   GraphQLNonNull,
-  } from 'graphql';
+} from 'graphql';
 
 import {
   connectionArgs,
@@ -20,9 +20,7 @@ import {
 
 import ServicePayloadType from './service/ServicePayloadTypeQL';
 
-import User, {
-  getAllUsers,
-} from './user/UserSchema';
+import User, { getAllUsers } from './user/UserSchema';
 import Project, {
   getProjectsByUserId,
   getProjectByName,
@@ -31,9 +29,7 @@ import Project, {
   getAll as getAllProjects,
   getTotalCount as getProjectsTotalCount,
 } from './project/ProjectSchema';
-import Service, {
-  getById as getServiceById,
-} from './service/ServiceSchema';
+import Service, { getById as getServiceById } from './service/ServiceSchema';
 
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
@@ -86,7 +82,10 @@ const ServiceType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
-const { connectionType: ServiceConnectionType, edgeType: ServiceEdgeType } = connectionDefinitions({
+const {
+  connectionType: ServiceConnectionType,
+  edgeType: ServiceEdgeType,
+} = connectionDefinitions({
   name: 'Service',
   nodeType: ServiceType,
 });
@@ -107,13 +106,15 @@ const ProjectType = new GraphQLObjectType({
       type: ServiceConnectionType,
       description: 'Services for project',
       args: connectionArgs,
-      resolve: async (project, args) => connectionFromArray(await getProjectServices(project), args),
+      resolve: async (project, args) =>
+        connectionFromArray(await getProjectServices(project), args),
     },
     users: {
       type: UserConnectionType,
       description: 'Users who have access to project',
       args: connectionArgs,
-      resolve: async (project, args) => connectionFromArray(await getProjectUsers(project), args),
+      resolve: async (project, args) =>
+        connectionFromArray(await getProjectUsers(project), args),
     },
     created_at: { type: GraphQLString },
     updated_at: { type: GraphQLString },
@@ -121,7 +122,10 @@ const ProjectType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
-const { connectionType: ProjectConnectionType, edgeType: ProjectEdgeType } = connectionDefinitions({
+const {
+  connectionType: ProjectConnectionType,
+  edgeType: ProjectEdgeType,
+} = connectionDefinitions({
   name: 'Project',
   nodeType: ProjectType,
   connectionFields: () => ({
@@ -153,7 +157,8 @@ const UserType = new GraphQLObjectType({
       type: ProjectConnectionType,
       description: 'Visible projects for user',
       args: connectionArgs,
-      resolve: async (viewer, args) => connectionFromArray(await getProjectsByUserId(viewer.id), args),
+      resolve: async (viewer, args) =>
+        connectionFromArray(await getProjectsByUserId(viewer.id), args),
     },
     allProjects: {
       type: ProjectConnectionType,
@@ -181,7 +186,10 @@ const UserType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
-const { connectionType: UserConnectionType, edgeType: UserEdgeType } = connectionDefinitions({
+const {
+  connectionType: UserConnectionType,
+  edgeType: UserEdgeType,
+} = connectionDefinitions({
   name: 'User',
   nodeType: UserType,
 });

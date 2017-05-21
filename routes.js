@@ -14,8 +14,16 @@ const router = express.Router();
 
 router.get('/', notAuthenticated, dashboard);
 router.get('/projects', notAuthenticated, project.list);
-router.get('/projects/:projectName', notAuthenticated, project.showSingleProject);
-router.get('/projects/:projectName/:serviceId', notAuthenticated, service.showSingleService);
+router.get(
+  '/projects/:projectName',
+  notAuthenticated,
+  project.showSingleProject,
+);
+router.get(
+  '/projects/:projectName/:serviceId',
+  notAuthenticated,
+  service.showSingleService,
+);
 
 router.get('/auth', auth.index);
 router.get('/auth/sign-up', auth.index);

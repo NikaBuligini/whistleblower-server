@@ -1,8 +1,4 @@
-import {
-  GraphQLList,
-  GraphQLString,
-  GraphQLNonNull,
-  } from 'graphql';
+import { GraphQLList, GraphQLString, GraphQLNonNull } from 'graphql';
 
 import { ServiceType } from '../types';
 import { getById } from './ServiceSchema';

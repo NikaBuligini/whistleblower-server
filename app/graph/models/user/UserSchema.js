@@ -47,30 +47,24 @@ UserSchema.statics = {
    * @api private
    */
   authenticate(email, password, next) {
-    return this.findOne({ email })
-      .select('+password')
-      .exec()
-      .then((user) => {
-        if (!user) return next();
+    return this.findOne({ email }).select('+password').exec().then((user) => {
+      if (!user) return next();
 
-        return next(user);
-        // bcrypt.compare(password, user.password, (err, res) => {
-        //   next(err, res);
-        // });
-      });
+      return next(user);
+      // bcrypt.compare(password, user.password, (err, res) => {
+      //   next(err, res);
+      // });
+    });
   },
 
   // deprecated
   getById(id) {
-    return this.findById(id)
-      .populate('projects')
-      .exec();
+    return this.findById(id).populate('projects').exec();
   },
 
   // deprecated
   getAll() {
-    return this.find({})
-      .exec();
+    return this.find({}).exec();
   },
 };
 

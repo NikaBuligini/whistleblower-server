@@ -1,7 +1,4 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-} from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 import {
   fromGlobalId,
@@ -14,7 +11,13 @@ import _ from 'lodash';
 
 import { UserType, UserEdgeType, ProjectType, ProjectEdgeType } from '../types';
 import User from '../user/UserSchema';
-import Project, { getById, getByName, getAll, getAllPermissions, removePermission } from './ProjectSchema';
+import Project, {
+  getById,
+  getByName,
+  getAll,
+  getAllPermissions,
+  removePermission,
+} from './ProjectSchema';
 
 const CreateProjectMutation = mutationWithClientMutationId({
   name: 'CreateProject',
@@ -100,7 +103,9 @@ const CreatePermissionMutation = mutationWithClientMutationId({
 
     const { id: userRealId } = fromGlobalId(userId);
 
-    const permission = await project.addPermission(() => User.findById(userRealId));
+    const permission = await project.addPermission(() =>
+      User.findById(userRealId),
+    );
 
     return { project, user, permission };
   },

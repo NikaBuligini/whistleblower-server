@@ -31,16 +31,20 @@ monitor.start(io);
 // to support JSON-encoded bodies
 app.use(bodyParser.json());
 // to support URL-encoded bodies
-app.use(bodyParser.urlencoded({
-  extended: true,
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  }),
+);
 
 // to hold session
-app.use(session({
-  secret: 'rthyuilu37jg735ty786935ikehruyh76',
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(
+  session({
+    secret: 'rthyuilu37jg735ty786935ikehruyh76',
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
 
 // Set jsx as the templating engine
 app.set('views', path.resolve(__dirname, 'app/views'));
@@ -91,7 +95,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/graphql', graphqlHTTP(() => ({ schema: graphqlSchema, graphiql: true })));
+app.use(
+  '/graphql',
+  graphqlHTTP(() => ({ schema: graphqlSchema, graphiql: true })),
+);
 app.use('/', routes);
 
 // Set /public as our static content dir

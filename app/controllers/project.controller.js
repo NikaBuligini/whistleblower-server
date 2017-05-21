@@ -1,4 +1,7 @@
-import { UserSchema as User, ProjectSchema as Project } from '../graph/models/schemas';
+import {
+  UserSchema as User,
+  ProjectSchema as Project,
+} from '../graph/models/schemas';
 
 export function list(req, res) {
   res.render('./pages/projects', {
@@ -17,16 +20,12 @@ export function showSingleProject(req, res) {
 export function getAll(req, res) {
   const { id } = req.body;
   if (typeof id !== 'undefined') {
-    Project.findById(id)
-      .exec()
-      .then(project => res.json(project));
+    Project.findById(id).exec().then(project => res.json(project));
   } else {
-    Project.getAll()
-      .then(projects => res.json(projects))
-      .catch((err) => {
-        console.log(err);
-        res.json(err);
-      });
+    Project.getAll().then(projects => res.json(projects)).catch((err) => {
+      console.log(err);
+      res.json(err);
+    });
   }
 }
 
@@ -68,7 +67,7 @@ export function create(req, res) {
 export async function addPermission(req, res) {
   const project = await Project.getById(req.params.projectId);
   if (!project) {
-    return res.status(500).json({ message: 'Project doesn\'t exists!' });
+    return res.status(500).json({ message: "Project doesn't exists!" });
   }
 
   const user = await User.getById(req.body.userId);
@@ -88,7 +87,10 @@ export async function addPermission(req, res) {
  * @api protected
  */
 export async function removePermission(req, res) {
-  const project = await Project.removePermission(req.params.projectId, req.body.userId);
+  const project = await Project.removePermission(
+    req.params.projectId,
+    req.body.userId,
+  );
   return res.json(project);
 }
 

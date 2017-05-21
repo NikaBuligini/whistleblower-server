@@ -1,8 +1,4 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-  GraphQLList,
-  } from 'graphql';
+import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
 
 import { UserType } from '../types';
 import { getAllUsers, getById } from './UserSchema';

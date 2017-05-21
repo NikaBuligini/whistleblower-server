@@ -8,7 +8,7 @@ import Schema from '../app/graph';
 
 // Save JSON of full schema introspection for Babel Relay Plugin to use
 (async () => {
-  const result = await (graphql(Schema, introspectionQuery));
+  const result = await graphql(Schema, introspectionQuery);
   if (result.errors) {
     console.error(
       'ERROR introspecting schema: ',

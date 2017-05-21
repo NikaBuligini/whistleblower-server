@@ -5,14 +5,21 @@ import uuid from 'uuid';
 const ServiceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
-  status: { type: String, required: true, default: 'outdated', enum: ['ok', 'failed', 'outdated'] },
+  status: {
+    type: String,
+    required: true,
+    default: 'outdated',
+    enum: ['ok', 'failed', 'outdated'],
+  },
   timeout: { type: Number, default: 5 },
   isActive: { type: Boolean, default: false },
   uuid: { type: String, index: { unique: true } },
-  payload: [{
-    data: mongoose.Schema.Types.Mixed,
-    created_at: Date,
-  }],
+  payload: [
+    {
+      data: mongoose.Schema.Types.Mixed,
+      created_at: Date,
+    },
+  ],
   created_at: Date,
   updated_at: { type: Date, default: Date.now },
 });
@@ -37,14 +44,16 @@ ServiceSchema.pre('save', function save(next) {
 ServiceSchema.statics = {
   // deprecated
   getById(id) {
-    return this.findById(id)
-      .exec();
+    return this.findById(id).exec();
   },
 
-   // deprecated
+  // deprecated
   changeActivation(serviceId, shouldBeActive) {
-    return this.findByIdAndUpdate(serviceId, { $set: { isActive: shouldBeActive } }, { new: true })
-      .exec();
+    return this.findByIdAndUpdate(
+      serviceId,
+      { $set: { isActive: shouldBeActive } },
+      { new: true },
+    ).exec();
   },
 };
 
@@ -67,11 +76,7 @@ export function getById(root, { id }) {
  * @api protected
  */
 export function changeActivationStatus(root, { id, isActive }) {
-  return Service.findByIdAndUpdate(
-    id,
-    { $set: { isActive } },
-    { new: true },
-  );
+  return Service.findByIdAndUpdate(id, { $set: { isActive } }, { new: true });
 }
 
 export default Service;

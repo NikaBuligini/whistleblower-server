@@ -1,4 +1,7 @@
-import { ProjectSchema as Project, ServiceSchema as Service } from '../graph/models/schemas';
+import {
+  ProjectSchema as Project,
+  ServiceSchema as Service,
+} from '../graph/models/schemas';
 
 export function showSingleService(req, res) {
   Service.getById(req.params.serviceId)
@@ -17,7 +20,7 @@ export function get(req, res) {
   Service.getById(req.params.serviceId)
     .then((service) => {
       if (!service) {
-        return res.status(500).json({ message: 'service doesn\'t exists!' });
+        return res.status(500).json({ message: "service doesn't exists!" });
       }
 
       return res.json(service);
@@ -34,11 +37,10 @@ export function getByProjectId(req, res) {
   Project.getById(projectId)
     .then((project) => {
       if (!project) {
-        return res.status(500).json({ message: 'Couldn\'t find project!' });
+        return res.status(500).json({ message: "Couldn't find project!" });
       }
 
-      const result = project.services
-        .map(service => service.toObject());
+      const result = project.services.map(service => service.toObject());
 
       return res.json(result);
     })
@@ -54,10 +56,12 @@ export function create(req, res) {
   Project.getById(projectId)
     .then((project) => {
       if (!project) {
-        return res.status(500).json({ message: 'project doesn\'t exists!' });
+        return res.status(500).json({ message: "project doesn't exists!" });
       }
 
-      const servicesWithSameName = project.services.filter(service => service.name === name);
+      const servicesWithSameName = project.services.filter(
+        service => service.name === name,
+      );
 
       if (servicesWithSameName.length !== 0) {
         return res.status(500).json({ message: `${name} is already used!` });
@@ -84,11 +88,15 @@ export function store(req, res) {
   const { serviceId } = req.params;
   const { name, type, timeout } = req.body;
 
-  Service.findByIdAndUpdate(serviceId, { $set: { name, type, timeout } }, { new: true })
+  Service.findByIdAndUpdate(
+    serviceId,
+    { $set: { name, type, timeout } },
+    { new: true },
+  )
     .exec()
     .then((service) => {
       if (!service) {
-        res.status(500).json({ message: 'service doesn\'t exists!' });
+        res.status(500).json({ message: "service doesn't exists!" });
       } else {
         res.json(service.toObject());
       }

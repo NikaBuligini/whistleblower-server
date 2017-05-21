@@ -2,4 +2,4 @@
 
 declare var componentHandler: {
   upgradeDom(): void,
-}
+};

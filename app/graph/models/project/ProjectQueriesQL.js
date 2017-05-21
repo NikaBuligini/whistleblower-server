@@ -1,7 +1,4 @@
-import {
-  GraphQLList,
-  GraphQLString,
-  } from 'graphql';
+import { GraphQLList, GraphQLString } from 'graphql';
 
 import { ProjectType } from '../types';
 import { getProjects } from './ProjectSchema';

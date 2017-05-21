@@ -11,18 +11,18 @@ type ProjectType = {
   created_at: Date,
   updated_at: Date,
 
-  populate: (string) => ProjectType,
+  populate: string => ProjectType,
   exec: () => ProjectType,
 };
 
 type ProjectSchemaType = {
   pre: (string, (Function) => void) => void,
   methods: {
-    addPermission: (Function) => any,
+    addPermission: Function => any,
   },
   statics: {},
   find: ({}) => Array<ProjectType>,
-  findById: (string) => ProjectType,
+  findById: string => ProjectType,
   findOne: ({}) => ProjectType,
   count: ({}) => number,
   populate: (ProjectType, string) => ProjectType,
@@ -80,38 +80,27 @@ ProjectSchema.statics = {
    * @api private
    */
   getFirstProject() {
-    return this.findOne({})
-      .populate('services')
-      .exec();
+    return this.findOne({}).populate('services').exec();
   },
 
   // deprecated
   getAll() {
-    return this.find({})
-      .exec();
+    return this.find({}).exec();
   },
 
   // deprecated
   getByName(name) {
-    return this.findOne({ name })
-      .populate('services')
-      .populate('users')
-      .exec();
+    return this.findOne({ name }).populate('services').populate('users').exec();
   },
 
   // deprecated
   getById(id) {
-    return this.findById(id)
-      .populate('services')
-      .populate('users')
-      .exec();
+    return this.findById(id).populate('services').populate('users').exec();
   },
 
   // deprecated
   getByUserId(userId) {
-    return this.find({ users: userId })
-      .populate('services')
-      .exec();
+    return this.find({ users: userId }).populate('services').exec();
   },
 
   /**
@@ -133,10 +122,7 @@ ProjectSchema.statics = {
    * @api public
    */
   getProjectServices(name: string) {
-    return this.findOne({ name })
-      .populate('services')
-      .populate('users')
-      .exec();
+    return this.findOne({ name }).populate('services').populate('users').exec();
   },
 };
 
@@ -157,9 +143,7 @@ export function getAll() {
  * @api protected
  */
 export function getAllPermissions(projectId: string) {
-  return Project.findById(projectId)
-    .populate('users')
-    .exec();
+  return Project.findById(projectId).populate('users').exec();
 }
 
 /**
@@ -169,7 +153,10 @@ export function getAllPermissions(projectId: string) {
  * @param {userId?} string
  * @api public
  */
-export function getProjects(_: {}, { id, name, userId }: { id: string, name: string, userId: string }) {
+export function getProjects(
+  _: {},
+  { id, name, userId }: { id: string, name: string, userId: string },
+) {
   if (id) {
     return Project.findById(id);
   } else if (name) {

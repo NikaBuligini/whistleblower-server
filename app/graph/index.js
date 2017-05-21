@@ -8,7 +8,7 @@ import viewer from './models/viewer';
 import { nodeField } from './models/types';
 
 const RootQuery = new GraphQLObjectType({
-  name: 'Query',  // Return this type of object
+  name: 'Query', // Return this type of object
   fields: () => ({
     node: nodeField,
     users: UserQueries.users,
@@ -37,7 +37,6 @@ const RootMutation = new GraphQLObjectType({
 //     messageAdded: ContactSubscriptions.messageAdded,
 //   }),
 // });
-
 
 const schema = new GraphQLSchema({
   query: RootQuery,

@@ -3,11 +3,17 @@ const nodemon = require('gulp-nodemon');
 const bump = require('gulp-bump');
 const argv = require('yargs').argv;
 
-gulp.task('mdl-css', () => gulp.src('./node_modules/material-design-lite/material.min.css')
-    .pipe(gulp.dest('./public')));
+gulp.task('mdl-css', () =>
+  gulp
+    .src('./node_modules/material-design-lite/material.min.css')
+    .pipe(gulp.dest('./public')),
+);
 
-gulp.task('mdl-js', () => gulp.src('./node_modules/material-design-lite/material.min.js')
-    .pipe(gulp.dest('./public')));
+gulp.task('mdl-js', () =>
+  gulp
+    .src('./node_modules/material-design-lite/material.min.js')
+    .pipe(gulp.dest('./public')),
+);
 
 gulp.task('start', () => {
   nodemon({
@@ -35,7 +41,5 @@ gulp.task('bump', () => {
   else if (argv.minor === true) options.type = 'minor';
   else if (argv.appversion !== 'undefined') options.version = argv.appversion;
 
-  gulp.src('./package.json')
-    .pipe(bump(options))
-    .pipe(gulp.dest('./'));
+  gulp.src('./package.json').pipe(bump(options)).pipe(gulp.dest('./'));
 });

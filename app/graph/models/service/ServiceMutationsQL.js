@@ -1,10 +1,6 @@
 /* eslint-disable import/no-named-as-default-member */
 
-import {
-  GraphQLString,
-  GraphQLBoolean,
-  GraphQLNonNull,
-} from 'graphql';
+import { GraphQLString, GraphQLBoolean, GraphQLNonNull } from 'graphql';
 
 import {
   fromGlobalId,
@@ -55,10 +51,12 @@ const CreateServiceMutation = mutationWithClientMutationId({
     const { id: projectRealId } = fromGlobalId(projectId);
 
     const project = await Project.getById(projectRealId);
-    if (!project) throw new UserError('project doesn\'t exists!');
+    if (!project) throw new UserError("project doesn't exists!");
 
-    const servicesWithSameName = project.services.filter(service => service.name === name);
-    if (servicesWithSameName.length !== 0) throw new UserError(`${name} is already used!`);
+    const servicesWithSameName = project.services.filter(
+      service => service.name === name,
+    );
+    if (servicesWithSameName.length !== 0) { throw new UserError(`${name} is already used!`); }
 
     const service = new Service({ name, type });
     await service.save();
@@ -96,7 +94,7 @@ const ChangeServiceStatusMutation = mutationWithClientMutationId({
     const { id: serviceRealId } = fromGlobalId(serviceId);
 
     const service = await Service.getById(serviceRealId);
-    if (!service) throw new UserError('Service doesn\'t exists!');
+    if (!service) throw new UserError("Service doesn't exists!");
 
     service.isActive = status;
     await service.save();

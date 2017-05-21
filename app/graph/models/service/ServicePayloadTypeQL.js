@@ -3,7 +3,7 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLID,
-  } from 'graphql';
+} from 'graphql';
 
 const ServicePayloadType = new GraphQLObjectType({
   name: 'Payload',
