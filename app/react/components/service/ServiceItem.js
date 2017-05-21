@@ -1,13 +1,19 @@
+// @flow
+
 import React from 'react';
 import { Link } from 'react-router';
 
 type ServiceItemProps = {
   service: any,
   projectName: string,
-  handleActivationChange: (any) => void,
-}
+  handleActivationChange: any => void,
+};
 
-const ServiceItem = ({ service, projectName, handleActivationChange }: ServiceItemProps) => {
+const ServiceItem = ({
+  service,
+  projectName,
+  handleActivationChange,
+}: ServiceItemProps) => {
   const btnData = service.isActive
     ? { name: 'Disable', cls: 'mdl-button mdl-js-button mdl-button--primary' }
     : { name: 'Enable', cls: 'mdl-button mdl-js-button mdl-button--accent' };

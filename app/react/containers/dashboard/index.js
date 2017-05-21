@@ -1,5 +1,5 @@
-/* eslint-disable react/no-unused-prop-types */
 // @flow
+/* eslint-disable react/no-unused-prop-types */
 
 import React from 'react';
 import Relay from 'react-relay';
@@ -8,34 +8,25 @@ import Layout from '../layouts/DefaultLayout';
 import ProjectItem from './ProjectItem';
 import type { Project } from '../../actions/types';
 
-type ProjectEdge = {
-  node: {
-    id: string,
-    name: string,
-  }
-}
-
 type Viewer = {
-  projects: {
-    edges: Array<ProjectEdge>,
-  },
-}
+  projects: Edges<{ id: string, name: string }>,
+};
 
 type Props = {
   viewer: Viewer,
   projects: Project[],
-}
+};
 
 type DefaultProps = {
   projects: Project[],
-}
+};
 
 class Dashboard extends React.Component {
   static defaultProps: DefaultProps;
 
   static defaultProps = {
     projects: [],
-  }
+  };
 
   props: Props;
 

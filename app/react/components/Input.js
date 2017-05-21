@@ -5,7 +5,7 @@ import React from 'react';
 type Props = {
   name: string,
   placeholder: string,
-  onChange: () => void,
+  onChange: (event: SyntheticInputEvent) => void,
   type: string,
   value: string,
   className: ?string,

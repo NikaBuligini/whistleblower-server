@@ -1,15 +1,16 @@
+// @flow
+
 import React from 'react';
 import { Link, withRouter } from 'react-router';
 import moment from 'moment';
 import { ProjectPropType } from '../../propTypes';
 import type { Project } from '../../actions/types';
 
-type ProjectCardProps = {
-  project: Project,
-}
-
 class ProjectCard extends React.Component {
-  props: ProjectCardProps
+  props: {
+    project: Project,
+    router: Router,
+  };
 
   goToLink(url) {
     this.props.router.push(url);
@@ -37,10 +38,7 @@ class ProjectCard extends React.Component {
           <a href="(URL or function)">Services</a>
         </div>
         <div className="mdl-card-actions">
-          <span
-            title={createdAt.format('L')}
-            className="default timespan"
-          >
+          <span title={createdAt.format('L')} className="default timespan">
             {createdAt.fromNow()}
           </span>
 
@@ -55,10 +53,7 @@ class ProjectCard extends React.Component {
             className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
             htmlFor={`${project.name}-actions`}
           >
-            <li
-              className="mdl-menu__item"
-              // onClick={this.goToLink.bind(this, editUrl)}
-            >
+            <li className="mdl-menu__item" /* onClick={this.goToLink.bind(this, editUrl)} */>
               View
             </li>
             <li disabled className="mdl-menu__item">Edit</li>

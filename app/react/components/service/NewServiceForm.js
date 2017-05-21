@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import Autocomplete from '../Autocomplete';
 import Input from '../Input';
@@ -22,10 +24,15 @@ const serviceTypes = [
   },
 ];
 
+type TypeItem = {
+  id: number,
+  name: string,
+};
+
 type NewServiceFormProps = {
   onServiceCreate: (string, string) => void,
   handleCancel: () => void,
-}
+};
 
 class NewServiceForm extends React.Component {
   state = {
@@ -34,22 +41,34 @@ class NewServiceForm extends React.Component {
     serviceType: '',
     loading: false,
     types: serviceTypes,
-  }
+  };
+
+  state: {
+    error: string,
+    serviceName: string,
+    serviceType: string,
+    loading: boolean,
+    types: Array<TypeItem>,
+    item: TypeItem,
+  };
 
   componentDidMount() {
     componentHandler.upgradeDom();
   }
 
-  props: NewServiceFormProps
+  autocomplete: any;
+  props: NewServiceFormProps;
 
-  filterTypes(value, types) {
+  filterTypes(value: string, types: Array<TypeItem>) {
     if (value === '') {
       this.setState({ types, loading: false });
       return;
     }
 
     const valueLowerCase = value.toLowerCase();
-    const items = types.filter(user => user.name.toLowerCase().indexOf(valueLowerCase) !== -1);
+    const items = types.filter(
+      user => user.name.toLowerCase().indexOf(valueLowerCase) !== -1,
+    );
 
     setTimeout(() => {
       let typeItems = items;
@@ -58,11 +77,11 @@ class NewServiceForm extends React.Component {
     }, 100);
   }
 
-  handleChange = (event) => {
+  handleChange = (event: SyntheticInputEvent) => {
     this.setState({ [event.target.name]: event.target.value });
-  }
+  };
 
-  handleSubmit = (event) => {
+  handleSubmit = (event: SyntheticInputEvent) => {
     event.preventDefault();
     const { serviceName, serviceType } = this.state;
 
@@ -71,7 +90,7 @@ class NewServiceForm extends React.Component {
     } else {
       // this.setState({ error: 'Please, fill inputs' });
     }
-  }
+  };
 
   render() {
     const { types } = this.state;
@@ -93,7 +112,10 @@ class NewServiceForm extends React.Component {
                 id: 'serviceType',
               }}
               inputLabel={() => (
-                <label className="mdl-textfield__label" htmlFor="permission-input">
+                <label
+                  className="mdl-textfield__label"
+                  htmlFor="permission-input"
+                >
                   Type
                 </label>
               )}
@@ -103,11 +125,11 @@ class NewServiceForm extends React.Component {
               value={this.state.serviceType}
               items={this.state.types}
               getItemValue={item => item.name}
-              onSelect={(value, item) => {
+              onSelect={(value: string, item: TypeItem) => {
                 // set the menu to only the selected item
                 this.setState({ serviceType: value, item, types: [item] });
               }}
-              onChange={(event, value) => {
+              onChange={(event, value: string) => {
                 this.setState({ serviceType: value, loading: true });
                 this.filterTypes(value, types);
               }}
@@ -116,7 +138,9 @@ class NewServiceForm extends React.Component {
                   style={isHighlighted ? style.highlighted : style.item}
                   key={item.id}
                   id={item.id}
-                >{item.name}</div>
+                >
+                  {item.name}
+                </div>
               )}
               wrapperStyle={{ display: 'block' }}
             />

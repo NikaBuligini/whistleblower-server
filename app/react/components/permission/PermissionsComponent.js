@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import Relay from 'react-relay';
 import CreatePermissionMutation from '../../mutations/CreatePermissionMutation';
@@ -10,13 +12,14 @@ type PermissionsComponentProps = {
   viewer: any,
   relay: {
     commitUpdate: () => void,
-  }
-}
+  },
+};
 
 class PermissionsComponent extends React.Component {
   state = {
+    errors: [],
     isAddingPermission: false,
-  }
+  };
 
   onPermissionCreate = (user) => {
     const onSuccess = (response) => {
@@ -31,15 +34,13 @@ class PermissionsComponent extends React.Component {
       console.error(error);
     };
 
-    const mutation = new CreatePermissionMutation(
-      {
-        project: this.props.project,
-        user,
-      },
-    );
+    const mutation = new CreatePermissionMutation({
+      project: this.props.project,
+      user,
+    });
 
     this.props.relay.commitUpdate(mutation, { onFailure, onSuccess });
-  }
+  };
 
   onDelete = (permissionId: string) => {
     const onFailure = (transaction) => {
@@ -56,13 +57,13 @@ class PermissionsComponent extends React.Component {
     });
 
     this.props.relay.commitUpdate(mutation, { onFailure });
-  }
+  };
 
   handleAddingCancel = () => {
     this.setState({ isAddingPermission: false });
-  }
+  };
 
-  props: PermissionsComponentProps
+  props: PermissionsComponentProps;
 
   render() {
     const { project } = this.props;
@@ -81,19 +82,15 @@ class PermissionsComponent extends React.Component {
             </button>
           </span>
         </div>
-        {this.state.isAddingPermission && (
+        {this.state.isAddingPermission &&
           <NewPermissionForm
             onPermissionCreate={this.onPermissionCreate}
             handleCancel={this.handleAddingCancel}
             project={project}
             permissions={permissions}
             users={this.props.viewer.allUsers}
-          />
-        )}
-        <PermissionList
-          permissions={permissions}
-          onDelete={this.onDelete}
-        />
+          />}
+        <PermissionList permissions={permissions} onDelete={this.onDelete} />
       </section>
     );
   }

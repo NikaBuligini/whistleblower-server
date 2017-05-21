@@ -11,7 +11,7 @@ const styles = {
 
 type Props = {
   service: Service,
-}
+};
 
 const ServiceItem = (props: Props) => {
   const { service } = props;
@@ -19,16 +19,23 @@ const ServiceItem = (props: Props) => {
   let icon = false;
   switch (service.status) {
     case 'ok':
-      icon = <i className="material-icons mdl-list__item-icon" style={styles.green}>check</i>;
+      icon = (
+        <i className="material-icons mdl-list__item-icon" style={styles.green}>
+          check
+        </i>
+      );
       break;
     case 'failed':
-      icon = <i className="material-icons mdl-list__item-icon" style={styles.red}>close</i>;
+      icon = (
+        <i className="material-icons mdl-list__item-icon" style={styles.red}>
+          close
+        </i>
+      );
       break;
     case 'outdated':
       icon = <i className="material-icons mdl-list__item-icon">schedule</i>;
       break;
     default:
-
   }
 
   return (

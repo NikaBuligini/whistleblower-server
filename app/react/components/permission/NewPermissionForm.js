@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import _ from 'lodash';
 import Autocomplete from '../Autocomplete';
@@ -5,7 +7,7 @@ import Autocomplete from '../Autocomplete';
 type User = {
   id: string,
   fullname: string,
-}
+};
 
 const style = {
   highlighted: {
@@ -24,7 +26,9 @@ function filterUsers(value, users, cb) {
   if (value === '') return cb();
 
   const valueLowerCase = value.toLowerCase();
-  const items = users.filter(user => user.fullname.toLowerCase().indexOf(valueLowerCase) !== -1);
+  const items = users.filter(
+    user => user.fullname.toLowerCase().indexOf(valueLowerCase) !== -1,
+  );
 
   return setTimeout(() => {
     cb(items);
@@ -32,15 +36,16 @@ function filterUsers(value, users, cb) {
 }
 
 function differentiate(all: Array<User> = [], actual: Array<User> = []) {
-  return _.differenceWith(all, actual, o => o.id);
+  console.warn('Check out _.differenceWith');
+  return _.differenceWith(all, actual, _.isEqual); /* prev: o => o.id */
 }
 
-type NewPermissionFormProps = {
+type Props = {
   permissions: Array<User>,
   users: Array<User>,
-  onPermissionCreate: (string) => void,
+  onPermissionCreate: User => void,
   handleCancel: () => void,
-}
+};
 
 class NewPermissionForm extends React.Component {
   state = {
@@ -48,19 +53,30 @@ class NewPermissionForm extends React.Component {
     value: '',
     loading: false,
     users: differentiate(this.props.users, this.props.permissions),
-  }
+  };
+
+  state: {
+    error: string,
+    value: string,
+    loading: boolean,
+    users: Array<User>,
+    item: User,
+  };
 
   componentDidMount() {
     componentHandler.upgradeDom();
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ users: differentiate(nextProps.users, nextProps.permissions) });
+  componentWillReceiveProps(nextProps: Props) {
+    this.setState({
+      users: differentiate(nextProps.users, nextProps.permissions),
+    });
   }
 
-  props: NewPermissionFormProps
+  autocomplete: any;
+  props: Props;
 
-  handleSubmit = (event) => {
+  handleSubmit = (event: SyntheticInputEvent) => {
     event.preventDefault();
     const { item } = this.state;
 
@@ -69,7 +85,7 @@ class NewPermissionForm extends React.Component {
     } else {
       // this.setState({ error: 'Please, fill inputs' });
     }
-  }
+  };
 
   render() {
     const { error, users } = this.state;
@@ -84,7 +100,10 @@ class NewPermissionForm extends React.Component {
                 id: 'permission-input',
               }}
               inputLabel={() => (
-                <label className="mdl-textfield__label" htmlFor="permission-input">
+                <label
+                  className="mdl-textfield__label"
+                  htmlFor="permission-input"
+                >
                   Name
                 </label>
               )}
@@ -94,7 +113,8 @@ class NewPermissionForm extends React.Component {
               value={this.state.value}
               items={this.state.users}
               getItemValue={item => item.fullname}
-              onSelect={(value, item) => this.setState({ value, item, users: [item] })}
+              onSelect={(value, item) =>
+                this.setState({ value, item, users: [item] })}
               onChange={(event, value) => {
                 this.setState({ value, loading: true });
                 filterUsers(value, users, (items) => {
@@ -108,11 +128,19 @@ class NewPermissionForm extends React.Component {
                   style={isHighlighted ? style.highlighted : style.item}
                   key={item.id}
                   id={item.id}
-                >{item.fullname}</div>
+                >
+                  {item.fullname}
+                </div>
               )}
               wrapperStyle={{ display: 'block' }}
             />
-            {error && <span className="mdl-textfield__error" style={{ visibility: 'visible' }}>{error}</span>}
+            {error &&
+              <span
+                className="mdl-textfield__error"
+                style={{ visibility: 'visible' }}
+              >
+                {error}
+              </span>}
           </div>
           <button
             className="mdl-button mdl-js-button mdl-button--accent add-service"

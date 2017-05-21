@@ -1,20 +1,23 @@
 // @flow
 
 import React from 'react';
+import styled from 'styled-components';
 
-type Props = {
-  data: Array<string>,
-}
+const ErrorList = styled.div`
+  display: block;
+  padding: 12px 0;
+  color: rgb(244, 67, 54);
+`;
 
-const Errors = ({ data }: Props) => {
+const Errors = ({ data }: { data: Array<string> }) => {
   if (data.length === 0) {
     return null;
   }
 
   return (
-    <div className="error-list">
+    <ErrorList>
       {data.map((message, index) => <span key={index}>{message}</span>)}
-    </div>
+    </ErrorList>
   );
 };
 

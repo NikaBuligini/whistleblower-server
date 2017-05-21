@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import Relay from 'react-relay';
 import DocumentTitle from 'react-document-title';
@@ -6,22 +8,18 @@ import AddProjectComponent from '../../components/project/AddProjectComponent';
 import ProjectCard from '../../components/project/ProjectCard';
 import type { Project } from '../../actions/types';
 
-type ProjectEdges = {
-  edges: Array<{ node: Project }>,
-}
-
 type ProjectListProps = {
   viewer: {
-    allProjects: Array<ProjectEdges>,
-  }
-}
+    allProjects: Edges<Project>,
+  },
+};
 
 class ProjectList extends React.Component {
   componentDidMount() {
     componentHandler.upgradeDom();
   }
 
-  props: ProjectListProps
+  props: ProjectListProps;
 
   render() {
     const { allProjects } = this.props.viewer;
@@ -30,20 +28,16 @@ class ProjectList extends React.Component {
       return <Loading />;
     }
 
-    // if (isFetching && typeof projects !== 'undefined') {
-    //   return <Loading />;
-    // }
-
     return (
       <DocumentTitle title="Projects">
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--10-col mdl-cell--1-offset">
             <div className="projects">
-              <AddProjectComponent
-                viewer={this.props.viewer}
-              />
+              <AddProjectComponent viewer={this.props.viewer} />
               <div className="list">
-                {allProjects.edges.map(({ node }) => <ProjectCard key={node.id} project={node} />)}
+                {allProjects.edges.map(({ node }) => (
+                  <ProjectCard key={node.id} project={node} />
+                ))}
               </div>
             </div>
           </div>

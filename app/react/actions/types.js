@@ -34,7 +34,9 @@ export type EditServiceForm = {
 };
 
 export type Project = {
+  id: string,
   name: string,
+  created_at: string,
   services: {
     edges: Array<{ node: Service }>,
   },

@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import Relay from 'react-relay';
 import Loading from '../Loading';
@@ -75,7 +77,6 @@ class NewProjectForm extends React.Component {
             type="text"
             id="project-name"
             autoComplete="off"
-            autoFocus="on"
             onChange={this.handleChange}
             value={this.state.name}
           />

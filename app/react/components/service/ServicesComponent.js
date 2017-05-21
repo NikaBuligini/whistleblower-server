@@ -1,8 +1,11 @@
+// @flow
+
 import React from 'react';
 import Relay from 'react-relay';
 import NewServiceForm from './NewServiceForm';
 import CreateServiceMutation from '../../mutations/CreateServiceMutation';
-import ChangeServiceStatusMutation from '../../mutations/ChangeServiceStatusMutation';
+import ChangeServiceStatusMutation
+  from '../../mutations/ChangeServiceStatusMutation';
 import ServiceList from './ServiceList';
 
 type ServicesComponentProps = {
@@ -10,12 +13,18 @@ type ServicesComponentProps = {
   viewer: any,
   relay: {
     commitUpdate: () => void,
-  }
+  },
 };
 
 class ServicesComponent extends React.Component {
   state = {
     isAddingService: false,
+  };
+
+  state: {
+    name: string,
+    isAddingService: boolean,
+    errors: Array<string>,
   }
 
   onServiceCreate = (name, type) => {
@@ -31,23 +40,21 @@ class ServicesComponent extends React.Component {
       console.error(error);
     };
 
-    const mutation = new CreateServiceMutation(
-      {
-        project: this.props.project,
-        name,
-        type,
-        viewer: this.props.viewer,
-      },
-    );
+    const mutation = new CreateServiceMutation({
+      project: this.props.project,
+      name,
+      type,
+      viewer: this.props.viewer,
+    });
 
     this.props.relay.commitUpdate(mutation, { onFailure, onSuccess });
-  }
+  };
 
-  props: ServicesComponentProps
+  props: ServicesComponentProps;
 
   handleAddingCancel = () => {
     this.setState({ isAddingService: false });
-  }
+  };
 
   handleServiceActivationChange = (service) => {
     console.log(service);
@@ -62,7 +69,7 @@ class ServicesComponent extends React.Component {
     const mutation = new ChangeServiceStatusMutation({ service });
 
     this.props.relay.commitUpdate(mutation, { onFailure });
-  }
+  };
 
   render() {
     const { project } = this.props;
@@ -80,13 +87,12 @@ class ServicesComponent extends React.Component {
             </button>
           </span>
         </div>
-        {this.state.isAddingService && (
+        {this.state.isAddingService &&
           <NewServiceForm
             onServiceCreate={this.onServiceCreate}
             handleCancel={this.handleAddingCancel}
             project={project}
-          />
-        )}
+          />}
         <ServiceList
           changeActivation={this.handleServiceActivationChange}
           services={project.services.edges.map(edge => edge.node)}

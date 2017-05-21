@@ -2,11 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 
 export default class Navigation extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-    };
+  state = {
+    isOpen: false,
   }
 
   render() {
@@ -33,6 +30,7 @@ export default class Navigation extends React.Component {
             <div>
               <a
                 className="account-icon"
+                role="button"
                 tabIndex="-1"
                 onClick={() => this.setState({ isOpen: !this.state.isOpen })}
               >

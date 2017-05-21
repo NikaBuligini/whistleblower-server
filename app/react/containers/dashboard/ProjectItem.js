@@ -2,13 +2,12 @@
 
 import React from 'react';
 import Relay from 'react-relay';
-// import { connect } from 'react-redux';
 import ServiceItem from './ServiceItem';
 import type { Project } from '../../actions/types';
 
 type Props = {
   project: Project,
-}
+};
 
 const ProjectItem = (props: Props) => {
   const { project } = props;

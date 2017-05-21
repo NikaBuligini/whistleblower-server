@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { withRouter } from 'react-router';
 import ServiceItem from '../../components/service/ServiceItem';
